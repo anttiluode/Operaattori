@@ -147,14 +147,35 @@ This task is intentionally trivial for an explicit two-weight digital model.
 Gate 4 therefore tests **local delayed structural credit**, not computational
 superiority.
 
-### Gate 5 — LOCKED behind Gate 4
+### Gate 5 — the matrix itself is state
 
-Only then run functional attackers: proportional-growth null, matched random
-arbor, shuffled anatomy, fixed reservoir, learned matrix, and a fixed-capacity
-nonlinear surrogate.
+Gate 5 is now the explicit **moving-matrix** experiment.
+
+The minimal operator is:
+
+~~~text
+h(t+1) = A(t) h(t) + (I - A(t)) 1 x(t)
+y_hat  = w(t)^T h(t)
+
+A(t) = diag(lambda_1(t), lambda_2(t))
+logit(lambda) = base + fast(t) + slow(t)
+~~~
+
+The recurrent eigenvalues are no longer fixed parameters. They are dynamical
+state updated online through a local sensitivity/eligibility trace.
+
+The benchmark is deliberately two-sided:
+
+1. a smoothly drifting two-timescale memory-kernel world, where a moving
+   operator should be a natural compact representation;
+2. an exact drifting-delay world, where explicit addressable context should
+   beat that compression.
+
+The transformer-like ruler is a causal explicit-token lag-attention system.
+A strong explicit-context LMS ruler is present as well.
 
 Do not build a bug, animal, population, genome, reproduction loop, or
-"intelligence" layer before the single substrate earns itself.
+"intelligence" layer before this mathematics has clear boundaries.
 
 ## Why this exists
 
@@ -193,6 +214,7 @@ python experiments/gate1_order_memory.py
 python experiments/gate2_multistability_null.py
 python experiments/gate3_grown_operator.py
 python experiments/gate4_delayed_consequence.py
+python experiments/gate5_moving_operator.py
 
 python -m unittest discover -s tests -v
 ~~~
@@ -242,11 +264,56 @@ two-weight solution.
 
 Detailed receipts: [Gate 0](results/GATE0.md),
 [Gate 1](results/GATE1.md), [Gate 2](results/GATE2.md),
-[Gate 3](results/GATE3.md), and [Gate 4](results/GATE4.md).
+[Gate 3](results/GATE3.md), [Gate 4](results/GATE4.md), and
+[Gate 5](results/GATE5.md).
+
+## Gate 5 first receipt — moving matrix, with the killer beside it
+
+Across eight seeds in the smoothly drifting hidden memory-kernel world:
+
+| model | MSE |
+|---|---:|
+| **moving two-mode operator** | **5.46e-05 ± 3.27e-06** |
+| frozen same-state operator | 1.70e-04 ± 6.76e-06 |
+| 64-token explicit-context LMS | 6.17e-05 ± 3.25e-06 |
+
+The moving operator's observer-measured temporal scale follows the hidden
+world:
+
+~~~text
+corr(operator effective tau, teacher effective tau)
+= 0.9921 ± 0.0012
+~~~
+
+The moving system keeps **10** mutable/stored online scalars. The 64-token
+context ruler keeps **128**.
+
+But the exact-delay attacker kills the universal claim:
+
+| model | drifting exact-delay MSE |
+|---|---:|
+| moving two-mode operator | 1.084 ± 0.014 |
+| frozen same-state operator | 0.997 ± 0.010 |
+| 32-token explicit-context LMS | 0.253 ± 0.0065 |
+| **32-token causal lag attention** | **0.0957 ± 0.0035** |
+
+~~~text
+corr(moving effective tau, true lag)   = -0.039 ± 0.131
+corr(attention estimated lag, true lag)=  0.9953 ± 0.0018
+~~~
+
+So Gate 5 earns exactly one new sentence:
+
+> **Past can sometimes be compressed into a moving present operator very
+> efficiently, but exact addressable history is not one of those cases.**
+
+That is already the first mathematical boundary for the Transformer question.
+A serious alternative now has to learn what should become operator state and
+what must remain explicitly addressable.
 
 ## Current stopping line
 
-> **Gates 1–4 now earn morphological memory, a causal grown operator, and a
-> first delayed local-credit effect on operator function. Gate 5 remains
-> locked until the Gate-4 effect survives a broader confirmation battery and
-> stronger ordinary attackers. Nothing here is yet an intelligent neuron.**
+> **Operaattori has moving-matrix mathematics, not a Transformer replacement.
+> The two-mode operator tracks a drifting smooth temporal law with compact
+> online state, while explicit attention decisively wins the exact-delay
+> counterexample. The next architecture must respect both facts.**
