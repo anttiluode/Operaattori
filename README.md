@@ -127,10 +127,25 @@ That is the point of the name:
 It does **not** yet beat a matrix. When frozen, it *is exactly representable as
 one*.
 
-### Gate 4 — LOCKED until Gates 1–3 pass
+### Gate 4 — delayed consequence stabilizes a useful operator
 
-Only after the first three gates survive: add soma consequence and ask whether
-useful morphology is stabilized by delayed local credit.
+Gates 1–3 survived, so Gate 4 is now implemented.
+
+A continuous strip receives balanced A/B trials. The soma-like readout has a
+deliberately simple target: become more responsive to A than B. The scalar
+target error arrives only after a silent delay; it can act only on the
+currently lingering local eligibility field.
+
+Attackers:
+
+- causal delayed consequence;
+- same-magnitude consequence with randomized sign;
+- correct consequence applied to spatially shuffled eligibility;
+- no consequence.
+
+This task is intentionally trivial for an explicit two-weight digital model.
+Gate 4 therefore tests **local delayed structural credit**, not computational
+superiority.
 
 ### Gate 5 — LOCKED behind Gate 4
 
@@ -177,6 +192,7 @@ python experiments/gate0_protocol_and_rulers.py
 python experiments/gate1_order_memory.py
 python experiments/gate2_multistability_null.py
 python experiments/gate3_grown_operator.py
+python experiments/gate4_delayed_consequence.py
 
 python -m unittest discover -s tests -v
 ~~~
@@ -215,13 +231,12 @@ earned **self-grown operator**, not a new function class and not superiority to
 matrices.
 
 Detailed receipts: [Gate 0](results/GATE0.md),
-[Gate 1](results/GATE1.md), [Gate 2](results/GATE2.md), and
-[Gate 3](results/GATE3.md).
+[Gate 1](results/GATE1.md), [Gate 2](results/GATE2.md),
+[Gate 3](results/GATE3.md), and [Gate 4](results/GATE4.md).
 
 ## Current stopping line
 
-> **Gates 1–3 now earn morphological memory and a causal grown operator in the
-> first controlled strip. Gate 4 may now ask whether delayed consequence can
-> stabilize useful structure. Gate 5 remains locked: no functional-complexity
-> or intelligence comparison is allowed until consequence-guided growth
-> survives.**
+> **Gates 1–4 now earn morphological memory, a causal grown operator, and a
+> first delayed local-credit effect on operator function. Gate 5 remains
+> locked until the Gate-4 effect survives a broader confirmation battery and
+> stronger ordinary attackers. Nothing here is yet an intelligent neuron.**

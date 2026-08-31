@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  gates-0-to-3:
+  gates-0-to-4:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +24,8 @@ jobs:
         run: python experiments/gate2_multistability_null.py
       - name: Gate 3 — morphology becomes operator
         run: python experiments/gate3_grown_operator.py
+      - name: Gate 4 — delayed consequence shapes operator
+        run: python experiments/gate4_delayed_consequence.py
 
   locked-gates:
     runs-on: ubuntu-latest
@@ -34,4 +36,4 @@ jobs:
         run: |
           test ! -e experiments/gate5.py
           test ! -e experiments/gate5_functional_attackers.py
-          echo "Gate 5 remains locked behind the causal ladder."
+          echo "Gate 5 remains locked behind Gate-4 confirmation."
