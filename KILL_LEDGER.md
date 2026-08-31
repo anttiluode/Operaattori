@@ -82,3 +82,31 @@ into operator state.
 The next architecture must therefore treat "compress into current operator" and
 "keep explicitly addressable" as distinct memory choices rather than declaring
 one universally superior.
+
+
+### Gate 7 v1 — "moving basis" was not yet identified
+
+The first rotating-basis attempt **failed its preregistered basis criterion**.
+
+Screen:
+
+~~~text
+moving-full MSE             0.007958
+moving-diagonal MSE         0.012389
+frozen-full MSE             0.024586
+
+full operator error         0.0338
+diagonal operator error     0.0626
+
+basis alignment             0.146
+required                    >= 0.600
+~~~
+
+Allowing an angle coordinate clearly improved prediction and direct operator
+reconstruction, but the learned basis angle did not track the hidden basis
+well enough. This is not counted as a Gate-7 pass.
+
+The likely mathematical defect is that the first update treated the three
+operator coordinates independently even though their forward sensitivities are
+coupled. The next attempt keeps the threshold and replaces the diagonal
+per-coordinate credit normalization with a tiny coupled sensitivity solve.
