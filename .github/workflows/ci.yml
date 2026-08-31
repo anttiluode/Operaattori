@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  gates-0-to-5:
+  gates-0-to-6:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,15 +28,17 @@ jobs:
         run: python experiments/gate4_delayed_consequence.py
       - name: Gate 5 — moving matrix against explicit context
         run: python experiments/gate5_moving_operator.py
+      - name: Gate 6 — out-of-family moving operator
+        run: python experiments/gate6_rich_operator.py
 
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 6 is still absent
+      - name: Verify Gate 7 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate6.py
-          test ! -e experiments/gate6_tissue.py
-          test ! -e experiments/gate6_lesion.py
-          echo "Gate 6 remains locked behind the moving-matrix boundary."
+          test ! -e experiments/gate7.py
+          test ! -e experiments/gate7_meta_operator.py
+          test ! -e experiments/gate7_tissue.py
+          echo "Gate 7 remains locked behind the out-of-family audit."
