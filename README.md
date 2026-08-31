@@ -183,9 +183,45 @@ python -m unittest discover -s tests -v
 
 Machine-readable receipts are written under `results/`.
 
+## First receipt — Gates 0–3 survive the initial implementation
+
+The first 24-clone / 12-clone battery gives:
+
+| measurement | result |
+|---|---:|
+| contractive matrix order decoder | **0.500** |
+| bistable abstract-state order decoder | **1.000** |
+| raw morphology order decoder | **1.000** |
+| **unit-total-mass morphology** order decoder | **1.000** |
+| fast-state residual after washout | **2.43e-7** |
+| eligibility residual after washout | **2.04e-3** |
+| order-shape distance / same-history multistability floor | **125.67×** |
+| same-history pseudo-class decoder | **0.417** |
+| mass-matched future-response order distance | **1.028 relative L2** |
+| response order effect / same-history response floor | **23.26×** |
+| mass-matched frozen-operator matrix distance | **0.0178 relative L2** |
+| exact spatial-vs-matrix replay error | **1.05e-17** |
+
+This is a useful combination of positive and negative results.
+
+**Positive:** order survives as spatial morphology after the labile state is
+gone, survives total-mass normalization, clears the hysteresis/noise floor, and
+changes later standardized propagation after pairwise total-mass matching.
+
+**Negative / ruler:** a same-capacity abstract bistable state also stores the
+order perfectly. And once the morphology is frozen, the spatial probe is
+exactly reproducible by the derived linear matrix. Operaattori has therefore
+earned **self-grown operator**, not a new function class and not superiority to
+matrices.
+
+Detailed receipts: [Gate 0](results/GATE0.md),
+[Gate 1](results/GATE1.md), [Gate 2](results/GATE2.md), and
+[Gate 3](results/GATE3.md).
+
 ## Current stopping line
 
-> **First prove that temporal order can become persistent spatial structure
-> beyond recency and multistability noise, then prove that the structure
-> changes the future operator. Nothing downstream is allowed to exist in CI
-> until that survives.**
+> **Gates 1–3 now earn morphological memory and a causal grown operator in the
+> first controlled strip. Gate 4 may now ask whether delayed consequence can
+> stabilize useful structure. Gate 5 remains locked: no functional-complexity
+> or intelligence comparison is allowed until consequence-guided growth
+> survives.**
