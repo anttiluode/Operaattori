@@ -193,6 +193,55 @@ class BudgetMovingOperator:
         self.fast += total - (self.base + self.fast + self.slow)
 
 
+class RLSContext:
+    """Strong explicit-context attacker with recursive least squares.
+
+    This is intentionally expensive. It keeps the recent tokens, one weight per
+    lag, and a full inverse-covariance matrix. It is here to test whether the
+    moving operator only looked good because normalized LMS adapted too slowly.
+    """
+
+    def __init__(
+        self,
+        window: int,
+        forgetting: float = 0.995,
+        ridge: float = 0.25,
+    ) -> None:
+        self.window = int(window)
+        self.forgetting = float(forgetting)
+        self.buffer: list[float] = []
+        self.w = np.zeros(self.window, dtype=float)
+        self.P = np.eye(self.window, dtype=float) / float(ridge)
+
+    @property
+    def online_scalars(self) -> int:
+        # buffer + weights + full inverse covariance.
+        return self.window * self.window + 2 * self.window
+
+    def predict(self, x: float) -> tuple[float, np.ndarray]:
+        self.buffer.append(float(x))
+        v = np.zeros(self.window, dtype=float)
+        n = min(self.window, len(self.buffer))
+        if n:
+            v[:n] = np.asarray(self.buffer[-n:][::-1], dtype=float)
+        return float(self.w @ v), v
+
+    def learn(
+        self,
+        target: float,
+        prediction: float,
+        context: np.ndarray,
+    ) -> None:
+        Pv = self.P @ context
+        denom = self.forgetting + float(context @ Pv)
+        gain = Pv / (denom + 1e-12)
+        error = float(target - prediction)
+        self.w += gain * error
+        self.P = (
+            self.P - np.outer(gain, context) @ self.P
+        ) / self.forgetting
+
+
 class ContextLMS:
     """Explicit causal context with one adaptive coefficient per stored token."""
 
@@ -255,10 +304,12 @@ def run_seed(
         w: ContextLMS(w, c.context_rate)
         for w in c.context_windows
     }
+    rls = RLSContext(64, forgetting=0.995, ridge=0.25)
 
     pred_m = {n: np.zeros(c.steps) for n in c.moving_sizes}
     pred_f = {n: np.zeros(c.steps) for n in c.moving_sizes}
     pred_c = {w: np.zeros(c.steps) for w in c.context_windows}
+    pred_rls = np.zeros(c.steps)
     tau_m = {n: np.zeros(c.steps) for n in c.moving_sizes}
 
     for t in range(c.steps):
@@ -278,12 +329,20 @@ def run_seed(
             pred_c[w][t] = p
             model.learn(float(y[t]), p, v)
 
+        pr, vr = rls.predict(float(x[t]))
+        pred_rls[t] = pr
+        rls.learn(float(y[t]), pr, vr)
+
     active = slice(c.burnin, None)
 
     result: dict[str, object] = {
         "moving": {},
         "frozen": {},
         "context": {},
+        "rls64": {
+            "mse": _mse(pred_rls, y, c.burnin),
+            "online_scalars": rls.online_scalars,
+        },
     }
 
     for n in c.moving_sizes:
@@ -364,6 +423,10 @@ def run_battery(config: RichConfig | None = None) -> dict:
         "moving": {},
         "frozen": {},
         "context": {},
+        "rls64": {
+            "mse": _agg(row["rls64"]["mse"] for row in rows),
+            "online_scalars": rows[0]["rls64"]["online_scalars"],
+        },
     }
 
     for n in c.moving_sizes:
@@ -406,6 +469,13 @@ def run_battery(config: RichConfig | None = None) -> dict:
                 "mse": row["mse"]["mean"],
             }
         )
+    frontier_points.append(
+        {
+            "name": "rls-64",
+            "online_scalars": summary["rls64"]["online_scalars"],
+            "mse": summary["rls64"]["mse"]["mean"],
+        }
+    )
 
     return {
         "config": c.as_dict(),
