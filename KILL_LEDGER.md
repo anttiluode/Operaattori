@@ -63,6 +63,22 @@ exact frozen operator matrix and requires it to replay the spatial simulation.
 
 ### Gate inflation
 
-Gate 4 does not enter CI until Gates 1–3 survive. Gate 5 does not exist until
-Gate 4 survives. No bug, animal, reproduction, population, language, reward
-hierarchy, or "intelligence" layer is allowed to jump this queue.
+Gate 4 did not enter CI until Gates 1–3 survived. Gate 5 was then unlocked only
+to test the moving-matrix hypothesis against explicit-context rulers. Gate 6
+does not exist yet. No bug, animal, tissue, reproduction, population, language,
+reward hierarchy, lesion story, or "intelligence" layer is allowed to jump
+this queue.
+
+### "Moving matrix replaces attention"
+
+Killed in Gate 5 for the current two-mode formulation.
+
+A moving recurrent operator tracks a smoothly drifting memory kernel compactly,
+but on an exact drifting-delay task causal explicit-token attention wins by
+more than an order of magnitude in MSE and tracks the useful lag almost
+perfectly. Exact addressable history cannot be assumed to survive compression
+into operator state.
+
+The next architecture must therefore treat "compress into current operator" and
+"keep explicitly addressable" as distinct memory choices rather than declaring
+one universally superior.
