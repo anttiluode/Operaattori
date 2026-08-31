@@ -194,8 +194,17 @@ class FullMovingOperator:
             prediction, dtype=float
         )
 
-        denom = 0.02 + np.sum(self.P * self.P, axis=0)
-        credit = (self.P.T @ error) / denom
+        # Gate-7 v1 normalized each operator coordinate independently.
+        # That failed the preregistered basis-alignment criterion because the
+        # eigenvalue and angle sensitivities are not orthogonal. Use the tiny
+        # coupled Gauss-Newton / sensitivity solve instead:
+        #
+        #   (P^T P + ridge I) delta = P^T error
+        #
+        # This remains online and local to the three operator coordinates; it
+        # does not backpropagate through the full history.
+        gram = self.P.T @ self.P + 0.02 * np.eye(self.n_params)
+        credit = np.linalg.solve(gram, self.P.T @ error)
         credit = np.clip(credit, -1.0, 1.0)
 
         self.fast[: self.n_params] = (
