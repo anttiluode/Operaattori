@@ -217,6 +217,8 @@ python experiments/gate4_delayed_consequence.py
 python experiments/gate5_moving_operator.py
 python experiments/gate6_rich_operator.py
 python experiments/gate7_rotating_basis.py
+python experiments/gate8_meta_law.py
+python experiments/gate9_lie_path.py
 
 python -m unittest discover -s tests -v
 ~~~
@@ -267,8 +269,9 @@ two-weight solution.
 Detailed receipts: [Gate 0](results/GATE0.md),
 [Gate 1](results/GATE1.md), [Gate 2](results/GATE2.md),
 [Gate 3](results/GATE3.md), [Gate 4](results/GATE4.md),
-[Gate 5](results/GATE5.md), [Gate 6](results/GATE6.md), and
-[Gate 7](results/GATE7.md).
+[Gate 5](results/GATE5.md), [Gate 6](results/GATE6.md),
+[Gate 7](results/GATE7.md), [Gate 8](results/GATE8.md), and
+[Gate 9](results/GATE9.md).
 
 ## Gate 5 first receipt — moving matrix, with the killer beside it
 
@@ -377,9 +380,101 @@ given much more online state.
 
 See [Gate 7](results/GATE7.md).
 
+## Gate 8 — the law that moves the operator generalizes
+
+Gate 8 selects one small developmental law on eight training worlds, freezes
+that law, resets the operator, and drops it into eight unseen worlds.
+
+The selected rule ranked **1 / 40** on the held-out worlds:
+
+| measurement | result |
+|---|---:|
+| selected held-out MSE | **1.632e-05 ± 8.9e-06** |
+| hand-written Gate-6 rule | 3.015e-05 |
+| frozen operator | 3.785e-05 |
+| median candidate rule | 3.788e-05 |
+| cheating per-world oracle | 1.609e-05 |
+| selected / oracle | **1.014×** |
+| held-out horizon correlation | **0.717** |
+
+Every held-out world begins from the same `A(0)`; what transfers is the update
+law, not the developed matrix.
+
+See [Gate 8](results/GATE8.md).
+
+## Gate 9 — history becomes geometry in operator space
+
+The matrix-exponential observation suggested a stricter test of the moving
+operator itself.
+
+Two primitive shear generators are supplied:
+
+~~~text
+H = [[0,1],      V = [[0,0],
+     [0,0]]           [1,0]]
+~~~
+
+Their commutator is a saddle:
+
+~~~text
+[H,V] = [[ 1, 0],
+         [ 0,-1]]
+~~~
+
+Now run a closed operator loop:
+
+~~~text
+H -> V -> -H -> -V
+~~~
+
+The integrated generator is exactly zero. An order-blind
+`exp(integral A dt)` approximation therefore predicts identity.
+
+It is wrong:
+
+| measurement | result |
+|---|---:|
+| net generator exposure | **0** |
+| noncommuting loop residue | **0.0091088** |
+| commuting-control residue | **3.14e-16** |
+| reverse-loop / commutator alignment | **0.996835** |
+| residue scaling exponent | **2.0029** |
+
+The epsilon-squared scaling is the BCH/Lie-bracket signature.
+
+A two-feature observer trained on path lengths 8/12/16 and tested only on
+unseen lengths 10/14/18 reads signed path area from the final state with
+**0.9717 correlation** and **0.9130 R²**. The commuting control is at zero
+(`R² = -0.0006`).
+
+The closure audit is the more important architectural result:
+
+~~~text
+2x2 shear primitives:                 2 -> 3 dimensions, then saturation
+
+3-state nearest-neighbor shears:
+1 <-> 2 <-> 3
+
+primitive span:                       4 dimensions
+Lie closure:                          8 dimensions = full sl(3)
+~~~
+
+The non-neighbor `E13` direction is absent from the primitive span but appears
+in the closure.
+
+This is not a new function class relative to a full adaptive matrix, and a tiny
+digital counter solves the toy signed-loop task exactly. What Gate 9 earns is a
+mechanism:
+
+> **ordered local operator motion can create effective directions and retain
+> history that are absent from the instantaneous operator and its time-average.**
+
+See [Gate 9](results/GATE9.md).
+
 ## Current stopping line
 
-> **The next mathematical object is G_theta: a fixed developmental law that
-> generates useful A(t) trajectories across worlds it was not individually
-> tuned on. Genes are the rule that moves the operator, not the final
-> operator. Exact addressable history remains an explicit-memory boundary.**
+> **A single moving matrix has a finite algebraic ceiling. The next useful
+> object is spatial: small local generators distributed over a graph or field,
+> with signal route/topology and local operator state both allowed to change.
+> The next gate must ask whether that locality produces useful effective
+> operators under a strict budget, not merely prettier matrix products.**
