@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  gates-0-to-6:
+  gates-0-to-7:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,15 +30,17 @@ jobs:
         run: python experiments/gate5_moving_operator.py
       - name: Gate 6 — out-of-family moving operator
         run: python experiments/gate6_rich_operator.py
+      - name: Gate 7 — move the operator basis
+        run: python experiments/gate7_rotating_basis.py
 
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 7 is still absent
+      - name: Verify Gate 8 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate7.py
-          test ! -e experiments/gate7_meta_operator.py
-          test ! -e experiments/gate7_tissue.py
-          echo "Gate 7 remains locked behind the out-of-family audit."
+          test ! -e experiments/gate8.py
+          test ! -e experiments/gate8_meta_operator.py
+          test ! -e experiments/gate8_hybrid_memory.py
+          echo "Gate 8 remains locked behind the moving-basis audit."
