@@ -199,7 +199,7 @@ python -m unittest discover -s tests -v
 
 Machine-readable receipts are written under `results/`.
 
-## First receipt — Gates 0–3 survive the initial implementation
+## First receipt — Gates 0–4 survive the initial implementation
 
 The first 24-clone / 12-clone battery gives:
 
@@ -217,6 +217,10 @@ The first 24-clone / 12-clone battery gives:
 | response order effect / same-history response floor | **23.26×** |
 | mass-matched frozen-operator matrix distance | **0.0178 relative L2** |
 | exact spatial-vs-matrix replay error | **1.05e-17** |
+| Gate-4 causal selectivity | **+0.481 ± 0.115** |
+| Gate-4 shuffled-consequence selectivity | **-0.226 ± 0.397** |
+| Gate-4 shuffled-eligibility selectivity | **-0.210 ± 0.266** |
+| Gate-4 no-credit selectivity | **-0.390 ± 0.055** |
 
 This is a useful combination of positive and negative results.
 
@@ -229,6 +233,12 @@ order perfectly. And once the morphology is frozen, the spatial probe is
 exactly reproducible by the derived linear matrix. Operaattori has therefore
 earned **self-grown operator**, not a new function class and not superiority to
 matrices.
+
+**Gate 4:** delayed scalar consequence changes the final operator only when it
+remains causally paired with the correct local eligibility address. Randomizing
+the consequence sign or shuffling the eligibility address destroys the
+selective effect. The task itself is still trivial for an explicit digital
+two-weight solution.
 
 Detailed receipts: [Gate 0](results/GATE0.md),
 [Gate 1](results/GATE1.md), [Gate 2](results/GATE2.md),
