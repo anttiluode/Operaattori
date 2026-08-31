@@ -48,6 +48,14 @@ def main() -> None:
             f"{'-':>14s}"
         )
 
+    rls = s["rls64"]
+    print(
+        f"{'rls-64':18s} "
+        f"{rls['online_scalars']:8d} "
+        f"{rls['mse']['mean']:9.6g} ± {rls['mse']['std']:.2g} "
+        f"{'-':>14s}"
+    )
+
     print()
     print("Budget/error Pareto frontier:")
     for row in receipt["pareto_frontier"]:
@@ -78,8 +86,10 @@ def main() -> None:
         "Stopping line: Gate 6 asks whether moving-operator adaptation survives "
         "a teacher that is richer than the student's own family. A pass means "
         "motion still buys something over a frozen operator and at least one "
-        "moving model lies on the online-state budget/error frontier. It does "
-        "not mean the moving representation wins at every budget."
+        "moving model lies on the online-state budget/error frontier. The "
+        "full-covariance RLS attacker is intentionally expensive and checks "
+        "whether LMS adaptation speed created a fake win. This does not mean "
+        "the moving representation wins at every budget."
     )
 
     assert min(moving_improvements) <= 0.90
