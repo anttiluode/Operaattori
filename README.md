@@ -292,13 +292,13 @@ But the exact-delay attacker kills the universal claim:
 
 | model | drifting exact-delay MSE |
 |---|---:|
-| moving two-mode operator | 1.084 ± 0.014 |
+| moving two-mode operator | 1.087 ± 0.015 |
 | frozen same-state operator | 0.997 ± 0.010 |
 | 32-token explicit-context LMS | 0.253 ± 0.0065 |
 | **32-token causal lag attention** | **0.0957 ± 0.0035** |
 
 ~~~text
-corr(moving effective tau, true lag)   = -0.039 ± 0.131
+corr(moving effective tau, true lag)   = -0.062 ± 0.131
 corr(attention estimated lag, true lag)=  0.9953 ± 0.0018
 ~~~
 
