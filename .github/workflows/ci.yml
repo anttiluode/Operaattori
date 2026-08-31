@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  gates-0-to-4:
+  gates-0-to-5:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,14 +26,17 @@ jobs:
         run: python experiments/gate3_grown_operator.py
       - name: Gate 4 — delayed consequence shapes operator
         run: python experiments/gate4_delayed_consequence.py
+      - name: Gate 5 — moving matrix against explicit context
+        run: python experiments/gate5_moving_operator.py
 
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 5 is still absent
+      - name: Verify Gate 6 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate5.py
-          test ! -e experiments/gate5_functional_attackers.py
-          echo "Gate 5 remains locked behind Gate-4 confirmation."
+          test ! -e experiments/gate6.py
+          test ! -e experiments/gate6_tissue.py
+          test ! -e experiments/gate6_lesion.py
+          echo "Gate 6 remains locked behind the moving-matrix boundary."
