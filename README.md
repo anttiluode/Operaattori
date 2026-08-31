@@ -215,6 +215,7 @@ python experiments/gate2_multistability_null.py
 python experiments/gate3_grown_operator.py
 python experiments/gate4_delayed_consequence.py
 python experiments/gate5_moving_operator.py
+python experiments/gate6_rich_operator.py
 
 python -m unittest discover -s tests -v
 ~~~
@@ -264,8 +265,8 @@ two-weight solution.
 
 Detailed receipts: [Gate 0](results/GATE0.md),
 [Gate 1](results/GATE1.md), [Gate 2](results/GATE2.md),
-[Gate 3](results/GATE3.md), [Gate 4](results/GATE4.md), and
-[Gate 5](results/GATE5.md).
+[Gate 3](results/GATE3.md), [Gate 4](results/GATE4.md),
+[Gate 5](results/GATE5.md), and [Gate 6](results/GATE6.md).
 
 ## Gate 5 first receipt — moving matrix, with the killer beside it
 
@@ -311,9 +312,36 @@ That is already the first mathematical boundary for the Transformer question.
 A serious alternative now has to learn what should become operator state and
 what must remain explicitly addressable.
 
+## Gate 6 — richer hidden operator, same question
+
+Gate 6 removes Gate 5's exact two-mode teacher/student match. The hidden world
+now has **six independently drifting exponential memory modes** and drifting
+mixture weights.
+
+The best result is a four-mode moving operator:
+
+| model | online scalars | MSE |
+|---|---:|---:|
+| moving-2 | 10 | 3.218e-4 |
+| frozen-2 | 10 | 1.876e-3 |
+| **moving-4** | **20** | **3.503e-5** |
+| frozen-4 | 20 | 5.189e-5 |
+| moving-8 | 40 | 3.879e-5 |
+| context-128 | 256 | 1.942e-4 |
+| RLS-64 | 4,224 | 3.959e-4 |
+
+The moving-4 operator remains on the online-state budget/error frontier even
+against a full-covariance RLS attacker. Its effective temporal horizon tracks
+the hidden world's moving horizon with correlation **0.860**.
+
+The negative result is useful too: eight moving modes are slightly worse than
+four. Capacity and adaptation speed trade off.
+
+See [Gate 6](results/GATE6.md).
+
 ## Current stopping line
 
-> **Operaattori has moving-matrix mathematics, not a Transformer replacement.
-> The two-mode operator tracks a drifting smooth temporal law with compact
-> online state, while explicit attention decisively wins the exact-delay
-> counterexample. The next architecture must respect both facts.**
+> **Moving-operator adaptation survives a richer six-mode smooth temporal
+> world, but every moving matrix so far is diagonal in a fixed basis. Gate 7
+> must move eigenvectors, not merely eigenvalues. Exact addressable history
+> remains the attention counterexample.**
