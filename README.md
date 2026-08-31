@@ -216,6 +216,7 @@ python experiments/gate3_grown_operator.py
 python experiments/gate4_delayed_consequence.py
 python experiments/gate5_moving_operator.py
 python experiments/gate6_rich_operator.py
+python experiments/gate7_rotating_basis.py
 
 python -m unittest discover -s tests -v
 ~~~
@@ -266,7 +267,8 @@ two-weight solution.
 Detailed receipts: [Gate 0](results/GATE0.md),
 [Gate 1](results/GATE1.md), [Gate 2](results/GATE2.md),
 [Gate 3](results/GATE3.md), [Gate 4](results/GATE4.md),
-[Gate 5](results/GATE5.md), and [Gate 6](results/GATE6.md).
+[Gate 5](results/GATE5.md), [Gate 6](results/GATE6.md), and
+[Gate 7](results/GATE7.md).
 
 ## Gate 5 first receipt — moving matrix, with the killer beside it
 
@@ -339,9 +341,45 @@ four. Capacity and adaptation speed trade off.
 
 See [Gate 6](results/GATE6.md).
 
+## Gate 7 — the operator basis moves too
+
+Gate 7 uses a hidden two-state teacher
+
+~~~text
+A(t) = R(phi(t)) diag(lambda_1(t), lambda_2(t)) R(phi(t))^T
+~~~
+
+so both timescales and eigenvectors drift.
+
+The first update rule failed its preregistered basis-alignment threshold even
+though prediction improved. That failure is preserved in the kill ledger.
+
+Replacing independent coordinate normalization with the coupled local
+sensitivity solve
+
+~~~text
+(P^T P + 0.02 I) delta = P^T error
+~~~
+
+passes the **same** thresholds:
+
+| model | online scalars | MSE | operator error | basis alignment |
+|---|---:|---:|---:|---:|
+| **moving full basis** | **14** | **0.004382** | **0.0239** | **0.671** |
+| moving diagonal | 10 | 0.012389 | 0.0626 | — |
+| frozen full | 14 | 0.024586 | — | — |
+| context-32 | 192 | 0.002315 | — | — |
+| RLS-32 | 4,288 | 0.001826 | — | — |
+
+So the matrix is now genuinely moving in more than one sense: its spectrum and
+its basis both adapt online. Explicit context still wins absolute error when
+given much more online state.
+
+See [Gate 7](results/GATE7.md).
+
 ## Current stopping line
 
-> **Moving-operator adaptation survives a richer six-mode smooth temporal
-> world, but every moving matrix so far is diagonal in a fixed basis. Gate 7
-> must move eigenvectors, not merely eigenvalues. Exact addressable history
-> remains the attention counterexample.**
+> **The next mathematical object is G_theta: a fixed developmental law that
+> generates useful A(t) trajectories across worlds it was not individually
+> tuned on. Genes are the rule that moves the operator, not the final
+> operator. Exact addressable history remains an explicit-memory boundary.**
