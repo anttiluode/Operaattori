@@ -44,3 +44,53 @@ If it survives, the candidate mechanism is genuinely interaction-shaped: human
 NMDA changes the departure from each exact set's independent superposition more
 strongly for compact same-branch inputs. That would earn a timing-structure
 experiment, not developmental growth.
+
+
+## Receipt — survives its own single-site time traces
+
+Gate 17 was expanded from four to all six Gate-16 branches without changing
+the metric or threshold.
+
+~~~text
+branches                               6
+median passive Rinput match            1.037x
+median passive soma-transfer match     1.126x
+settled selected-site voltage          -70.485 .. -70.400 mV
+
+median compact HUMAN/FROZEN
+  interaction gain                     2.6265x
+
+median dispersed HUMAN/FROZEN
+  interaction gain                     1.3818x
+
+median interaction locality            1.6759
+fraction locality >1.05                0.667  (4 / 6)
+median peak-interaction locality       1.0313
+~~~
+
+Per-branch locality:
+
+~~~text
+1.8765
+0.9850
+0.9780
+1.6952
+2.1013
+1.6565
+~~~
+
+Classification:
+
+~~~text
+NMDA_INTERACTION_LOCALITY_SURVIVES_SUPERPOSITION_ATTACK
+~~~
+
+This is a stronger statement than Gate 16 but still a heterogeneous one. Two
+branches are essentially null. Four show a substantial locality effect.
+
+Because each simultaneous response is divided by the sum of that exact set's
+own three single-site time traces, differences in individual passive temporal
+filtering are not sufficient to explain the median effect.
+
+Gate 18 therefore replaces the extreme frozen-NMDA attacker with the paper's
+own Hybrid B control and a still harder rest-matched gamma=0.062 control.
