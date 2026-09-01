@@ -261,3 +261,33 @@ a clean, tiny small-signal coupling. Increasing field strength until the 5%
 ruler is crossed is explicitly not part of the protocol.
 
 See [results/FIELD_SCALING_AUDIT.md](results/FIELD_SCALING_AUDIT.md).
+
+
+## Metric → nonlinear interaction audit
+
+The strong Gate-22 metric channel was connected directly to the six Gate-20
+nonlinear compact branches by increasing only each selected section's
+intrinsic cable length by 20%.
+
+~~~text
+median passive site factor                 1.0877x
+passive branches >1%                       6 / 6
+
+median exact nonlinear interaction factor  1.0274x
+nonlinear branches >5%                     1 / 6
+spike guard                                0
+~~~
+
+Classification:
+
+~~~text
+METRIC_CHANGES_PASSIVE_TRANSPORT_BUT_NOT_NONLINEAR_RATIO
+~~~
+
+The intervention therefore changes transport robustly without comparably
+changing the normalized three-site nonlinear superposition law. This keeps
+`intrinsic transport` and `local nonlinear law` as distinct causal
+channels rather than merging them into one morphology effect.
+
+See
+[results/METRIC_NONLINEARITY_AUDIT.md](results/METRIC_NONLINEARITY_AUDIT.md).
