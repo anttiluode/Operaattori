@@ -106,3 +106,39 @@ compare against both a frozen-output attacker and T_new[N_actual] oracle
 
 That intervention-based portability test is what the current receipts support.
 Priority beyond that would require a dedicated literature review.
+
+
+## Cross-input reuse
+
+A second audit reused each held-out geometry's single T_g across three distinct
+local input operators: one middle site, an outer-site pair, and all three
+sites.
+
+~~~text
+36 held-out cases
+
+frozen-soma attacker                  0.0931 median NRMSE
+factorized T_g[N_original(pattern)]   0.0282
+transport oracle                      0.0039
+
+factorized wins                       28 / 36
+
+pattern medians
+  middle single                       0.0125
+  outer pair                          0.0373
+  triple                              0.0512
+~~~
+
+Classification:
+
+~~~text
+TRANSPORT_OPERATOR_REUSES_ACROSS_INPUT_PATTERNS
+~~~
+
+This strengthens the modular claim: T_g is not tied to the waveform used to
+measure it.
+
+The remaining limitation is now clearer. N_b is still supplied as a measured
+original-geometry current waveform for each input pattern. The next reduction
+should replace that lookup with a geometry-independent synaptic nonlinearity
+coupled through a local geometry-dependent Green/impulse matrix.
