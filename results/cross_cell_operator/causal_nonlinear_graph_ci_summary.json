@@ -1,0 +1,39 @@
+{
+  "object": "causal state-space morphology-graph nonlinear closure diagnosis",
+  "source": "GitHub Actions run 33538293022, job 99957910024",
+  "aggregate": {
+    "cases": 288,
+    "median_causal_graph_oracle_soma_nrmse": 0.0040437370797826635,
+    "median_causal_soma_nrmse": 0.002525587396565146,
+    "median_causal_current_nrmse": 0.01722415965824054,
+    "median_causal_local_voltage_nrmse": 0.0007997762544340256,
+    "timing_medians": {
+      "synchronous": 0.0025968419552519053,
+      "forward_5": 0.00247091856073288,
+      "reverse_5": 0.0025091795760086807,
+      "spread_15": 0.0024176212637432096
+    },
+    "median_cell_soma_nrmse": 0.0021428701804259275,
+    "cells_median_soma_nrmse_le_0p10": 23,
+    "case_convergence_fraction": 1,
+    "max_newton_iterations": 4,
+    "line_search_failures": 0,
+    "rat_median_cell_soma_nrmse": 0.007244921523193222,
+    "human_median_cell_soma_nrmse": 0.001268485372723858,
+    "worst_cell": {
+      "species": "rat",
+      "morphology_identifier": "L6 IPC",
+      "median_soma_nrmse": 0.1119147945437729,
+      "median_current_nrmse": 0.1571776502734909,
+      "median_oracle_soma_nrmse": 0.020034695553880093
+    }
+  },
+  "original_global_picard": {
+    "converged_cases": 207,
+    "total_cases": 288,
+    "convergence_fraction": 0.71875
+  },
+  "classification": "CAUSAL_MORPHOLOGY_GRAPH_NONLINEAR_CLOSURE_VALID",
+  "failure_mechanism": "GLOBAL_WAVEFORM_PICARD_WAS_THE_NONPORTABLE_COMPONENT",
+  "strong_descriptive_label": "SUBPERCENT_CAUSAL_MORPHOLOGY_TO_NONLINEAR_RESPONSE"
+}
