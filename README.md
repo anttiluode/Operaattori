@@ -271,7 +271,8 @@ Detailed receipts: [Gate 0](results/GATE0.md),
 [Gate 3](results/GATE3.md), [Gate 4](results/GATE4.md),
 [Gate 5](results/GATE5.md), [Gate 6](results/GATE6.md),
 [Gate 7](results/GATE7.md), [Gate 8](results/GATE8.md),
-[Gate 9](results/GATE9.md), and [Gate 10](results/GATE10.md).
+[Gate 9](results/GATE9.md), [Gate 10](results/GATE10.md), and
+[Gate 11](results/GATE11.md).
 
 ## Gate 5 first receipt — moving matrix, with the killer beside it
 
@@ -497,10 +498,50 @@ learn or grow.
 
 See [Gate 10](results/GATE10.md).
 
+## Gate 11 — real dendritic transport has path order
+
+Gate 11 attaches classical passive-cable two-port matrices to the real
+cell-1125 dendritic paths, using the Aizenbud passive parameters rather than an
+invented neural operator.
+
+Across 64 long dendritic paths:
+
+| measurement | result |
+|---|---:|
+| median path length | **357.6 um** |
+| median point segments/path | **241** |
+| raw adjacent-point commutator | 3.712e-17 |
+| **25-um block commutator** | **6.754e-04** |
+| uniform-radius block commutator max | 2.127e-16 |
+| real vs reversed impedance | **0.315524** |
+| real vs shuffled impedance | **0.174423** |
+| real vs reversed gain | **0.315524** |
+| median phase difference | **0.237898 rad** |
+| median group-delay difference | **1.52477 ms** |
+| area-matched uniform-radius reverse control | **1.039e-14** |
+
+The first version of this gate failed its microscopic commutator meter even
+while the reversal/shuffle effects were large. That failure is preserved in the
+receipt. The ASC reconstruction is sampled at roughly micron scale, where the
+two-piece commutator is second-order tiny. Grouping contiguous pieces into
+25-um cable blocks reveals the finite-scale noncommutativity without changing
+the functional gate or attacker.
+
+So Gate 11 earns:
+
+> **the spatial ordering of heterogeneous local passive transport operators is
+> a real functional degree of freedom on the reconstructed human dendrite.**
+
+It does not earn learning or intelligence. See [Gate 11](results/GATE11.md).
+
 ## Current stopping line
 
-> **The real morphology must first survive exact reconstruction from local
-> matrices. If it does, Gate 11 may attach small dynamical operators to those
-> frames and ask whether preserving spatial operator order matters versus
-> shuffled, commuting, fixed-topology and dense-matrix attackers. Only after
-> that functional audit may activity change the scaffold itself.**
+> **We now have two separately passing halves: local SE(3) frames can twist a
+> real dendritic subtree, and ordered passive cable matrices on real dendritic
+> paths change impedance, attenuation, phase, and delay. But a pure 3-D
+> rotation of a frame does not change passive cable transport when length,
+> radius, and topology are held fixed. The next gate must expose that boundary
+> explicitly before adding growth: first prove the bend-only null, then add one
+> physically specified geometry-sensitive coupling (for example an
+> extracellular/ephaptic interaction) and ask whether spatial deformation
+> becomes computational rather than merely visual.**
