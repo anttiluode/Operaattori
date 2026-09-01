@@ -554,3 +554,59 @@ novel cable-theory claim.
 
 See
 [results/DIRECT_CABLE_GRAPH_AUDIT.md](results/DIRECT_CABLE_GRAPH_AUDIT.md).
+
+
+## Cross-cell morphology -> nonlinear response
+
+The full morphology graph was composed with the fixed HUMAN_PROBE
+AMPA/NMDA law across 24 morphologies, three branches per cell and four timing
+programs.
+
+The first global-waveform fixed-point implementation failed portability:
+
+~~~text
+median soma NRMSE                0.0042
+global fixed-point convergence   207 / 288
+~~~
+
+Classification:
+
+~~~text
+CROSS_CELL_GRAPH_TRANSPORT_VALID_NONLINEAR_CLOSURE_NOT_PORTABLE
+~~~
+
+A locked causal solver diagnosis changed no scientific parameter. It evolved
+the passive graph state one time step at a time and solved only the three
+current-bearing site voltages implicitly.
+
+~~~text
+288 cases
+
+graph-current oracle soma NRMSE  0.00404
+causal soma NRMSE                0.00253
+causal local-voltage NRMSE       0.00080
+causal current NRMSE             0.01722
+
+median cell soma NRMSE           0.00214
+cells <= 0.10                    23 / 24
+Newton convergence               288 / 288
+max Newton iterations            4
+~~~
+
+Classification:
+
+~~~text
+CAUSAL_MORPHOLOGY_GRAPH_NONLINEAR_CLOSURE_VALID
+~~~
+
+Failure mechanism:
+
+~~~text
+GLOBAL_WAVEFORM_PICARD_WAS_THE_NONPORTABLE_COMPONENT
+~~~
+
+Thus the cross-cell architecture requires preserving causal passive state; a
+single global waveform Picard loop is not a universally robust runtime.
+
+See
+[results/CAUSAL_NONLINEAR_GRAPH_DIAGNOSIS.md](results/CAUSAL_NONLINEAR_GRAPH_DIAGNOSIS.md).
