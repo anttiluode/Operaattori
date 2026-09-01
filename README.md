@@ -4,6 +4,17 @@
 
 **Operaattori** is Finnish for **operator**.
 
+## [▶ Live Bend Fence demo](https://anttiluode.github.io/Operaattori/)
+
+**Drag a real human dendritic subtree through space.** A 35° rigid bend moves it
+**184.107 µm** while the classical passive cable transfer changes by only
+**5.999e-14**. Switch to intrinsic stretch and a much less dramatic-looking
+20% metric change produces a **36.34% median passive-transfer change**.
+
+The browser computes the geometry live and displays the locked Gate-22
+electrical measurements as measured anchors; it does not fabricate interpolated
+electrophysiology.
+
 The repo started as a synthetic moving-operator project. From Gate 10 onward it
 became a different and much more concrete investigation:
 
