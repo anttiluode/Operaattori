@@ -389,3 +389,74 @@ can the morphology graph itself generate the operator directly?
 
 A direct matched-passive graph/cable solver is the next scientifically clean
 test. It would use no cross-cell fitting at all.
+
+
+## The graph is the cross-cell coordinate
+
+The cross-cell coordinate search ended with a direct test.
+
+Two small learned charts failed:
+
+~~~text
+gross morphology chart              0.3522 joint NRMSE
+electrotonic chart                  0.4070
+combined chart                      0.3062
+training-basis PCA oracle           0.0307
+~~~
+
+A direct matched-passive cable solver was then built from the full loaded
+morphology graph with no cross-cell fitting.
+
+~~~text
+144 branch operator packs
+
+direct morphology graph
+  joint G/T NRMSE                   0.0021
+  local G                           0.0013
+  soma T                            0.0024
+
+median held-out-cell error          0.0018
+cells <= 0.10                       23 / 24
+~~~
+
+Classification:
+
+~~~text
+MORPHOLOGY_GRAPH_GENERATES_PASSIVE_OPERATOR
+~~~
+
+This resolves the apparent contradiction.
+
+The operator family is compressible **after** cable physics has acted, but the
+mapping from morphology into that family does not survive aggressive
+compression into a handful of scalar features.
+
+The upstream architecture should therefore be:
+
+~~~text
+full morphology graph
+        |
+        v
+physical cable construction
+        |
+        v
+operator pack P = (G, T)
+        |
+        v
+local nonlinear circuit
+~~~
+
+not:
+
+~~~text
+morphology
+   |
+   v
+small feature vector
+   |
+   v
+operator coordinates
+~~~
+
+The nonlinear cross-cell closure is still untested. The direct graph result is
+currently passive only.
