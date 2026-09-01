@@ -32,3 +32,42 @@ reason to relearn the local nonlinear computation.
 
 If it fails, the oracle decomposition tells us whether the failure belongs to
 transport linearization or to portability of the local nonlinear operator.
+
+
+## Earned result
+
+The first held-out composition audit passed.
+
+~~~text
+original transport reconstruction         0.0046 median NRMSE
+
+held-out +/-20% branch-length perturbations
+  frozen original soma attacker           0.0982
+  T_g [ N_original ]                      0.0512
+  T_g [ N_holdout ] transport oracle      0.0046
+
+factorized / frozen median error           0.5213
+factorized beats frozen                    9 / 12
+median local-current waveform drift        0.0560
+~~~
+
+Classification:
+
+~~~text
+TRANSPORT_X_LOCAL_NONLINEAR_OPERATOR_FACTORIZATION
+~~~
+
+So the useful abstraction is no longer just a diagram. On these six real
+cell-1125 compact branches, a nonlinear synaptic-current operator measured only
+in the original geometry can be reused after held-out intrinsic metric changes
+by replacing the site-to-soma transport operator.
+
+The transport oracle is especially strong: once given the correct held-out
+currents, the linear transport module reconstructs soma traces at about 0.46%
+median NRMSE. The dominant residual error in the reusable factorization is
+therefore drift of the local nonlinear current operator, not failure of the
+transport decomposition.
+
+This does not mean N_b is universal. The next audit asks whether the same T_g
+works across several distinct local input patterns rather than only the
+three-site Gate-20 pattern.
