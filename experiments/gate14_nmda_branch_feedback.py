@@ -259,6 +259,7 @@ def main() -> None:
         curves_by_condition[name] = np.asarray(curves_by_condition[name], dtype=float)
 
     human_enh = np.asarray([r['human_to_frozen_high_dose_ratio'] for r in rows])
+    human_hybrid = np.asarray([r['human_to_hybridB_high_dose_ratio'] for r in rows])
     human_coop = np.asarray([r['human_high_dose_cooperativity'] for r in rows])
     frozen_coop = np.asarray([r['frozen_high_dose_cooperativity'] for r in rows])
     linear_coop = np.asarray([r['linear_high_dose_cooperativity'] for r in rows])
@@ -274,9 +275,11 @@ def main() -> None:
         'doses': doses.tolist(),
         'median_human_to_frozen_high_dose_ratio': float(np.median(human_enh)),
         'max_human_to_frozen_high_dose_ratio': float(np.max(human_enh)),
+        'median_human_to_hybridB_high_dose_ratio': float(np.median(human_hybrid)),
         'fraction_branches_human_over_frozen_10pct': float(np.mean(human_enh > 1.10)),
         'median_human_high_dose_cooperativity': float(np.median(human_coop)),
         'median_frozen_high_dose_cooperativity': float(np.median(frozen_coop)),
+        'median_human_minus_frozen_cooperativity': float(np.median(human_coop - frozen_coop)),
         'max_abs_linear_cooperativity_minus_one': float(np.max(np.abs(linear_coop - 1.0))),
         'dose_curve_effective_rank': {k: float(v) for k,v in ranks.items()},
         'human_minus_frozen_effective_rank': float(ranks['human'] - ranks['human_frozen_block']),
@@ -333,6 +336,7 @@ def main() -> None:
     print(f"branches:                              {aggregate['branches']}")
     print(f"median human/frozen at 48 synapses:    {aggregate['median_human_to_frozen_high_dose_ratio']:.4f}")
     print(f"max human/frozen at 48 synapses:       {aggregate['max_human_to_frozen_high_dose_ratio']:.4f}")
+    print(f"median human/hybrid-B at 48:            {aggregate['median_human_to_hybridB_high_dose_ratio']:.4f}")
     print(f"branches >10% human/frozen:            {aggregate['fraction_branches_human_over_frozen_10pct']:.3f}")
     print(f"median human cooperativity:            {aggregate['median_human_high_dose_cooperativity']:.4f}")
     print(f"median frozen cooperativity:           {aggregate['median_frozen_high_dose_cooperativity']:.4f}")
