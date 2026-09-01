@@ -1,5 +1,7 @@
 # Operaattori
 
+![pic](cell1125_original_scaffold.png)
+
 **Operaattori** is Finnish for **operator**.
 
 This repo asks one deliberately narrow question:
