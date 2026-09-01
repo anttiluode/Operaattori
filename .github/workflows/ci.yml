@@ -269,6 +269,18 @@ jobs:
       - name: Gate 24 — real field x movable scaffold x NMDA
         run: python experiments/gate24_real_field_nmda.py --fci-root /tmp/fci --branches 6 --sites 3 --cluster-span-um 55
 
+  symmetry-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pip install -r requirements-morphology.txt
+      - name: Multi-pivot scaffold symmetry audit
+        run: python experiments/symmetry_audit.py --pivots 6 --paths-per-pivot 3
+
   locked-gates:
     runs-on: ubuntu-latest
     steps:
