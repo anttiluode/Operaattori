@@ -87,6 +87,28 @@ def solve_equilibrium(
     if Z.shape != (m, m):
         raise ValueError("Z and multiplicity size mismatch")
 
+    # The fixed-current attacker is intentionally not a conductance model.
+    # Solve it exactly rather than passing it through the voltage-bounded
+    # nonlinear solver below. Its voltage may exceed E_syn; that is fine
+    # because this ruler exists only to verify linear superposition.
+    if condition.fixed_current:
+        current, deriv = synaptic_current_and_derivative_nA(
+            np.full(m, v_rest_mV, dtype=float),
+            mult,
+            condition,
+            v_rest_mV=v_rest_mV,
+        )
+        dep = Z @ current
+        absolute_v = v_rest_mV + dep
+        return {
+            "voltage_mV": absolute_v,
+            "depolarization_mV": dep,
+            "current_nA": current,
+            "dI_dV_nA_per_mV": deriv,
+            "converged": True,
+            "residual_mV": float(np.max(np.abs(dep - Z @ current))) if m else 0.0,
+        }
+
     dep = np.zeros(m, dtype=float)
     eye = np.eye(m)
     converged = False
