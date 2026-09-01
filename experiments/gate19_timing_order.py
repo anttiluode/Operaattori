@@ -34,6 +34,8 @@ def run_timed_trace(
     baseline_by_row: dict[int, float],
     *,
     tstop_ms: float,
+    analysis_first_ms: float | None = None,
+    analysis_last_ms: float | None = None,
 ) -> dict:
     from neuron import h
 
@@ -78,8 +80,16 @@ def run_timed_trace(
     if not np.all(np.isfinite(soma)) or not np.all(np.isfinite(local)):
         raise FloatingPointError("non-finite Gate-19 trace")
 
-    first_event = float(np.min(event_times_ms))
-    last_event = float(np.max(event_times_ms))
+    first_event = (
+        float(np.min(event_times_ms))
+        if analysis_first_ms is None
+        else float(analysis_first_ms)
+    )
+    last_event = (
+        float(np.max(event_times_ms))
+        if analysis_last_ms is None
+        else float(analysis_last_ms)
+    )
     pre = (t >= first_event - 10.0) & (t < first_event - 1.0)
     post = (t >= first_event) & (t <= last_event + 90.0)
 
@@ -107,7 +117,9 @@ def timed_interaction_metrics(
 ) -> dict:
     sites = np.asarray(sites, dtype=int)
     event_times_ms = np.asarray(event_times_ms, dtype=float)
-    tstop = float(np.max(event_times_ms) + 100.0)
+    analysis_first = float(np.min(event_times_ms))
+    analysis_last = float(np.max(event_times_ms))
+    tstop = float(analysis_last + 100.0)
 
     together = run_timed_trace(
         cell,
@@ -119,6 +131,8 @@ def timed_interaction_metrics(
         condition,
         baseline_by_row,
         tstop_ms=tstop,
+        analysis_first_ms=analysis_first,
+        analysis_last_ms=analysis_last,
     )
 
     singles = []
@@ -134,6 +148,8 @@ def timed_interaction_metrics(
                 condition,
                 baseline_by_row,
                 tstop_ms=tstop,
+                analysis_first_ms=analysis_first,
+                analysis_last_ms=analysis_last,
             )
         )
 
