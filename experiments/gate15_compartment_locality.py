@@ -374,6 +374,39 @@ def main() -> None:
         [r["doses"][-1]["locality_index_human_over_frozen"] for r in rows],
         dtype=float,
     )
+
+    def depol(item: dict, field: str = "median_local_voltage_mV") -> float:
+        return max(float(item[field]) + 70.0, 1e-12)
+
+    voltage_locality = []
+    max_voltage_locality = []
+    clustered_human_median_v = []
+    clustered_frozen_median_v = []
+    dispersed_human_median_v = []
+    dispersed_frozen_median_v = []
+    for r in rows:
+        d = r["doses"][-1]
+        ch = d["clustered"]["human"]
+        cf = d["clustered"]["human_frozen_block"]
+        dh = d["dispersed"]["human"]
+        df = d["dispersed"]["human_frozen_block"]
+
+        rc = depol(ch) / depol(cf)
+        rd = depol(dh) / depol(df)
+        voltage_locality.append(rc / (rd + 1e-30))
+
+        rcm = depol(ch, "max_local_voltage_mV") / depol(cf, "max_local_voltage_mV")
+        rdm = depol(dh, "max_local_voltage_mV") / depol(df, "max_local_voltage_mV")
+        max_voltage_locality.append(rcm / (rdm + 1e-30))
+
+        clustered_human_median_v.append(ch["median_local_voltage_mV"])
+        clustered_frozen_median_v.append(cf["median_local_voltage_mV"])
+        dispersed_human_median_v.append(dh["median_local_voltage_mV"])
+        dispersed_frozen_median_v.append(df["median_local_voltage_mV"])
+
+    voltage_locality = np.asarray(voltage_locality, dtype=float)
+    max_voltage_locality = np.asarray(max_voltage_locality, dtype=float)
+
     high_gamma_locality = np.asarray(
         [r["doses"][-1]["locality_index_human_over_hybridB"] for r in rows],
         dtype=float,
@@ -419,6 +452,13 @@ def main() -> None:
         "minimum_distinct_dispersed_runs": int(np.min(distinct_runs)),
         "median_coupling_ratio_clustered_over_dispersed": float(np.median(coupling_ratio)),
         "median_high_dose_locality_index_human_over_frozen": float(np.median(high_locality)),
+        "median_high_dose_local_voltage_locality_human_over_frozen": float(np.median(voltage_locality)),
+        "median_high_dose_max_voltage_locality_human_over_frozen": float(np.median(max_voltage_locality)),
+        "median_high_dose_clustered_human_local_voltage_mV": float(np.median(clustered_human_median_v)),
+        "median_high_dose_clustered_frozen_local_voltage_mV": float(np.median(clustered_frozen_median_v)),
+        "median_high_dose_dispersed_human_local_voltage_mV": float(np.median(dispersed_human_median_v)),
+        "median_high_dose_dispersed_frozen_local_voltage_mV": float(np.median(dispersed_frozen_median_v)),
+        "fraction_branches_local_voltage_locality_over_1p05": float(np.mean(voltage_locality > 1.05)),
         "fraction_branches_high_dose_locality_over_1p05": float(np.mean(high_locality > 1.05)),
         "fraction_branches_high_dose_locality_over_1p10": float(np.mean(high_locality > 1.10)),
         "median_high_dose_locality_index_human_over_hybridB": float(np.median(high_gamma_locality)),
@@ -516,6 +556,11 @@ def main() -> None:
     print(f"minimum dispersed branch runs:         {aggregate['minimum_distinct_dispersed_runs']}")
     print(f"median clustered/dispersed coupling:   {aggregate['median_coupling_ratio_clustered_over_dispersed']:.3f}x")
     print(f"median high-dose locality H/F:         {aggregate['median_high_dose_locality_index_human_over_frozen']:.4f}")
+    print(f"median local-V locality H/F:           {aggregate['median_high_dose_local_voltage_locality_human_over_frozen']:.4f}")
+    print(f"median max-V locality H/F:             {aggregate['median_high_dose_max_voltage_locality_human_over_frozen']:.4f}")
+    print(f"median clustered V human/frozen:       {aggregate['median_high_dose_clustered_human_local_voltage_mV']:.2f} / {aggregate['median_high_dose_clustered_frozen_local_voltage_mV']:.2f} mV")
+    print(f"median dispersed V human/frozen:       {aggregate['median_high_dose_dispersed_human_local_voltage_mV']:.2f} / {aggregate['median_high_dose_dispersed_frozen_local_voltage_mV']:.2f} mV")
+    print(f"branches local-V locality >1.05:       {aggregate['fraction_branches_local_voltage_locality_over_1p05']:.3f}")
     print(f"fraction high-dose locality >1.05:     {aggregate['fraction_branches_high_dose_locality_over_1p05']:.3f}")
     print(f"fraction high-dose locality >1.10:     {aggregate['fraction_branches_high_dose_locality_over_1p10']:.3f}")
     print(f"median high-dose locality H/hybrid-B:  {aggregate['median_high_dose_locality_index_human_over_hybridB']:.4f}")
