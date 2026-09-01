@@ -161,3 +161,103 @@ impedance measurements, species labels, deletion of 2057, direct PCA-coordinate
 fits, or nonlinear-NMDA output scoring.
 
 This is an architecture audit, not Gate 25.
+
+
+## Receipt — electrotonic chart still insufficient
+
+The locked 24-cell leave-one-cell-out audit completed.
+
+~~~text
+electrotonic chart
+  median joint NRMSE                 0.4070
+  median G NRMSE                     0.2643
+  median T NRMSE                     0.4405
+
+electrotonic nearest attacker        0.4068
+training-basis PCA oracle            0.0307
+
+electrotonic / previous gross        1.1556
+electrotonic / nearest               1.0005
+held-out cells beating nearest       14 / 24
+
+gross morphology rerun               0.3522
+combined gross + electrotonic        0.3062
+~~~
+
+Classification:
+
+~~~text
+OPERATOR_LOW_DIMENSIONAL_ELECTROTONIC_CHART_STILL_INSUFFICIENT
+~~~
+
+The primary physical chart therefore failed. Replacing metric morphology with
+electrotonic/Rall summaries did not locate unseen cells more accurately.
+
+### The useful secondary clue
+
+The combined chart did improve over gross morphology alone:
+
+~~~text
+gross only joint NRMSE               0.3522
+combined joint NRMSE                 0.3062
+combined G NRMSE                     0.2323
+combined T NRMSE                     0.3337
+~~~
+
+That is about a 13% relative reduction in median joint error, so the
+electrotonic descriptors carry information that the gross morphology chart
+misses. But they are complementary rather than sufficient.
+
+The primary pass/fail decision remains a failure.
+
+### Species diagnostics
+
+~~~text
+electrotonic LOCO rat median cell joint     0.3067
+electrotonic LOCO human                     0.5577
+
+rat -> human                                1.1211
+human -> rat                                0.4211
+~~~
+
+The human side becomes harder, not easier, under the electrotonic-only chart.
+
+### Largest coefficient diagnostics
+
+Averaged across LOCO folds, the largest standardized ridge weights into the
+operator PCA scores were:
+
+~~~text
+log midpoint characteristic admittance     15.52
+section electrotonic length                  4.05
+proximal/distal taper                        3.96
+subtree total electrotonic length            3.85
+soma-to-mid electrotonic path                3.67
+distal Rall load ratio                       2.59
+~~~
+
+These weights are interpretive only; no feature was selected from them.
+
+### Interpretation
+
+The cross-cell operator family remains highly compressible:
+
+~~~text
+training-basis PCA oracle                    0.0307
+~~~
+
+but neither gross geometry nor a compact Rall/electrotonic summary is a good
+coordinate chart.
+
+The combined improvement suggests both carry real information, while the
+remaining ~31% error points to missing **distributed boundary/loading
+structure** rather than one more scalar feature.
+
+The next justified question is therefore whether the morphology's full cable
+graph itself is the appropriate coordinate: can a direct matched-passive graph
+solver reconstruct G/T across the 24 cells without any cross-cell fitting?
+
+No neural-net, polynomial-feature or target-impedance rescue is opened.
+
+GitHub Actions:
+run 33527487507, job 99921928756.
