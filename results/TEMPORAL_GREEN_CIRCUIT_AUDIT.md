@@ -120,3 +120,61 @@ No event delays, time alignment, conductance gains, damping, branches, geometry
 scales or analysis windows are changed after seeing the result.
 
 This is an architecture audit, not Gate 25.
+
+
+## Receipt — temporal portability passes
+
+The locked 72-case audit passed.
+
+~~~text
+6 branches x 3 geometries x 4 timing programs = 72
+
+median transport-oracle soma NRMSE       0.0037
+median reduced-circuit soma NRMSE        0.0050
+median reduced current-waveform NRMSE    0.0026
+
+timing-family medians
+  synchronous                            0.0070
+  forward_5                              0.0053
+  reverse_5                              0.0054
+  spread_15                              0.0041
+
+fixed-point convergence                  72 / 72
+actual soma spike guard                  0
+~~~
+
+Classification:
+
+~~~text
+TEMPORAL_GREEN_CIRCUIT_GENERALIZES_WITHOUT_REFIT
+~~~
+
+The same single-event conductance template, local Green matrix construction,
+HUMAN magnesium-block law and transport construction therefore generalize to
+forward, reverse and widely staggered three-site event sequences without any
+temporal fit.
+
+### Nonlinear feedback ablation
+
+The diagnostic open-loop attacker keeps the exact same conductance programs and
+the exact same geometry-specific transport, but evaluates synaptic current only
+at the no-input local voltage:
+
+~~~text
+J_open = synapse_law(V_noinput, timed conductances)
+V_open = T_g[J_open]
+~~~
+
+Result:
+
+~~~text
+median open-loop soma NRMSE              0.4141
+median reduced/open-loop error ratio     0.0121
+reduced circuit beats open loop          72 / 72
+~~~
+
+Thus the high accuracy is not explained by passive transport plus a prescribed
+conductance waveform. The self-consistent local voltage feedback around the
+NMDA conductance is essential in this operating regime.
+
+GitHub Actions: run 33501182766, job 99834644732.
