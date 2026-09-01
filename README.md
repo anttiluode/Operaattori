@@ -153,20 +153,37 @@ electric-field polarization can shift NMDA-spike generation.
 Therefore Operaattori must **not** claim that "field + NMDA" is an undiscovered
 phenomenon.
 
-## The open cell: Gate 24
+## Gate 24 closes the world-field loop — but the nonlinear effect is tiny
 
-The remaining experiment is narrower and more specific:
+Gate 24 replaced Gate 23's toy current redistribution with a real uniform
+extracellular potential coupled through NEURON while keeping the intrinsic
+cell-1125 cable unchanged.
 
-> **On this real matrix scaffold, can an isometric local bend alter which of the
-> already-measured nonlinear branch compartments is recruited when both
-> embeddings are placed in the same physically defined extracellular field?**
+The controls are exact:
 
-That is a scaffold-causality question, not a first-discovery claim about
-electric fields or NMDA.
+~~~text
+zero-field embedding difference          0
+material-locked difference               0
+~~~
 
-Gate 24 will use a real extracellular-potential coupling rather than Gate 23's
-toy current redistribution, preserve the intrinsic cable, and compare proximal
-fork bends against a distal-bend control. Growth remains locked.
+Under the locked 1 V/m, 35-degree, 24-synapse protocol:
+
+~~~text
+proximal HUMAN bend factor          1.0003x
+distal HUMAN bend factor            1.0002x
+frequencies with >5% proximal effect   0 / 3
+~~~
+
+Classification:
+
+~~~text
+FIELD_COUPLING_PRESENT_BUT_NOT_COMPARTMENT_SELECTIVE
+~~~
+
+So a real world-space field gives the isometric embedding a physical coupling,
+but under this weak-field protocol it does **not** materially change the
+already-measured nonlinear branch interaction. That is a completed row, not a
+failed search to be rescued by turning up field strength.
 
 No Gate 25 is open.
 
@@ -188,7 +205,7 @@ No Gate 25 is open.
 | [21](results/GATE21.md) | do branch subunits cleanly factorize fixed-budget soma traces? | mixed; scalar signature yes, full trace no |
 | [22](results/GATE22.md) | does pure 3-D re-embedding change cable computation? | **no, to numerical precision** |
 | [23](results/GATE23.md) | does passive toy world sampling make that embedding robustly functional? | weak |
-| **24** | real extracellular field x movable scaffold x nonlinear compartments | **next / locked protocol** |
+| [24](results/GATE24.md) | real extracellular field x movable scaffold x nonlinear compartments | field coupling present; **nonlinear bend effect ~0.03%, not selective** |
 
 ## Reproduce the current headline rows
 
