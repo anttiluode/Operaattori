@@ -80,3 +80,45 @@ outputs. It does not yet mean N_b can predict an input pattern it has never
 seen.
 
 This is an architecture audit, not Gate 25.
+
+
+## Receipt
+
+The 36-case locked audit passed.
+
+~~~text
+6 branches x 2 held-out length scales x 3 input patterns = 36
+
+median original reconstruction NRMSE      0.0041
+median frozen-soma attacker NRMSE         0.0931
+median factorized NRMSE                   0.0282
+median transport-oracle NRMSE             0.0039
+
+factorized / frozen median error           0.3027
+factorized beats frozen                    28 / 36
+spike guard                                0
+~~~
+
+Pattern-family medians:
+
+~~~text
+middle_single                              0.0125
+outer_pair                                 0.0373
+triple                                     0.0512
+~~~
+
+Classification:
+
+~~~text
+TRANSPORT_OPERATOR_REUSES_ACROSS_INPUT_PATTERNS
+~~~
+
+The same geometry-specific transport kernels were measured once and reused for
+all three patterns. No per-pattern gain, alignment or transport fit was used.
+
+Error grows with local interaction complexity while the transport oracle
+remains around four parts in a thousand. That is consistent with the limiting
+approximation being geometry-induced drift in the local nonlinear current
+operator, not failure of T_g to transport different current waveforms.
+
+GitHub Actions: run 33493467996, job 99810134019.
