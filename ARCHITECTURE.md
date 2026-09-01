@@ -346,3 +346,46 @@ The full receipt is
 
 No larger learned model is justified until the missing physical coordinates
 are understood.
+
+
+## Electrotonic chart boundary
+
+A second cross-cell audit replaced gross morphology coordinates with
+cable-theoretic ones: electrotonic lengths, d^(3/2) characteristic-admittance
+proxies, taper, Rall branch mismatch and downstream electrotonic load.
+
+~~~text
+electrotonic-only joint NRMSE       0.4070
+gross morphology                    0.3522
+combined gross + electrotonic       0.3062
+training-basis PCA oracle           0.0307
+~~~
+
+Classification:
+
+~~~text
+OPERATOR_LOW_DIMENSIONAL_ELECTROTONIC_CHART_STILL_INSUFFICIENT
+~~~
+
+So the missing cross-cell coordinate is not recovered by a small hand-designed
+Rall/electrotonic feature vector either.
+
+The combined improvement is still informative: electrotonic quantities add
+signal beyond gross geometry, but the remaining error is consistent with the
+operator depending on the distributed loaded cable tree rather than a handful
+of scalar summaries.
+
+That changes the next question from:
+
+~~~text
+which morphology features predict the operator?
+~~~
+
+to:
+
+~~~text
+can the morphology graph itself generate the operator directly?
+~~~
+
+A direct matched-passive graph/cable solver is the next scientifically clean
+test. It would use no cross-cell fitting at all.
