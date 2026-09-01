@@ -12,6 +12,8 @@ on:
       - "**/*.webp"
       - "audits/**"
       - ".github/workflows/audit-*.yml"
+      - "reduced/**"
+      - ".github/workflows/reduced-runtime.yml"
   pull_request:
 
 concurrency:
