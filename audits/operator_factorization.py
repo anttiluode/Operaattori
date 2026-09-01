@@ -101,7 +101,32 @@ def configure_human(syn_df, sites: np.ndarray) -> None:
         row["exc_netcons"].weight[0] = BASE_WEIGHT_US * MULTIPLICITY
 
 
-def cluster_trace(cell, syn_df, sites: np.ndarray) -> dict:
+def noinput_soma_trace(cell) -> dict:
+    from neuron import h
+
+    tvec = h.Vector().record(h._ref_t)
+    soma_vec = h.Vector().record(cell.soma[0](0.5)._ref_v)
+
+    h.dt = DT_MS
+    h.finitialize(V_INIT_MV)
+    h.fcurrent()
+    h.continuerun(TSTOP_MS)
+
+    t = np.asarray(tvec, dtype=float)
+    soma = np.asarray(soma_vec, dtype=float)
+    post = (t >= EVENT_MS) & (t <= EVENT_MS + POST_MS + 1e-9)
+    return {
+        "t": t[post] - EVENT_MS,
+        "soma": soma[post],
+    }
+
+
+def cluster_trace(
+    cell,
+    syn_df,
+    sites: np.ndarray,
+    noinput: dict,
+) -> dict:
     from neuron import h
 
     sites = np.asarray(sites, dtype=int)
@@ -138,13 +163,12 @@ def cluster_trace(cell, syn_df, sites: np.ndarray) -> dict:
         [np.asarray(v, dtype=float) for v in nmda_vecs], axis=0
     )
 
-    pre = (t >= EVENT_MS - 10.0) & (t < EVENT_MS - 1.0)
     post = (t >= EVENT_MS) & (t <= EVENT_MS + POST_MS + 1e-9)
-    if not np.any(pre) or not np.any(post):
-        raise RuntimeError("missing factorization trace window")
+    tp = t[post] - EVENT_MS
+    if not np.allclose(tp, noinput["t"], rtol=0, atol=1e-12):
+        raise RuntimeError("matched no-input time grid differs")
 
-    base = float(np.median(soma[pre]))
-    soma_dep = soma[post] - base
+    soma_dep = soma[post] - noinput["soma"]
     inward = -(ampa[:, post] + nmda[:, post])
 
     if not (
@@ -154,7 +178,7 @@ def cluster_trace(cell, syn_df, sites: np.ndarray) -> dict:
         raise FloatingPointError("non-finite factorization trace")
 
     return {
-        "t": t[post] - EVENT_MS,
+        "t": tp,
         "soma_depol": soma_dep,
         "site_inward_current_nA": inward,
         "soma_peak_absolute_mV": float(np.max(soma[post])),
@@ -162,7 +186,12 @@ def cluster_trace(cell, syn_df, sites: np.ndarray) -> dict:
     }
 
 
-def impulse_kernel(cell, sec, x: float) -> np.ndarray:
+def impulse_kernel(
+    cell,
+    sec,
+    x: float,
+    noinput: dict,
+) -> np.ndarray:
     from neuron import h
 
     stim = h.IClamp(float(x), sec=sec)
@@ -180,10 +209,14 @@ def impulse_kernel(cell, sec, x: float) -> np.ndarray:
 
     t = np.asarray(tvec, dtype=float)
     soma = np.asarray(soma_vec, dtype=float)
-    pre = (t >= EVENT_MS - 10.0) & (t < EVENT_MS - 1.0)
     post = (t >= EVENT_MS) & (t <= EVENT_MS + POST_MS + 1e-9)
-    base = float(np.median(soma[pre]))
-    return (soma[post] - base) / IMPULSE_NA
+    tp = t[post] - EVENT_MS
+    if not np.allclose(tp, noinput["t"], rtol=0, atol=1e-12):
+        raise RuntimeError("matched impulse-control time grid differs")
+
+    kernel = (soma[post] - noinput["soma"]) / IMPULSE_NA
+    stim.amp = 0.0
+    return kernel
 
 
 def transport_predict(currents: np.ndarray, kernels: np.ndarray) -> np.ndarray:
@@ -316,6 +349,7 @@ def main() -> None:
         cell0, syn0, args.cluster_span_um
     )
     settle_baselines(syn0, rows0)
+    noinput0 = noinput_soma_trace(cell0)
 
     original = {}
     original_receipts = []
@@ -325,13 +359,14 @@ def main() -> None:
         branch = dict(branch)
         branch["branch_index"] = int(bi)
         sites = np.asarray(branch["sites"], dtype=int)
-        tr = cluster_trace(cell0, syn0, sites)
+        tr = cluster_trace(cell0, syn0, sites, noinput0)
         kernels = np.stack(
             [
                 impulse_kernel(
                     cell0,
                     syn0.iloc[int(i)]["segments"].sec,
                     float(syn0.iloc[int(i)]["segments"].x),
+                    noinput0,
                 )
                 for i in sites
             ],
@@ -380,13 +415,15 @@ def main() -> None:
             new_length = float(sec.L)
 
             settle_baselines(syn, rows)
-            actual = cluster_trace(cell, syn, sites)
+            noinput = noinput_soma_trace(cell)
+            actual = cluster_trace(cell, syn, sites, noinput)
             kernels = np.stack(
                 [
                     impulse_kernel(
                         cell,
                         syn.iloc[int(i)]["segments"].sec,
                         float(syn.iloc[int(i)]["segments"].x),
+                        noinput,
                     )
                     for i in sites
                 ],
