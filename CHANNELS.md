@@ -412,3 +412,31 @@ law and the geometry-specific local Green matrix.
 
 See
 [results/GREEN_CIRCUIT_AUDIT.md](results/GREEN_CIRCUIT_AUDIT.md).
+
+
+## Temporal portability of the reduced circuit
+
+The Green circuit was reused without refit for four three-site timing programs
+across six branches and three geometries.
+
+~~~text
+transport oracle soma NRMSE       0.0037
+reduced soma NRMSE                0.0050
+reduced current NRMSE             0.0026
+
+open-loop soma NRMSE              0.4141
+reduced/open-loop                 0.0121
+reduced beats open-loop           72 / 72
+~~~
+
+Classification:
+
+~~~text
+TEMPORAL_GREEN_CIRCUIT_GENERALIZES_WITHOUT_REFIT
+~~~
+
+The result separates the architecture into an extremely accurate linear
+transport module and an essential nonlinear local voltage-feedback loop.
+
+See
+[results/TEMPORAL_GREEN_CIRCUIT_AUDIT.md](results/TEMPORAL_GREEN_CIRCUIT_AUDIT.md).
