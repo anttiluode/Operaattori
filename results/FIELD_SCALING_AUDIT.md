@@ -83,3 +83,60 @@ If the estimated 5% field lies far beyond the audited panel, that closes the
 weak-field route more strongly than simply saying Gate 24 was small.
 
 This is an audit, not Gate 25.
+
+
+## Receipt
+
+The bounded audit passed in its local-linearity sense.
+
+~~~text
+proximal section                      apic[77]
+max bend displacement                 278.569 um
+frequency                             15 Hz
+
+field        signed log bend effect       factor
+0.25 V/m     -6.856178e-05                1.000069x
+0.50 V/m     -1.375044e-04                1.000138x
+1.00 V/m     -2.765310e-04                1.000277x
+2.00 V/m     -5.591471e-04                1.000559x
+
+through-origin slope                  -2.787234e-04 log/(V/m)
+through-origin R2                      0.999970
+sign consistent                       yes
+spike guard fraction                  0
+local first-order field for 5%        175.049 V/m
+~~~
+
+Classification:
+
+~~~text
+WEAK_FIELD_BEND_EFFECT_IN_LOCAL_LINEAR_REGIME
+~~~
+
+Within 0.25–2 V/m, the geometry-dependent nonlinear interaction perturbation is
+therefore an extremely clean small-signal response. Doubling field amplitude
+approximately doubles the signed effect.
+
+The 175.049 V/m value is **not** a simulation result at 175 V/m and is not a
+claim that the response stays linear there. It is the first-order scale implied
+by the measured weak-field slope.
+
+For context, conventional human transcranial electric stimulation generally
+produces intracranial fields below about 1 V/m. Huang et al. (2017) measured and
+modeled cortical maxima around 0.4 V/m per 1 mA and about 0.8 V/m for typical
+2 mA stimulation:
+
+https://doi.org/10.7554/eLife.18834
+
+A review of immediate TES physiology likewise summarizes conventional human
+fields as <1 V/m:
+
+https://doi.org/10.1038/s41467-018-07233-7
+
+So the honest conclusion is not "try 175 V/m." It is:
+
+> **The weak-field isometric-bend route is physically real but far too small,
+> in this locked cell-1125 assay, to be the nonlinear computational amplifier
+> we were looking for.**
+
+No larger-amplitude rescue scan is opened.
