@@ -5,6 +5,10 @@ on:
     branches: [main]
   pull_request:
 
+concurrency:
+  group: operaattori-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   gates-0-to-9:
     runs-on: ubuntu-latest
