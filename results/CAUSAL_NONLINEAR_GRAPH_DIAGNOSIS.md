@@ -208,3 +208,132 @@ Do not change the HUMAN_PROBE, graph discretization, dt, cell panel, branch
 panel, delays, Newton tolerances, or line search after seeing the result.
 
 This is a solver diagnosis, not Gate 25.
+
+
+## Receipt — causal closure passes
+
+The locked 288-case diagnosis passed.
+
+~~~text
+causal graph oracle soma NRMSE       0.00404
+causal nonlinear soma NRMSE          0.00253
+causal current NRMSE                 0.01722
+causal local-voltage NRMSE           0.00080
+
+timing medians
+  synchronous                        0.00260
+  forward_5                          0.00247
+  reverse_5                          0.00251
+  spread_15                          0.00242
+
+median cell soma NRMSE               0.00214
+cells with median soma NRMSE <= .10  23 / 24
+
+Newton convergence                   288 / 288 cases
+maximum Newton iterations            4
+line-search failures                 0
+site-consistency max                 < 1e-10 mV
+
+rat median cell soma NRMSE           0.00724
+human median cell soma NRMSE         0.00127
+~~~
+
+Classification:
+
+~~~text
+CAUSAL_MORPHOLOGY_GRAPH_NONLINEAR_CLOSURE_VALID
+~~~
+
+Failure mechanism of the previous audit:
+
+~~~text
+GLOBAL_WAVEFORM_PICARD_WAS_THE_NONPORTABLE_COMPONENT
+~~~
+
+Descriptive label:
+
+~~~text
+SUBPERCENT_CAUSAL_MORPHOLOGY_TO_NONLINEAR_RESPONSE
+~~~
+
+The scientific parameters are identical to the failed global-waveform run. The
+difference is only the numerical organization of the nonlinear solve.
+
+### The previous catastrophic cells recover
+
+Rat L6 TPC:
+
+~~~text
+global-waveform cell median soma error      0.2508
+causal cell median soma error               0.00024
+~~~
+
+Rat L6 UPC:
+
+~~~text
+global-waveform cell median soma error      2.4666
+causal cell median soma error               0.00093
+~~~
+
+Those cells had excellent graph-transport oracles in the failed run, and the
+causal solve now resolves them with three Newton iterations per step.
+
+That is strong evidence that their earlier failures were solver divergence, not
+a failure of the morphology-graph operator or the local HUMAN_PROBE law.
+
+### Retained physical/discretization boundary
+
+Rat L6 IPC remains the one cell outside the 10% cell-error fence:
+
+~~~text
+median causal soma NRMSE                    0.1119
+median causal current NRMSE                 0.1572
+median graph-oracle soma NRMSE              0.0200
+all causal cases converged                  yes
+~~~
+
+This is the same morphology whose direct passive graph audit already had the
+largest local-G error. The causal solver does not hide that earlier
+discretization boundary.
+
+### What is now supported
+
+For the matched-passive 24-cell panel and the standardized HUMAN_PROBE:
+
+~~~text
+target morphology
+      |
+      v
+hand-built passive cable graph
+      |
+      v
+causal local voltage-feedback solve
+      |
+      v
+nonlinear temporal soma response
+~~~
+
+requires no target-cell electrical calibration and reaches 0.25% median
+soma-trace NRMSE across 288 cases.
+
+The result does **not** establish species-specific synaptic physiology: the
+same HUMAN_PROBE was intentionally applied to every morphology as a controlled
+nonlinear test input.
+
+### Runtime boundary
+
+The earlier portable NumPy Green-kernel runtime solves the complete waveform by
+global Picard iteration. That algorithm is no longer a universally supported
+cross-cell runtime.
+
+The robust cross-cell result uses causal state-space evolution of the passive
+graph plus a three-dimensional implicit nonlinear solve at each time step.
+
+A later reduced runtime must preserve that causal stability rather than merely
+reusing the global waveform iteration.
+
+Compact CI receipt:
+[results/cross_cell_operator/causal_nonlinear_graph_ci_summary.json](cross_cell_operator/causal_nonlinear_graph_ci_summary.json)
+
+GitHub Actions:
+run 33538293022, job 99957910024.
