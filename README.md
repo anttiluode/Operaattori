@@ -770,12 +770,35 @@ contributes to compact interaction beyond resting effective NMDA strength.
 
 See [Gate 18](results/GATE18.md).
 
+## Gate 19 — compact coactivation is not a simple sequence detector
+
+Gate 19 kept the same three compact sites and the same total input, but staggered
+the events by 4 ms and reversed proximal-to-distal versus distal-to-proximal
+order. Every order was divided by its own time-shifted sum-of-single-sites
+prediction.
+
+~~~text
+HUMAN compact order magnitude          0.0005
+HUMAN dispersed order magnitude        0.0089
+compact branches with >5% order effect 0 / 6
+compact-dispersed excess log          -0.0080
+gamma-specific excess log             -0.0088
+~~~
+
+So the Gates 16–18 effect should not be sold as a local sequence processor.
+At this preregistered lag the compact branch behaves much more like a nonlinear
+coactivation compartment than something that cares which end was stimulated
+first.
+
+See [Gate 19](results/GATE19.md).
+
 ## Current stopping line
 
-> **Still no growth. Gate 18 earns one timing/order experiment in the same
-> pinned released neuron. Gate 19 must use the same compact sites, reverse the
-> spatial order in which they receive temporally staggered events, and compare
-> every ordered response with an independent-superposition prediction carrying
-> those exact event times. The question is whether spatial scaffold × temporal
-> order becomes a genuine computational degree of freedom rather than another
-> passive timing artifact.**
+> **Do not scan lags to rescue Gate 19, and still do not add growth. The next
+> scaffold question is modularity: if a compact branch is a nonlinear
+> compartment, is that interaction substantially stronger within a branch than
+> between different branch compartments? Gate 20 should compare within-branch
+> nonadditivity against all cross-branch pairs using each pair's own branch-alone
+> superposition null. A positive result would finally support the useful
+> abstraction "many semi-independent nonlinear subunits on one physical
+> scaffold."**
