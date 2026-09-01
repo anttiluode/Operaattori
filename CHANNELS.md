@@ -17,6 +17,36 @@ change.
 
 These rows should not be merged into one vague word such as "geometry."
 
+### Symmetry audit of the pure-embedding row
+
+Gate 22's single 35-degree example is now backed by a deterministic
+implementation audit:
+
+~~~text
+6 bifurcations
+72 local rigid bends
+3 local axes x 4 signed angles
+
+max visual displacement               619.350 um
+max cable-length error                1.652e-13 um
+max passive-transfer change           9.710e-14
+
+20% metric positive controls
+median passive-transfer change        11.84%
+controls >1%                          6 / 6
+~~~
+
+Classification:
+
+~~~text
+KNOWN_REEMBEDDING_SYMMETRY_REPLICATED_ON_REAL_SCAFFOLD
+~~~
+
+This is a replication of a known cable-geometry invariance on the Operaattori
+implementation, not a new curvature theorem. See
+[SYMMETRY.md](SYMMETRY.md) and
+[results/SYMMETRY_AUDIT.md](results/SYMMETRY_AUDIT.md).
+
 ## 1. Intrinsic geometry
 
 The cable equation depends on physical cable properties: length, radius,
