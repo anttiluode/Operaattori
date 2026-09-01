@@ -71,3 +71,38 @@ retune the biology.
 
 The result will be written to
 `results/symmetry_audit/symmetry_audit.json`.
+
+
+## Receipt
+
+The locked audit passed in CI.
+
+~~~text
+bifurcations audited                    6
+local rigid-bend trials                72
+axes                                   x, y, z
+angles                                 -35, -15, +15, +35 deg
+
+maximum visual displacement            619.350 um
+maximum rigid-bend cable-length error  1.652e-13 um
+maximum passive-transfer change        9.710e-14
+
+20% intrinsic metric controls
+  median transfer change               0.1184
+  controls >1%                         6 / 6
+~~~
+
+Classification:
+
+~~~text
+KNOWN_REEMBEDDING_SYMMETRY_REPLICATED_ON_REAL_SCAFFOLD
+~~~
+
+Gate 22 was therefore not a lucky pivot or axis. Across a deliberately varied
+family of local SE(3) edits, the real scaffold can move hundreds of microns
+while the intrinsic passive cable response remains invariant to numerical
+precision. The same pivots respond immediately when their material metric is
+changed.
+
+This is a validation of the scaffold implementation against known cable
+geometry, not a novelty claim about curvature or torsion.
