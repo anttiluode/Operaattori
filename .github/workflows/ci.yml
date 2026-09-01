@@ -6,7 +6,7 @@ on:
   pull_request:
 
 concurrency:
-  group: operaattori-${{ github.ref }}
+  group: operaattori-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 
 jobs:
