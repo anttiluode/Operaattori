@@ -73,14 +73,28 @@ jobs:
       - name: Gate 12 — biological order audit
         run: python experiments/gate12_biological_order_audit.py --paths 32 --permutations 128 --constrained-permutations 48 --no-plot
 
+  gate13-branching-transport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pip install -r requirements-morphology.txt
+      - name: Gate 13 unit tests
+        run: python -m unittest tests.test_tree_cable -v
+      - name: Gate 13 — full branching transport
+        run: python experiments/gate13_branching_transport.py --no-plot
+
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 13 is still absent
+      - name: Verify Gate 14 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate13.py
-          test ! -e experiments/gate13_dynamic_scaffold.py
-          test ! -e experiments/gate13_ephaptic_geometry.py
-          echo "Gate 13 remains locked behind the biological-order audit."
+          test ! -e experiments/gate14.py
+          test ! -e experiments/gate14_nonlinear_compartments.py
+          test ! -e experiments/gate14_nmda.py
+          echo "Gate 14 remains locked behind the branch-junction audit."
