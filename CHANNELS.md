@@ -506,3 +506,51 @@ single scalar descriptor.
 
 See
 [results/ELECTROTONIC_CHART_AUDIT.md](results/ELECTROTONIC_CHART_AUDIT.md).
+
+
+## Full morphology graph -> passive operator
+
+The scalar cross-cell charts were replaced by a direct physical construction.
+
+For each of all 24 released FCI morphologies, a hand-built matched-passive
+compartment graph used:
+
+~~~text
+section topology
+segment length / diameter / membrane area
+Ra = 150 ohm cm
+Cm = 1 uF/cm^2
+Rm = 20,000 ohm cm^2
+~~~
+
+Zero-capacitance branch junctions were eliminated analytically and the resulting
+linear system generated the same three-site local G and soma T operators.
+
+~~~text
+144 branch operator packs
+
+joint G/T NRMSE                  0.0021
+local G                          0.0013
+soma T                           0.0024
+median cell error                0.0018
+cells <= 0.10                    23 / 24
+~~~
+
+Classification:
+
+~~~text
+MORPHOLOGY_GRAPH_GENERATES_PASSIVE_OPERATOR
+~~~
+
+This resolves the earlier low-dimensional-map failure:
+
+~~~text
+small scalar morphology chart    inadequate
+full loaded cable graph          sufficient
+~~~
+
+The result is classical cable physics used as an architectural boundary, not a
+novel cable-theory claim.
+
+See
+[results/DIRECT_CABLE_GRAPH_AUDIT.md](results/DIRECT_CABLE_GRAPH_AUDIT.md).
