@@ -326,3 +326,90 @@ graph-generated cross-cell G/T with that nonlinear law across the 24-cell panel.
 
 See
 [results/DIRECT_CABLE_GRAPH_AUDIT.md](results/DIRECT_CABLE_GRAPH_AUDIT.md).
+
+
+## Causal cross-cell nonlinear closure
+
+The cross-cell passive map can now be composed with an explicit nonlinear probe
+law, but the numerics matter.
+
+A global fixed-point solve of the complete 90 ms Green-kernel waveform was not
+universally contractive across the 24-cell panel: it converged in only 207/288
+cases despite 0.42% median soma error.
+
+The robust form keeps the passive morphology graph as a causal state.
+
+For backward Euler:
+
+[
+A = C/Delta t + G_{m passive}
+]
+
+and
+
+[
+x_{n+1}
+=
+A^{-1}
+left[
+(C/Delta t)x_n + B J_{n+1}
+ight].
+]
+
+For the three synaptic sites define
+
+[
+X=A^{-1}B,
+qquad
+R=S X,
+]
+
+where (S) selects the site voltages. With the passive prediction
+
+[
+u=A^{-1}(C/Delta t)x_n,
+qquad
+p=Su,
+]
+
+the only nonlinear equation at one time step is
+
+[
+z
+=
+p + R J(-70+z,g_A,g_N).
+]
+
+This is a three-dimensional implicit solve. An analytic Newton method converged
+for every time step of all 288 cases, with at most four iterations.
+
+The resulting full chain achieved:
+
+~~~text
+median soma NRMSE             0.00253
+median local voltage NRMSE    0.00080
+median current NRMSE          0.01722
+median cell soma NRMSE        0.00214
+~~~
+
+Classification:
+
+~~~text
+CAUSAL_MORPHOLOGY_GRAPH_NONLINEAR_CLOSURE_VALID
+~~~
+
+So the current supported cross-cell model is:
+
+[
+	ext{morphology graph}
+ightarrow
+	ext{causal passive state}
+ightarrow
+	ext{local nonlinear current law}
+ightarrow
+	ext{response}.
+]
+
+The previous FFT/Green-kernel global Picard implementation remains useful on
+the original tested regime but is not a universally robust solver across these
+morphologies.
