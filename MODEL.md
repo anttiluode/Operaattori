@@ -273,3 +273,56 @@ A NEURON-free implementation of the reduced equations is in:
 
 The full released-model causal receipts remain in the audit scripts and results
 directory.
+
+
+## Cross-cell upstream map
+
+The within-cell model used geometry-indexed operator packs. Cross-cell work
+tested what must replace that scalar coordinate.
+
+Two leave-one-cell-out scalar charts failed:
+
+~~~text
+gross morphology -> operator             0.3522 joint NRMSE
+electrotonic/Rall chart                  0.4070
+combined                                 0.3062
+training-basis PCA oracle                0.0307
+~~~
+
+A direct morphology-graph cable construction then generated the matched-passive
+operator without any cross-cell learning:
+
+~~~text
+24 cells
+144 branch operator packs
+
+median joint G/T NRMSE                   0.0021
+median local G                           0.0013
+median soma T                            0.0024
+~~~
+
+Therefore the empirically supported cross-cell passive map is not
+
+~~~text
+small morphology vector -> operator coordinates
+~~~
+
+but
+
+~~~text
+full loaded morphology graph
+        |
+        v
+passive cable equations
+        |
+        v
+G, T
+~~~
+
+The full nonlinear cross-cell model has **not** yet been established. The
+successful AMPA/NMDA Green-circuit closure was earned on cell 1125 and its
+within-cell metric perturbations. A separate audit is required before combining
+graph-generated cross-cell G/T with that nonlinear law across the 24-cell panel.
+
+See
+[results/DIRECT_CABLE_GRAPH_AUDIT.md](results/DIRECT_CABLE_GRAPH_AUDIT.md).
