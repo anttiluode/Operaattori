@@ -701,11 +701,81 @@ NO_ROBUST_NMDA_LOCALITY_ADVANTAGE
 
 See [Gate 15](results/GATE15.md).
 
+## Gate 16 — the real kinetic model reverses the quasi-static result
+
+Gate 15's equilibrium reduction was negative. The same compact/dispersed test
+in the authors' pinned released NEURON model is not.
+
+~~~text
+median compact span                    41.92 um
+passive Rinput match                   1.037x
+passive soma-transfer match            1.126x
+
+48-synapse local-AUC locality          1.5143
+branches >1.05                         5 / 6
+somatic spikes                         0 / 6
+~~~
+
+So the missing ingredient was temporal synaptic dynamics: with the released
+0.3/1.8-ms AMPA and 5/43-ms NMDA kinetics, compact coactivation gains a
+HUMAN/FROZEN interaction advantage that the quasi-static model erased.
+
+See [Gate 16](results/GATE16.md).
+
+## Gate 17 — the effect survives each set's own time-domain null
+
+For every exact three-site set, Gate 17 compares simultaneous activation with
+the sum of the same three sites activated individually. That independent sum
+already contains the set's own input resistance, cable filtering and temporal
+response.
+
+~~~text
+compact HUMAN/FROZEN interaction       2.6265x
+dispersed HUMAN/FROZEN interaction     1.3818x
+interaction locality                   1.6759
+branches >1.05                         4 / 6
+~~~
+
+Two branches are essentially null, so this is heterogeneous. But ordinary
+differences in each set's passive time filtering do not explain the median
+effect.
+
+See [Gate 17](results/GATE17.md).
+
+## Gate 18 — the paper's Hybrid B attacker survives too, but the hard pass is narrow
+
+The paper/released-code Hybrid B changes only NMDA gamma from the human
+0.078/mV to the smaller rat 0.062/mV while retaining human kinetics and raw
+conductances.
+
+~~~text
+HUMAN / paper Hybrid-B locality        1.6439
+branches >1.05                         5 / 6
+~~~
+
+A harder attacker then rescales every gamma=0.062 synapse so its effective NMDA
+conductance at that site's actual resting voltage is exactly equal to HUMAN.
+That removes the resting-strength difference and leaves the voltage-dependence
+curve as the intended contrast.
+
+~~~text
+median gamma062 raw-ratio scale        0.3337x human
+rest-matched locality                  1.0592
+branches >1.05                         3 / 6
+~~~
+
+So this is a **narrow pass**, not a claim that human gamma dominates every
+branch. What survives is that the human NMDA voltage-dependence shape
+contributes to compact interaction beyond resting effective NMDA strength.
+
+See [Gate 18](results/GATE18.md).
+
 ## Current stopping line
 
-> **Do not rescue the compact-locality result with growth. If we continue this
-> mechanistic line, Gate 16 must use the authors' released time-domain NEURON
-> model for cell 1125 and its actual AMPA/NMDA kinetics on a small matched
-> clustered/dispersed protocol. The question is whether equilibrium saturation
-> erased a temporal compartment effect. If that bounded reproduction is not
-> practical, stop here rather than invent another surrogate.**
+> **Still no growth. Gate 18 earns one timing/order experiment in the same
+> pinned released neuron. Gate 19 must use the same compact sites, reverse the
+> spatial order in which they receive temporally staggered events, and compare
+> every ordered response with an independent-superposition prediction carrying
+> those exact event times. The question is whether spatial scaffold × temporal
+> order becomes a genuine computational degree of freedom rather than another
+> passive timing artifact.**
