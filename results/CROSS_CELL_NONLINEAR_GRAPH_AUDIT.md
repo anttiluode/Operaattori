@@ -275,3 +275,121 @@ then to a nonlinear temporal response by the portable local feedback circuit,
 without target-cell electrical calibration.
 
 This is an architecture audit, not Gate 25.
+
+
+## Receipt — global waveform fixed point fails portability
+
+The locked 288-case audit completed.
+
+~~~text
+24 cells x 3 branches x 4 timing programs = 288
+
+graph transport oracle soma NRMSE       0.0040
+reduced soma NRMSE                      0.0042
+reduced local-voltage NRMSE             0.0035
+reduced current NRMSE                   0.0172
+
+open-loop soma NRMSE                    0.5002
+reduced / open-loop                     0.0083
+reduced beats open-loop                 0.941
+
+timing medians
+  synchronous                           0.0041
+  forward_5                             0.0044
+  reverse_5                             0.0042
+  spread_15                             0.0041
+
+median cell soma NRMSE                  0.0049
+cells with median soma NRMSE <= 0.10    21 / 24
+
+rat median cell soma NRMSE              0.0134
+human median cell soma NRMSE            0.0028
+
+global fixed-point convergence          0.719
+soma excursion guard                    0
+~~~
+
+Classification:
+
+~~~text
+CROSS_CELL_GRAPH_TRANSPORT_VALID_NONLINEAR_CLOSURE_NOT_PORTABLE
+~~~
+
+The classification is a **failure** because the preregistered global damped
+waveform fixed point converged in only 207 / 288 cases.
+
+### What survived
+
+The graph-built passive transport survived nonlinear drive:
+
+~~~text
+actual full-model synaptic currents
+        |
+        v
+graph-built T
+        |
+        v
+soma
+
+median error = 0.40%
+~~~
+
+Thus target-cell electrical operator measurement is not needed for downstream
+transport on the median case.
+
+The nonlinear feedback is also still essential. Removing local voltage feedback
+while retaining the same conductance programs and graph transport gives 50.02%
+median soma error.
+
+### What failed
+
+The failed cases are concentrated in a subset of morphologies/branches rather
+than uniformly degrading the whole panel.
+
+The worst cell is rat L6 UPC:
+
+~~~text
+median reduced soma NRMSE          2.4666
+median current NRMSE              10.5507
+median graph-transport oracle      0.0059
+~~~
+
+Rat L6 TPC also fails strongly:
+
+~~~text
+median reduced soma NRMSE          0.2508
+median current NRMSE               0.5078
+median graph-transport oracle      0.0032
+~~~
+
+Rat L6 IPC is a separate retained case where the hand-built passive graph itself
+is less accurate:
+
+~~~text
+median reduced soma NRMSE          0.1119
+median graph-transport oracle      0.0200
+~~~
+
+Across the 81 nonconverged fixed-point cases, the final relative-current update
+has median approximately 0.28. Thirty-eight of those nonconverged cases still
+happen to give <5% soma error, while others diverge catastrophically. Therefore
+the convergence failure cannot be reclassified away by looking only at output
+error.
+
+### Diagnosis boundary
+
+The current evidence separates:
+
+~~~text
+morphology graph -> passive transport        survives
+global waveform Picard closure               not portable
+~~~
+
+It does **not** yet tell us whether the nonlinear physical closure itself fails
+or whether solving an entire causal Volterra waveform as one damped Picard fixed
+point is the wrong numerical algorithm for strongly loaded branches.
+
+That is the next diagnosis. No damping change or probe retuning is opened.
+
+GitHub Actions:
+run 33537524016, job 99955378644.
