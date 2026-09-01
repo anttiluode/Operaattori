@@ -270,8 +270,8 @@ Detailed receipts: [Gate 0](results/GATE0.md),
 [Gate 1](results/GATE1.md), [Gate 2](results/GATE2.md),
 [Gate 3](results/GATE3.md), [Gate 4](results/GATE4.md),
 [Gate 5](results/GATE5.md), [Gate 6](results/GATE6.md),
-[Gate 7](results/GATE7.md), [Gate 8](results/GATE8.md), and
-[Gate 9](results/GATE9.md).
+[Gate 7](results/GATE7.md), [Gate 8](results/GATE8.md),
+[Gate 9](results/GATE9.md), and [Gate 10](results/GATE10.md).
 
 ## Gate 5 first receipt — moving matrix, with the killer beside it
 
@@ -471,10 +471,36 @@ mechanism:
 
 See [Gate 9](results/GATE9.md).
 
+## Gate 10 — the matrix scaffold is put on a real human neuron
+
+Gate 10 moves from toy operator graphs to the exact human L2/3 exemplar used in
+Aizenbud et al. (2026): morphology **1125**,
+`2013_03_06_cell11_1125_H41_06.asc`, reported FCI **0.4294**.
+
+The source is pinned to the authors' public FCI repository commit. Every
+neurite point is represented by a parent-local rigid 4x4 transform. Absolute
+neurite coordinates are then discarded and the arbor is rebuilt only by
+
+~~~text
+W_child = W_parent L_child
+~~~
+
+At a bifurcation, one parent frame produces multiple child frames: the matrix
+scaffold literally forks with the dendritic tree.
+
+The gate also changes only one internal local rotation. Its attachment point
+must remain fixed, all non-descendants must remain fixed, its entire distal
+subtree must move coherently, and all cable lengths must remain unchanged.
+
+This gate earns only **geometry-as-scaffold**. It does not yet make the neuron
+learn or grow.
+
+See [Gate 10](results/GATE10.md).
+
 ## Current stopping line
 
-> **A single moving matrix has a finite algebraic ceiling. The next useful
-> object is spatial: small local generators distributed over a graph or field,
-> with signal route/topology and local operator state both allowed to change.
-> The next gate must ask whether that locality produces useful effective
-> operators under a strict budget, not merely prettier matrix products.**
+> **The real morphology must first survive exact reconstruction from local
+> matrices. If it does, Gate 11 may attach small dynamical operators to those
+> frames and ask whether preserving spatial operator order matters versus
+> shuffled, commuting, fixed-topology and dense-matrix attackers. Only after
+> that functional audit may activity change the scaffold itself.**
