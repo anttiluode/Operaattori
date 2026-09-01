@@ -158,3 +158,44 @@ def normalized_offdiagonal_coupling(z_mohm: np.ndarray) -> float:
     C = np.abs(Z) / denom
     mask = ~np.eye(len(Z), dtype=bool)
     return float(np.median(C[mask]))
+
+
+
+def select_compact_midpoint_sites(
+    run: list[int] | np.ndarray,
+    lengths_um: np.ndarray,
+    count: int,
+    span_um: float,
+) -> tuple[np.ndarray, float]:
+    """Select distinct sites inside a fixed physical window at branch midpoint.
+
+    The window is centered on the physical midpoint of a maximal unbranched
+    run. Selection depends only on geometry, never on nonlinear response.
+    Returns an empty array when the reconstruction is too sparse.
+    """
+    nodes = np.asarray(run, dtype=int)
+    if len(nodes) == 0 or count <= 0 or span_um <= 0:
+        return np.empty(0, dtype=int), 0.0
+
+    edge_lengths = np.asarray(lengths_um, dtype=float)[nodes]
+    coord = np.cumsum(edge_lengths)
+    coord = coord - coord[0]
+    total = float(coord[-1]) if len(coord) else 0.0
+    center = 0.5 * total
+    mask = np.abs(coord - center) <= 0.5 * float(span_um) + 1e-12
+    candidates = nodes[mask]
+    candidate_coord = coord[mask]
+
+    if len(candidates) < int(count):
+        return np.empty(0, dtype=int), 0.0
+
+    idx = np.unique(
+        np.rint(np.linspace(0, len(candidates) - 1, int(count))).astype(int)
+    )
+    chosen = candidates[idx]
+    chosen_coord = candidate_coord[idx]
+    if len(chosen) != int(count):
+        return np.empty(0, dtype=int), 0.0
+
+    actual_span = float(chosen_coord[-1] - chosen_coord[0]) if len(chosen) > 1 else 0.0
+    return chosen.astype(int), actual_span
