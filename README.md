@@ -73,6 +73,8 @@ local matrix motion
 That is not new cable theory. Its value here is disciplinary: it prevents the
 repo from calling every beautiful geometric deformation "computation."
 
+The mathematical version of this boundary is in **[SYMMETRY.md](SYMMETRY.md)**.
+
 ## Where the nonlinear result enters
 
 Gates 16–20 then found something the passive picture does not contain.
