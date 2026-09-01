@@ -170,14 +170,38 @@ jobs:
       - name: Gate 19 — scaffold x temporal order
         run: python experiments/gate19_timing_order.py --fci-root /tmp/fci --branches 6 --sites 3 --cluster-span-um 55 --multiplicity 16 --lag-ms 4
 
+  gate20-released-neuron:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements.txt
+      - name: Install released-model runtime
+        run: python -m pip install neuron pandas matplotlib
+      - name: Checkout pinned FCI source
+        shell: bash
+        run: |
+          git clone --filter=blob:none https://github.com/ido4848/FCI.git /tmp/fci
+          git -C /tmp/fci checkout 75ad8b4d81a7f51bf888b30650c543592340db06
+          test "$(git -C /tmp/fci rev-parse HEAD)" = "75ad8b4d81a7f51bf888b30650c543592340db06"
+      - name: Compile cell-1125 released mechanisms
+        shell: bash
+        run: |
+          cd /tmp/fci/simulating_neurons/neuron_models/human/eyal/Human_L23_PC_0603_11_937_Eyal_passive_dends_simple_soma
+          nrnivmodl mods
+      - name: Gate 20 — compartment modularity
+        run: python experiments/gate20_compartment_modularity.py --fci-root /tmp/fci --branches 6 --sites 3 --cluster-span-um 55 --multiplicity 8
+
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 20 is still absent
+      - name: Verify Gate 21 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate20.py
-          test ! -e experiments/gate20_sequence_discrimination.py
-          test ! -e experiments/gate20_dynamic_growth.py
-          echo "Gate 20 remains locked behind the Gate 19 timing-order audit."
+          test ! -e experiments/gate21.py
+          test ! -e experiments/gate21_branch_subunit_computation.py
+          test ! -e experiments/gate21_dynamic_growth.py
+          echo "Gate 21 remains locked behind the Gate 20 modularity audit."
