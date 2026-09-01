@@ -29,6 +29,7 @@ def block(v_mV: float, gamma: float = HUMAN_GAMMA) -> float:
 
 B_ZERO_GAMMA = 1.0 / (1.0 + 1.0 / 3.57)
 HUMAN_RATIO = 0.00131 / 0.00088
+RAT_GAMMA = 0.062
 
 
 def settle_baselines(syn_df, rows: np.ndarray) -> dict[int, float]:
