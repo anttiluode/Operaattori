@@ -117,7 +117,7 @@ jobs:
       - name: Gate 15b — compact 50-um matched locality
         run: python experiments/gate15_compartment_locality.py --branches 8 --sites 8 --min-dispersed-runs 6 --cluster-span-um 50 --out-dir results/gate15_compact --no-plot
 
-  gate16a-released-neuron-smoke:
+  gate16-released-neuron:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -140,6 +140,8 @@ jobs:
           nrnivmodl mods
       - name: Gate 16a — released cell-1125 time-domain smoke
         run: python experiments/gate16a_fci_neuron_smoke.py --fci-root /tmp/fci
+      - name: Gate 16 — released kinetic matched locality
+        run: python experiments/gate16_fci_dynamic_locality.py --fci-root /tmp/fci --branches 6 --sites 3 --cluster-span-um 55
 
   locked-gates:
     runs-on: ubuntu-latest
