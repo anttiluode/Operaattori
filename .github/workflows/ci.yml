@@ -3,6 +3,13 @@ name: Operaattori gates
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "**/*.md"
+      - "**/*.html"
+      - "**/*.png"
+      - "**/*.jpg"
+      - "**/*.jpeg"
+      - "**/*.webp"
   pull_request:
 
 concurrency:
