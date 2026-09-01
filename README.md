@@ -555,10 +555,39 @@ No task utility is assigned, so "unusual" is not called "better" or
 
 See [Gate 12](results/GATE12.md).
 
+## Gate 12 receipt — ordinary taper explains the path order
+
+The first Gate-12 audit initially looked spectacular under randomization: every
+tested path landed in the tail of the full and constrained shuffle nulls.
+
+Then the boring deterministic attacker won.
+
+~~~text
+median radius-increase steps          0
+median nonincreasing fraction         1.000000
+paths exactly stable thick->thin      0.938
+
+real -> thick-to-thin distance        0.000 null-SD RMS
+real -> thin-to-thick distance       23.951 null-SD RMS
+~~~
+
+The correct classification is:
+
+~~~text
+MONOTONIC_TAPER_EXPLAINS_REAL_ORDER
+~~~
+
+So Gate 11's large reversal/shuffle effects are genuine cable physics, but they
+do **not** establish an additional fine-grained biological operator sequence.
+The null shuffles mostly destroy ordinary proximal-to-distal taper.
+
+See [Gate 12](results/GATE12.md).
+
 ## Current stopping line
 
-> **Do not let the scaffold learn merely because order matters. First determine
-> whether the biological ordering survives taper, endpoint, and coarse-profile
-> attackers. If it does not, the next model should use the simpler taper
-> explanation. If fine order remains unusual, then a geometry-sensitive
-> developmental gate is justified.**
+> **Serial root-to-tip cable order has hit the taper explanation. The next
+> neuron-specific object is the branch junction: daughter impedances combine in
+> parallel, side branches load shared trunks, and many routes coexist. Gate 13
+> must put the full branching tree into the transport algebra and compare it
+> against isolated-path/equivalent-cable attackers before any growth or
+> intelligence claim.**
