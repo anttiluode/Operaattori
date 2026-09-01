@@ -271,8 +271,8 @@ Detailed receipts: [Gate 0](results/GATE0.md),
 [Gate 3](results/GATE3.md), [Gate 4](results/GATE4.md),
 [Gate 5](results/GATE5.md), [Gate 6](results/GATE6.md),
 [Gate 7](results/GATE7.md), [Gate 8](results/GATE8.md),
-[Gate 9](results/GATE9.md), [Gate 10](results/GATE10.md), and
-[Gate 11](results/GATE11.md).
+[Gate 9](results/GATE9.md), [Gate 10](results/GATE10.md),
+[Gate 11](results/GATE11.md), and [Gate 12](results/GATE12.md).
 
 ## Gate 5 first receipt — moving matrix, with the killer beside it
 
@@ -534,14 +534,31 @@ So Gate 11 earns:
 
 It does not earn learning or intelligence. See [Gate 11](results/GATE11.md).
 
+## Gate 12 — attack the biological ordering itself
+
+Gate 11 proves that order matters. Gate 12 asks whether the **real** order is
+unusual or whether gross taper and endpoint placement explain most of the
+effect.
+
+The exact same segment multiset is challenged by:
+
+- full random permutations;
+- ideal thick-to-thin and thin-to-thick taper rulers;
+- endpoint-preserving shuffles;
+- 10/25/50/100-um within-window shuffles that preserve the coarse
+  proximal-to-distal profile while destroying progressively larger-scale
+  internal order.
+
+The output is an empirical tail position of the biological transfer signature.
+No task utility is assigned, so "unusual" is not called "better" or
+"optimized." A negative scientific result is allowed to pass CI.
+
+See [Gate 12](results/GATE12.md).
+
 ## Current stopping line
 
-> **We now have two separately passing halves: local SE(3) frames can twist a
-> real dendritic subtree, and ordered passive cable matrices on real dendritic
-> paths change impedance, attenuation, phase, and delay. But a pure 3-D
-> rotation of a frame does not change passive cable transport when length,
-> radius, and topology are held fixed. The next gate must expose that boundary
-> explicitly before adding growth: first prove the bend-only null, then add one
-> physically specified geometry-sensitive coupling (for example an
-> extracellular/ephaptic interaction) and ask whether spatial deformation
-> becomes computational rather than merely visual.**
+> **Do not let the scaffold learn merely because order matters. First determine
+> whether the biological ordering survives taper, endpoint, and coarse-profile
+> attackers. If it does not, the next model should use the simpler taper
+> explanation. If fine order remains unusual, then a geometry-sensitive
+> developmental gate is justified.**
