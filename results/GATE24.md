@@ -166,3 +166,56 @@ No Gate 25 is opened in this session.
 If Gate 24 passes, the result is demo-worthy but still not a growth result.
 If it fails, do not increase field amplitude, scan bend angles or tune synaptic
 dose to force a threshold crossing.
+
+
+## Receipt — real field couples, compartment selectivity does not
+
+The corrected locked CI assay completed successfully.
+
+~~~text
+distal small-subtree arm
+  section                              apic[58]
+  descendant cable                     316.9 um
+  max moved segment                    159.9 um
+
+proximal large-subtree arm
+  section                              apic[77]
+  descendant cable                     599.3 um
+  max moved segment                    278.6 um
+
+controls
+  zero-field max relative difference   0
+  material-locked max difference       0
+
+HUMAN nonlinear branch interaction
+  proximal median bend factor          1.0003x
+  distal median bend factor            1.0002x
+  proximal frequencies >5%             0 / 3
+  proximal/distal effect ratio         1.206x
+  spike guard fraction                 0
+~~~
+
+Classification:
+
+~~~text
+FIELD_COUPLING_PRESENT_BUT_NOT_COMPARTMENT_SELECTIVE
+~~~
+
+The causal wiring passed its strongest bookkeeping checks exactly: when the
+field is removed, changing only the embedding is invisible; when the original
+field coefficients are locked to material segments, the nominal bend is also
+invisible.
+
+With a real uniform 1 V/m extracellular field, however, the locked 35-degree
+re-embedding changes the already-measured compact-branch nonlinear interaction
+by only about three parts in ten thousand in the large-subtree arm. No tested
+frequency clears the preregistered 5% ruler.
+
+So Gate 24 completes rather than rescues the scaffold decomposition:
+
+> real extracellular field coupling exists, but this weak-field isometric bend
+> does not selectively recruit the nonlinear branch compartment under the
+> locked protocol.
+
+Do not increase field amplitude, scan bend angle, or tune synaptic dose after
+seeing this result. Gate 25 remains closed.
