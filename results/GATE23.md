@@ -155,3 +155,38 @@ is to combine two mechanisms that independently survived earlier attacks:
 **world-space sampling and the measured nonlinear branch compartments**. That
 would require a fresh locked protocol and a real nonlinear model, not a tuned
 version of Gate 23.
+
+
+## Literature correction — this was not the 2018 bent-cable projection assay
+
+After Gate 23 was run, the scaffold line was compared against the extracellular
+field literature.
+
+Aspart, Remme & Obermayer (2018) analyze a different physical object:
+extracellular potential enters the cable equation, and the potential profile
+along a bent cable follows the cable's projection onto the field axis.
+
+Gate 23 did **not** implement that mechanism. It sampled an abstract positive
+exponential world field and converted those samples directly into normalized
+current injection.
+
+Therefore:
+
+- the numerical Gate-23 receipt remains valid;
+- `FIXED_WORLD_FIELD_EFFECT_WEAK` remains the correct classification for the
+  toy sampling model that was actually run;
+- the result must not be relabeled `PROJECTION_FACTOR_AS_PREDICTED`;
+- a real extracellular-potential / bent-cable test belongs in Gate 24.
+
+The literature also removes a possible novelty overclaim. Fan et al.
+(2023/2024) already show that weak electric fields can regulate dendritic NMDA
+integration and NMDA-spike generation.
+
+Gate 24 must therefore ask the narrower scaffold question: whether changing the
+isometric embedding of this real matrix scaffold changes which already-measured
+nonlinear branch compartment is recruited under the same extracellular field.
+
+References:
+
+- https://doi.org/10.1371/journal.pcbi.1006124
+- https://doi.org/10.1007/s11571-022-09922-y
