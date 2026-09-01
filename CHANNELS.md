@@ -478,3 +478,31 @@ removing it after the fact does not rescue the conclusion.
 
 See
 [results/CROSS_CELL_OPERATOR_AUDIT.md](results/CROSS_CELL_OPERATOR_AUDIT.md).
+
+
+## Electrotonic cross-cell chart
+
+A morphology-only Rall/electrotonic chart was tested on the same 24-cell LOCO
+panel.
+
+~~~text
+electrotonic chart joint NRMSE      0.4070
+gross chart                         0.3522
+combined chart                      0.3062
+PCA oracle                          0.0307
+~~~
+
+Classification:
+
+~~~text
+OPERATOR_LOW_DIMENSIONAL_ELECTROTONIC_CHART_STILL_INSUFFICIENT
+~~~
+
+Electrotonic descriptors are complementary to gross morphology but do not
+provide a sufficient cross-cell coordinate system.
+
+The likely missing object is distributed cable-tree loading rather than another
+single scalar descriptor.
+
+See
+[results/ELECTROTONIC_CHART_AUDIT.md](results/ELECTROTONIC_CHART_AUDIT.md).
