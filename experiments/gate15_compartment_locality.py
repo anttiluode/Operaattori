@@ -17,6 +17,7 @@ from operaattori.compartment_match import (
     greedy_dispersed_match,
     normalized_offdiagonal_coupling,
     run_id_map,
+    select_compact_midpoint_sites,
     select_even_sites,
 )
 from operaattori.nmda_branch import HUMAN, HUMAN_FROZEN_BLOCK, HYBRID_B, solve_equilibrium
@@ -170,6 +171,12 @@ def main() -> None:
     ap.add_argument("--branches", type=int, default=10)
     ap.add_argument("--sites", type=int, default=8)
     ap.add_argument("--min-dispersed-runs", type=int, default=6)
+    ap.add_argument(
+        "--cluster-span-um",
+        type=float,
+        default=0.0,
+        help="if >0, restrict clustered sites to a midpoint window of this physical span",
+    )
     ap.add_argument("--no-plot", action="store_true")
     args = ap.parse_args()
 
@@ -215,10 +222,26 @@ def main() -> None:
         branch_length = float(np.sum(lengths[physical_nodes]))
         if branch_length < 35.0:
             continue
-        candidates.append((branch_length, rid, physical_nodes))
+
+        if args.cluster_span_um > 0:
+            clustered, actual_span = select_compact_midpoint_sites(
+                physical_nodes,
+                lengths,
+                args.sites,
+                args.cluster_span_um,
+            )
+            if len(clustered) != args.sites:
+                continue
+        else:
+            clustered = select_even_sites(physical_nodes, args.sites)
+            actual_span = float(branch_length)
+
+        candidates.append(
+            (branch_length, rid, physical_nodes, clustered, actual_span)
+        )
     candidates.sort(reverse=True, key=lambda x: x[0])
 
-    # The target set is chosen by branch length only, before seeing nonlinear
+    # Target branches are chosen by geometry only, before seeing nonlinear
     # outcomes. Poor passive matches are reported as a scientific limitation.
     candidates = candidates[: min(args.branches, len(candidates))]
     if len(candidates) < 6:
@@ -228,8 +251,7 @@ def main() -> None:
     conditions = [HUMAN_FROZEN_BLOCK, HYBRID_B, HUMAN]
     rows = []
 
-    for branch_index, (branch_length, rid, run) in enumerate(candidates):
-        clustered = select_even_sites(run, args.sites)
+    for branch_index, (branch_length, rid, run, clustered, actual_cluster_span) in enumerate(candidates):
         dispersed, match_diag = greedy_dispersed_match(
             clustered,
             rid,
@@ -313,6 +335,11 @@ def main() -> None:
             "branch_index": int(branch_index),
             "run_id": int(rid),
             "branch_length_um": float(branch_length),
+            "cluster_selection_mode": (
+                "compact_midpoint_window" if args.cluster_span_um > 0 else "whole_unbranched_run"
+            ),
+            "requested_cluster_span_um": float(args.cluster_span_um),
+            "actual_cluster_span_um": float(actual_cluster_span),
             "clustered_sites": clustered.tolist(),
             "dispersed_sites": dispersed.tolist(),
             "distinct_dispersed_runs": int(match_diag["distinct_match_runs"]),
@@ -335,7 +362,7 @@ def main() -> None:
 
         print(
             f"[{branch_index+1:02d}/{len(candidates):02d}] run {rid:3d} "
-            f"L={branch_length:6.1f}um "
+            f"L={branch_length:6.1f}um span={actual_cluster_span:5.1f}um "
             f"matchZ={match_diag['median_z_ratio_factor']:.3f}x "
             f"matchT={match_diag['median_transfer_ratio_factor']:.3f}x "
             f"runs={match_diag['distinct_match_runs']:2d} "
@@ -442,6 +469,12 @@ def main() -> None:
             "quasi_static_peak_conductance": True,
             "clustered_sites_share_one_maximal_unbranched_run": True,
             "dispersed_sites_exclude_target_run": True,
+            "cluster_selection": (
+                "compact midpoint physical window"
+                if args.cluster_span_um > 0
+                else "sites distributed across whole maximal unbranched run"
+            ),
+            "requested_cluster_span_um": float(args.cluster_span_um),
             "matching_coordinates": [
                 "log driving-point impedance",
                 "log absolute soma current transfer",
@@ -477,6 +510,7 @@ def main() -> None:
     print()
     print(f"branches:                              {aggregate['branches']}")
     print(f"sites / arrangement:                   {aggregate['sites_per_arrangement']}")
+    print(f"requested compact span:                {args.cluster_span_um:.1f} um")
     print(f"median passive Z match factor:         {aggregate['median_passive_z_match_factor']:.3f}x")
     print(f"median passive soma-T match factor:    {aggregate['median_passive_soma_transfer_match_factor']:.3f}x")
     print(f"minimum dispersed branch runs:         {aggregate['minimum_distinct_dispersed_runs']}")
