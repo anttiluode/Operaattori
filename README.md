@@ -911,11 +911,46 @@ embedding-dependent process.
 
 See [Gate 22 protocol](results/GATE22.md).
 
+## Gate 22 receipt — a bend is not automatically an electrical operator
+
+The locked 35-degree local SE(3) bend moved the real distal subtree by
+**184.107 um** while changing cable length by only **1.483e-13 um** and passive
+transfer by only **5.999e-14**. The positive-control 20% intrinsic metric
+stretch changed transfer by **36.34% median** on the same affected routes.
+
+~~~text
+CABLE_MODEL_IGNORES_ISOMETRIC_3D_EMBEDDING
+~~~
+
+That sharply narrows the original scaffold claim: in the classical cable
+model, visual XYZ shape is not itself the computation. A bend needs a coupling
+to world space before it can change function.
+
+## Gate 23 — give the scaffold something spatial to sample
+
+Gate 23 keeps the intrinsic cell-1125 cable operator unchanged and places the
+original/bent arbor in the **same fixed family of smooth 3-D fields**.
+
+Every field is normalized so the original and bent neuron receive exactly the
+same total drive. A scalar total-input ruler therefore predicts no difference.
+
+The readout uses the exact whole-tree passive transfer coefficients from Gate
+13. A material-locked attacker keeps each node's sampled value attached to the
+same material point after bending and must remain invariant.
+
+If the fixed-world condition changes while the material-locked condition does
+not, the missing causal object is explicit:
+
+~~~text
+relative geometry = scaffold embedding + external spatial structure
+~~~
+
+See [Gate 23 protocol](results/GATE23.md).
+
 ## Current stopping line
 
-> **Do not call every visible matrix bend a new electrical operator. First
-> separate extrinsic 3-D embedding from intrinsic length/radius/topology. If
-> Gate 22 confirms the expected invariance, the next route is to give the real
-> arbor a fixed spatial environment and test whether bending the scaffold
-> changes what it samples.**
+> **An SE(3) bend only earns functional meaning through a real coupling. If
+> Gate 23 survives equal-total normalization and the material-locked attacker,
+> then—and only then—start asking whether a local adaptive rule can move the
+> scaffold to improve later sampling.**
 

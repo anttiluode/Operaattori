@@ -230,14 +230,26 @@ jobs:
       - name: Gate 22 — embedding versus intrinsic cable metric
         run: python experiments/gate22_embedding_vs_metric.py --paths 32 --twist-deg 35 --stretch 1.20
 
+  gate23-spatial-coupling:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pip install -r requirements-morphology.txt
+      - name: Gate 23 — fixed world field on movable scaffold
+        run: python experiments/gate23_spatial_field.py --directions 48 --twist-deg 35
+
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 23 is still absent
+      - name: Verify Gate 24 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate23.py
-          test ! -e experiments/gate23_spatial_field.py
-          test ! -e experiments/gate23_dynamic_growth.py
-          echo "Gate 23 remains locked behind the Gate 22 geometry-causality audit."
+          test ! -e experiments/gate24.py
+          test ! -e experiments/gate24_adaptive_scaffold.py
+          test ! -e experiments/gate24_dynamic_growth.py
+          echo "Gate 24 remains locked behind the Gate 23 spatial-coupling audit."

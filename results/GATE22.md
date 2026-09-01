@@ -73,3 +73,37 @@ If this boundary passes, the next honest route for 3-D scaffold geometry is an
 external field and ask whether an isometric local scaffold bend changes what
 the branches sample. Do not pretend pure XYZ bending changes cable physics by
 itself.
+
+
+## Receipt
+
+The locked assay passed cleanly on the real cell-1125 scaffold:
+
+~~~text
+affected dendritic paths                13
+pivot node                            9418
+
+35-degree SE3 bend
+  max distal 3-D displacement       184.107 um
+  max cable-length change          1.483e-13 um
+  max passive-transfer change      5.999e-14
+
+20% intrinsic metric stretch
+  median passive-transfer change      0.3634
+  paths with >1% change              13 / 13
+~~~
+
+Classification:
+
+~~~text
+CABLE_MODEL_IGNORES_ISOMETRIC_3D_EMBEDDING
+~~~
+
+The same local matrix operation can therefore be visually enormous and
+electrically null. In the classical internal cable model, what matters is the
+intrinsic neurite metric/radius/topology. Absolute XYZ embedding is not an
+independent electrical degree of freedom.
+
+This is a boundary on the scaffold idea, not a claim that biological neurons
+ignore space. It tells us exactly what must be added for a pure bend to matter:
+some process that lives in world space rather than only along the cable.
