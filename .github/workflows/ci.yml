@@ -87,14 +87,28 @@ jobs:
       - name: Gate 13 — full branching transport
         run: python experiments/gate13_branching_transport.py --no-plot
 
+  gate14-nmda-feedback:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pip install -r requirements-morphology.txt
+      - name: Gate 14 unit tests
+        run: python -m unittest tests.test_nmda_branch -v
+      - name: Gate 14 — reduced NMDA branch feedback
+        run: python experiments/gate14_nmda_branch_feedback.py --branches 10 --no-plot
+
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 14 is still absent
+      - name: Verify Gate 15 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate14.py
-          test ! -e experiments/gate14_nonlinear_compartments.py
-          test ! -e experiments/gate14_nmda.py
-          echo "Gate 14 remains locked behind the branch-junction audit."
+          test ! -e experiments/gate15.py
+          test ! -e experiments/gate15_neuron_nmda_time.py
+          test ! -e experiments/gate15_dynamic_growth.py
+          echo "Gate 15 remains locked behind the reduced NMDA audit."
