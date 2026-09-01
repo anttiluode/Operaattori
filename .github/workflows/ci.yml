@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  gates-0-to-9:
+  gates-0-to-10:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,15 +36,19 @@ jobs:
         run: python experiments/gate8_meta_law.py
       - name: Gate 9 — path through operator space
         run: python experiments/gate9_lie_path.py
+      - name: Install morphology dependencies
+        run: python -m pip install -r requirements-morphology.txt
+      - name: Gate 10 — real neuron matrix scaffold
+        run: python experiments/gate10_real_neuron_scaffold.py --no-plot
 
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 10 is still absent
+      - name: Verify Gate 11 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate10.py
-          test ! -e experiments/gate10_spatial_operator_field.py
-          test ! -e experiments/gate10_graph_operator.py
-          echo "Gate 10 remains locked behind the spatial-locality audit."
+          test ! -e experiments/gate11.py
+          test ! -e experiments/gate11_spatial_operator_order.py
+          test ! -e experiments/gate11_dynamic_scaffold.py
+          echo "Gate 11 remains locked behind the real-neuron scaffold audit."
