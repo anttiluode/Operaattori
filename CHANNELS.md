@@ -331,3 +331,43 @@ local operator.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) and
 [results/OPERATOR_FACTORIZATION.md](results/OPERATOR_FACTORIZATION.md).
+
+
+## Cross-input transport reuse
+
+One T_g per held-out geometry was reused across three different local current
+operators on every compact branch:
+
+~~~text
+middle single
+outer pair
+triple
+~~~
+
+Across 36 held-out branch x geometry x pattern cases:
+
+~~~text
+frozen-soma attacker NRMSE       0.0931
+factorized NRMSE                 0.0282
+transport-oracle NRMSE           0.0039
+factorized / frozen              0.3027
+factorized wins                  28 / 36
+
+pattern medians
+  middle single                  0.0125
+  outer pair                     0.0373
+  triple                         0.0512
+~~~
+
+Classification:
+
+~~~text
+TRANSPORT_OPERATOR_REUSES_ACROSS_INPUT_PATTERNS
+~~~
+
+Thus the measured transport module is not tied to the triple-input waveform.
+Its error remains dominated by portability of the local nonlinear current
+operator as interaction complexity grows.
+
+See
+[results/CROSS_INPUT_TRANSPORT_AUDIT.md](results/CROSS_INPUT_TRANSPORT_AUDIT.md).
