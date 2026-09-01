@@ -122,6 +122,42 @@ measures block commutators. Reversal and shuffle of the exact same segment
 multiset remain the primary causal tests; the area-matched uniform-radius path
 remains the commuting attacker.
 
+## Revised finite-scale receipt — PASS
+
+The revised meter composes the micron-scale reconstruction points into
+contiguous **25-um cable blocks** before asking the local noncommutativity
+question. The functional reversal/shuffle tests and the uniform-radius attacker
+are unchanged.
+
+The real-neuron job passed:
+
+```text
+dendritic paths audited               64
+median path length                    357.6 um
+median point segments/path            241
+
+point-adjacent commutator action      3.712e-17
+25-um block commutator action         6.754e-04
+uniform 25-um block commutator max    2.127e-16
+
+real vs reversed impedance            0.315524
+real vs shuffled impedance            0.174423
+real vs reversed gain                 0.315524
+median gain phase difference          0.237898 rad
+median group-delay difference         1.52477 ms
+
+uniform-radius reverse control        1.039e-14
+```
+
+So the failed microscopic meter taught us a scale lesson rather than erasing
+the result: at the raw ASC point spacing the pairwise bracket is below a useful
+numerical scale, while finite contiguous cable blocks are plainly
+noncommuting. The causal result remains the stronger one: **the exact same
+heterogeneous cable pieces, reordered, produce a different transfer**.
+
+The area-matched uniform-radius path keeps the same path length and membrane
+surface area but loses the order sensitivity to roundoff.
+
 ## What a pass means
 
 A pass earns:
