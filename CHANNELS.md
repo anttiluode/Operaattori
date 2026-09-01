@@ -440,3 +440,41 @@ transport module and an essential nonlinear local voltage-feedback loop.
 
 See
 [results/TEMPORAL_GREEN_CIRCUIT_AUDIT.md](results/TEMPORAL_GREEN_CIRCUIT_AUDIT.md).
+
+
+## Cross-cell operator boundary
+
+A morphology-only leave-one-cell-out audit was run across all 24 released FCI
+morphologies under one matched-passive electrical regime.
+
+~~~text
+144 measured branch operators
+
+morphology predictor joint NRMSE    0.3522
+nearest training branch             0.3199
+training mean                        0.6686
+training-basis PCA oracle            0.0307
+
+held-out cells beating nearest       11 / 24
+local-only morphology map            0.3695
+local + whole-cell map               0.3522
+~~~
+
+Classification:
+
+~~~text
+CROSS_CELL_OPERATOR_LOW_DIMENSIONAL_BUT_MORPHOLOGY_MAP_WEAK
+~~~
+
+This separates two facts that should not be conflated:
+
+~~~text
+operator family across cells         highly compressible
+simple morphology -> operator chart  inadequate
+~~~
+
+The extreme human L5 2057 morphology is retained as a real stress case, but
+removing it after the fact does not rescue the conclusion.
+
+See
+[results/CROSS_CELL_OPERATOR_AUDIT.md](results/CROSS_CELL_OPERATOR_AUDIT.md).
