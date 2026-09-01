@@ -1,0 +1,21 @@
+name: Operaattori reduced runtime
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "reduced/**"
+      - ".github/workflows/reduced-runtime.yml"
+  workflow_dispatch:
+
+jobs:
+  reduced-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install numpy
+      - name: Portable Green-circuit unit tests
+        run: python -m unittest reduced/test_green_circuit_numpy.py -v
