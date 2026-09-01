@@ -142,15 +142,17 @@ jobs:
         run: python experiments/gate16a_fci_neuron_smoke.py --fci-root /tmp/fci
       - name: Gate 16 — released kinetic matched locality
         run: python experiments/gate16_fci_dynamic_locality.py --fci-root /tmp/fci --branches 6 --sites 3 --cluster-span-um 55
+      - name: Gate 17 — same-site superposition attack
+        run: python experiments/gate17_superposition_attack.py --fci-root /tmp/fci --branches 4 --sites 3 --cluster-span-um 55 --multiplicity 16
 
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 16 is still absent
+      - name: Verify Gate 18 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate16.py
-          test ! -e experiments/gate16_nmda_time_domain.py
-          test ! -e experiments/gate16_dynamic_growth.py
-          echo "Gate 16 remains locked behind the compartment-locality audit."
+          test ! -e experiments/gate18.py
+          test ! -e experiments/gate18_timing_structure.py
+          test ! -e experiments/gate18_dynamic_growth.py
+          echo "Gate 18 remains locked behind the Gate 17 superposition attack."
