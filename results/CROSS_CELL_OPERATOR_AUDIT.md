@@ -239,3 +239,112 @@ held-out causal/operator portability experiment and the executable reduced
 runtime, not invention of Green functions.
 
 This is an architecture audit, not Gate 25.
+
+
+## Receipt — cross-cell map fails
+
+The full 24-cell leave-one-cell-out audit completed successfully.
+
+~~~text
+24 cells
+6 deterministic apical sections per cell
+144 measured branch operators
+
+ten-feature morphology predictor
+  median joint NRMSE                 0.3522
+  median local-G NRMSE               0.2830
+  median soma-T NRMSE                0.3736
+
+attackers
+  training-mean joint NRMSE          0.6686
+  nearest-morphology joint NRMSE     0.3199
+
+training-basis PCA oracle
+  joint NRMSE                        0.0307
+
+morphology / mean error              0.5268
+morphology / nearest error           1.1010
+held-out cells beating nearest       11 / 24
+
+local/tree features only             0.3695
+local + whole-cell features          0.3522
+full / local-only                    0.9531
+~~~
+
+Classification:
+
+~~~text
+CROSS_CELL_OPERATOR_LOW_DIMENSIONAL_BUT_MORPHOLOGY_MAP_WEAK
+~~~
+
+The low PCA-oracle error is the central diagnostic. A held-out cell's operator
+usually lies very close to the low-dimensional operator family spanned by the
+other 23 cells, but the preregistered morphology coordinates do not locate it
+accurately enough.
+
+### Species diagnostics
+
+~~~text
+held-out rat cells, median cell joint NRMSE       0.2637
+held-out human cells                              0.4263
+
+train rat -> test human                           0.7842
+train human -> test rat                           0.3804
+~~~
+
+The species labels themselves were never predictor features; these are only
+post-run grouping diagnostics.
+
+### Important retained failures
+
+The most extreme cell is human L5 morphology 2057:
+
+~~~text
+morphology predictor       7.972
+nearest branch             1.315
+mean operator              9.021
+PCA oracle                 0.091
+~~~
+
+It is also the largest morphology in this matched-passive panel by several
+gross measures, including about 27,041 um total dendritic cable and a maximum
+path over 2,100 um.
+
+That makes it a genuine out-of-distribution stress case, not a reason to delete
+the row.
+
+For diagnosis only, removing 2057 after the fact does **not** rescue the
+conclusion:
+
+~~~text
+23 remaining cells
+
+morphology median joint NRMSE       0.3569
+nearest median joint NRMSE          0.3366
+PCA oracle                          0.0303
+morphology beats nearest            11 / 23
+~~~
+
+So the failure is not one outlier.
+
+### What the failure says
+
+The operator representation itself survived the cross-cell jump much better
+than the geometry-to-coordinate map:
+
+~~~text
+held-out operator -> training PCA family      ~3%
+morphology features -> operator coordinates   ~35%
+~~~
+
+Adding the four whole-cell descriptors to the six local/tree descriptors only
+improved median error from 36.95% to 35.22%.
+
+The next justified question is therefore **not** "which larger regressor wins?"
+It is whether the operator family needs a more physically appropriate
+coordinate system than raw length/diameter/path/tree summaries.
+
+No neural-network, polynomial-feature or nonlinear-NMDA rescue scan is opened.
+
+GitHub Actions:
+run 33506573377, job 99851921367.
