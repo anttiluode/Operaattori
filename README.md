@@ -947,10 +947,45 @@ relative geometry = scaffold embedding + external spatial structure
 
 See [Gate 23 protocol](results/GATE23.md).
 
+## Gate 23 receipt — passive spatial sampling is real but weak
+
+The material-locked attacker is exactly invariant, so the causal bookkeeping
+works. But the locked smooth-field family does not clear the robustness gate:
+
+~~~text
+sample nodes                              1809
+field/frequency conditions                 432
+
+material-locked max difference        0.000e+00
+
+fixed-world equal-total
+  median output difference                2.11%
+  conditions >5%                          19.9%
+  conditions >10%                          6.0%
+  maximum                                 22.3%
+~~~
+
+~~~text
+FIXED_WORLD_FIELD_EFFECT_WEAK
+~~~
+
+So we do **not** sharpen gradients or cherry-pick directions. The passive tree
+can care about relative world geometry in particular cases, but not robustly
+enough here to justify adaptive scaffold growth.
+
+The interesting synthesis is now narrower: Gate 20 earned strong **local
+nonlinear compartments**, while Gate 23 says passive spatial redistribution is
+mostly washed out at the soma. If this line continues, Gate 24 should combine
+world-space sampling with those actual nonlinear compartments under a fresh
+locked protocol—not rescue Gate 23 by making the toy field harsher.
+
+See [Gate 23](results/GATE23.md).
+
 ## Current stopping line
 
-> **An SE(3) bend only earns functional meaning through a real coupling. If
-> Gate 23 survives equal-total normalization and the material-locked attacker,
-> then—and only then—start asking whether a local adaptive rule can move the
-> scaffold to improve later sampling.**
+> **Growth remains locked. We now know that visible matrix motion, intrinsic
+> cable geometry, nonlinear compartments and world-space sampling are distinct
+> causal objects. The next experiment is worth doing only if it combines the
+> previously earned nonlinear compartment mechanism with spatial sampling
+> without tuning the environment after the fact.**
 

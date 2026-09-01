@@ -108,3 +108,50 @@ branch bend?” It is:
 > that later sampling/performance improves under a fixed environment?
 
 That is the point where adaptive scaffold motion becomes worth testing.
+
+
+## Receipt — causal coupling exists, but the locked smooth-field effect is weak
+
+The 35-degree isometric bend was evaluated across all 48 field directions,
+three gradient strengths and three frequencies:
+
+~~~text
+sampled material nodes                    1809
+field/frequency conditions                 432
+
+max intrinsic cable-length change      1.426e-13 um
+material-locked max output change       0.000e+00
+
+fixed-world equal-total condition
+  median output change                     0.0211
+  conditions >5%                            0.199
+  conditions >10%                           0.060
+  maximum output change                     0.2230
+~~~
+
+Classification:
+
+~~~text
+FIXED_WORLD_FIELD_EFFECT_WEAK
+~~~
+
+The zero material-locked error verifies the causal decomposition: the bend does
+not secretly alter the intrinsic passive operator. Fixed-world fields can
+produce sizeable effects for some orientations, but the preregistered family is
+not robust enough to earn the stronger claim that spatial coupling generally
+makes this passive embedding functional.
+
+We do not rescue the gate by sharpening the field, changing the normalization
+or selecting favorable directions after seeing the result.
+
+The combined boundary after Gates 20–23 is now informative:
+
+- real branches can be strong local nonlinear compartments;
+- a pure SE(3) bend is intrinsically cable-invariant;
+- smooth spatial resampling through a passive soma is mostly weak.
+
+A future Gate 24 should therefore not be “more gradient.” The clean candidate
+is to combine two mechanisms that independently survived earlier attacks:
+**world-space sampling and the measured nonlinear branch compartments**. That
+would require a fresh locked protocol and a real nonlinear model, not a tuned
+version of Gate 23.
