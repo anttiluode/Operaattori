@@ -112,6 +112,35 @@ results/gate10/cell1125_one_local_bend.png
 The NPZ is the important artifact. It contains the matrix scaffold and no
 absolute neurite coordinates.
 
+## CI receipt — real cell 1125
+
+The first full run on GitHub Actions (Python 3.12, MorphIO 3.5) passed:
+
+| measurement | result |
+|---|---:|
+| scaffold nodes | **12,632** |
+| local edges / transforms | **12,631** |
+| branch nodes | **99** |
+| tips | **111** |
+| parsed cable length (all parsed neurites + synthetic root links) | **20,939.29 um** |
+| max reconstruction error | **8.224e-12 um** |
+| max local-frame orthogonality error | **1.033e-15** |
+| chosen bend pivot | 9,418 |
+| distal descendants of pivot | **1,808** |
+| pivot displacement | **0** |
+| max distal displacement after one 20 degree local bend | **106.316 um** |
+| max displacement outside that subtree | **0** |
+| max cable-length change | **1.541e-13 um** |
+
+The cable-length number above is the point-tree scaffold's parsed total and
+should not be equated with the paper's dendritic-length morphometric: it also
+contains whatever non-dendritic neurite material MorphIO retained plus the
+synthetic soma-root attachment edges.
+
+The key structural result is independent of that bookkeeping: the original
+absolute neurite coordinates can be discarded and regenerated to picometer-scale
+numerical error from the root pose, topology and local matrices alone.
+
 ## Stopping line
 
 A pass earns **geometry-as-scaffold** only.
