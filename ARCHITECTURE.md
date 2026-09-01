@@ -71,3 +71,38 @@ transport decomposition.
 This does not mean N_b is universal. The next audit asks whether the same T_g
 works across several distinct local input patterns rather than only the
 three-site Gate-20 pattern.
+
+
+## Literature fence
+
+The broad architecture is not a novelty claim.
+
+Poirazi, Brannon & Mel (2003), *Pyramidal neuron as two-layer neural network*,
+showed that a detailed CA1 pyramidal model could be abstracted as nonlinear
+dendritic subunits whose outputs are pooled before somatic thresholding:
+
+https://doi.org/10.1016/S0896-6273(03)00149-1
+
+Subsequent experimental and modeling work developed and attacked this
+two-layer / nonlinear-subunit picture, including branch independence and
+location-dependent subunit behavior.
+
+Likewise, linear cable transfer and Green's-function descriptions of current
+propagation from dendritic sites to the soma are classical cable theory.
+
+Operaattori therefore does **not** claim to invent nonlinear dendritic subunits,
+linear transport, or a two-layer neuron.
+
+The narrower earned object here is a causal modularity assay on one released
+human L2/3 reconstruction:
+
+~~~text
+measure N only in original geometry
+change intrinsic branch metric
+remeasure only T
+predict unseen held-out soma trace with T_new[N_original]
+compare against both a frozen-output attacker and T_new[N_actual] oracle
+~~~
+
+That intervention-based portability test is what the current receipts support.
+Priority beyond that would require a dedicated literature review.
