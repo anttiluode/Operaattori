@@ -853,10 +853,69 @@ independent-site ruler, the branch decomposition has bought a compact
 factorization of an input-output function rather than merely a descriptive
 anatomical label.
 
+## Gate 21 receipt — allocation matters, clean waveform factorization fails
+
+With the same two branches, same six sites and same total 48 virtual synapses,
+redistributing the budget changes the somatic response strongly:
+
+~~~text
+HUMAN equal-budget AUC range           1.3414x median
+pairs with range >=1.05               15 / 15
+
+centered AUC-signature RMSE
+  total-input                          0.1323
+  independent sites                    0.1336
+  nonlinear branch basis               0.0402
+
+branch vs site signature advantage      3.320x
+~~~
+
+So the scalar total-input ruler is dead, and the measured nonlinear branch
+basis predicts **which redistribution wins** much better than independent
+sites.
+
+But the preregistered gate also required the complete soma waveform to
+factorize. It did not:
+
+~~~text
+nonlinear-branch full-trace NRMSE       0.1994
+required                               <=0.10
+~~~
+
+Classification:
+
+~~~text
+NO_CLEAN_BRANCH_SUBUNIT_FACTORISATION
+~~~
+
+We do not scan doses to rescue it. See [Gate 21](results/GATE21.md).
+
+## Gate 22 — separate 3-D embedding from intrinsic cable geometry
+
+The next test returns to the matrix scaffold itself.
+
+Gate 10 can bend a large distal subtree by rotating one local SE(3) frame while
+preserving every cable length. Gate 22 asks whether that visually dramatic
+change is electrically causal **by itself**.
+
+It compares the original cell-1125 scaffold with:
+
+- a locked 35-degree isometric local bend;
+- a 20% stretch of the intrinsic cable metric on the same subtree.
+
+The classical cable equation should ignore the first and respond to the
+second. If so, that is an important constraint on the geometric-neuron idea:
+XYZ shape only becomes computational when it couples to an external spatial
+field, synapse placement, mechanics, diffusion or another genuinely
+embedding-dependent process.
+
+See [Gate 22 protocol](results/GATE22.md).
+
 ## Current stopping line
 
-> **Still do not add growth. Gate 21 must first show that redistributing the
-> same total drive across the measured branch compartments changes the somatic
-> output in a way predicted by nonlinear branch subunits better than by
-> independent sites. If it passes, the next attacker must remove the exact
-> dose-lookup-table crutch before any developmental claim is allowed.**
+> **Do not call every visible matrix bend a new electrical operator. First
+> separate extrinsic 3-D embedding from intrinsic length/radius/topology. If
+> Gate 22 confirms the expected invariance, the next route is to give the real
+> arbor a fixed spatial environment and test whether bending the scaffold
+> changes what it samples.**
+

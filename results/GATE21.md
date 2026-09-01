@@ -109,3 +109,60 @@ It does **not** earn learning, growth, optimality, or intelligence.
 If Gate 21 passes, Gate 22 must attack the exact dose lookup table: predict
 held-out branch doses/redistributions from a smaller fitted/interpolated
 subunit law. If Gate 21 fails, do not rescue it by scanning doses.
+
+
+## Receipt — strong scalar signature, failed full-trace factorization
+
+The locked assay ran on all 15 branch pairs with the corrected released-model
+initialization.
+
+~~~text
+HUMAN
+
+median equal-budget AUC range          1.3414x
+pairs with range >= 1.05              15 / 15
+
+signature RMSE
+  total-input ruler                    0.1323
+  independent-site ruler               0.1336
+  nonlinear-branch ruler               0.0402
+
+site / branch signature error          3.320x
+branch ruler beats site               14 / 15
+branch ruler beats total              15 / 15
+
+full trace NRMSE
+  independent-site ruler               0.7456
+  nonlinear-branch ruler               0.1994
+
+somatic spike guard                    0 / 15
+~~~
+
+The rest-matched gamma=0.062 control also produced redistribution sensitivity
+and the branch ruler again predicted the centered AUC signature better than
+independent sites:
+
+~~~text
+median equal-budget AUC range          1.2404x
+site / branch signature error          2.764x
+full branch-ruler trace NRMSE           0.3615
+~~~
+
+Classification:
+
+~~~text
+NO_CLEAN_BRANCH_SUBUNIT_FACTORISATION
+~~~
+
+This is deliberately a negative classification. The branch basis predicts
+**which equal-budget redistribution produces more integrated somatic response**
+surprisingly well, but it does not predict the complete somatic waveform within
+the preregistered 10% error bound. HUMAN branch-ruler trace NRMSE is 19.94%.
+
+So Gate 20's semi-independent compartments remain real, and Gate 21 shows that
+input allocation across them matters, but the whole neuron is not cleanly the
+sum of six measured nonlinear branch transfer functions.
+
+The pre-registered stopping rule said not to scan doses to rescue a failure.
+We therefore do not proceed to the held-out-dose Gate 22 that had been planned
+for a positive factorization result.
