@@ -195,3 +195,49 @@ embedded in measured linear transport.
 The next attack is temporal rather than geometric: reuse the same reduced object
 for asynchronous event patterns without fitting new conductance shapes or
 transport kernels.
+
+
+## Temporal portability
+
+The same reduced circuit was then tested on asynchronous event programs without
+new conductance or transport fitting.
+
+~~~text
+72 full-model comparisons
+
+transport oracle soma NRMSE       0.0037
+reduced circuit soma NRMSE        0.0050
+reduced current NRMSE             0.0026
+
+timing medians
+  synchronous                     0.0070
+  forward 0,5,10 ms               0.0053
+  reverse 10,5,0 ms               0.0054
+  spread 0,15,30 ms               0.0041
+~~~
+
+Classification:
+
+~~~text
+TEMPORAL_GREEN_CIRCUIT_GENERALIZES_WITHOUT_REFIT
+~~~
+
+A diagnostic open-loop version that keeps the same conductance templates and
+transport but removes local voltage feedback has **0.4141 median soma NRMSE**.
+The nonlinear fixed-point circuit beats it in **72 / 72** cases.
+
+So the current factorization is genuinely mixed:
+
+~~~text
+linear geometry-dependent transport
+             x
+essential local nonlinear voltage feedback
+~~~
+
+The next missing map is upstream of both:
+
+~~~text
+geometry parameters  --->  G_g, T_g
+~~~
+
+At present those kernels are still measured separately for each geometry.
