@@ -1,0 +1,21 @@
+{
+  "object": "local 3x3 Green matrix plus released AMPA/NMDA law reduction",
+  "source": "GitHub Actions run 33494156490, job 99812336306",
+  "aggregate": {
+    "median_transport_oracle_soma_nrmse": 0.004,
+    "median_reduced_soma_nrmse": 0.0043,
+    "median_reduced_current_nrmse": 0.0038,
+    "heldout_frozen_current_nrmse": 0.0282,
+    "heldout_reduced_soma_nrmse": 0.0043,
+    "reduced_to_frozen_current_median_error_ratio": 0.1527,
+    "fraction_reduced_beats_frozen_current": 0.889,
+    "pattern_median_reduced_soma_nrmse": {
+      "middle_single": 0.003,
+      "outer_pair": 0.0048,
+      "triple": 0.007
+    },
+    "fixed_point_convergence_fraction": 1,
+    "spike_guard_fraction": 0
+  },
+  "classification": "LOCAL_GREEN_MATRIX_X_SYNAPSE_LAW_REDUCES_RELEASED_NEURON"
+}
