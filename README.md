@@ -15,6 +15,13 @@ The browser computes the geometry live and displays the locked Gate-22
 electrical measurements as measured anchors; it does not fabricate interpolated
 electrophysiology.
 
+A separate **72-bend symmetry audit** then repeated the null across six
+bifurcations, all three local axes and positive/negative bend angles: the
+largest subtree motion was **619.350 µm**, while the largest passive-transfer
+change was only **9.710e-14**. The 20% intrinsic-metric controls changed
+transfer by **11.84% median**. See
+**[results/SYMMETRY_AUDIT.md](results/SYMMETRY_AUDIT.md)**.
+
 The repo started as a synthetic moving-operator project. From Gate 10 onward it
 became a different and much more concrete investigation:
 
