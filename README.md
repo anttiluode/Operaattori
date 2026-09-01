@@ -2,6 +2,14 @@
 
 ![pic](cell1125_original_scaffold.png)
 
+> **This repo changed direction substantially midway through.** Gates 0–9 are
+> the original synthetic "grown operator" investigation. From Gate 10 onward,
+> the project pivots to the scaffolding idea: take a real reconstructed human
+> neuron (cell 1125, shown above), make its geometry and cable physics explicit
+> as operators, and then ask which parts of the biological scaffold actually
+> buy function under hard ablations. The earlier gates are kept as provenance,
+> not presented as one seamless final model.
+
 **Operaattori** is Finnish for **operator**.
 
 This repo asks one deliberately narrow question:
