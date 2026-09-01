@@ -291,3 +291,43 @@ channels rather than merging them into one morphology effect.
 
 See
 [results/METRIC_NONLINEARITY_AUDIT.md](results/METRIC_NONLINEARITY_AUDIT.md).
+
+
+## Operator composition — transport x local nonlinearity
+
+The causal channels were finally composed rather than merely compared.
+
+For each of the six compact branches, the original geometry supplies a local
+nonlinear operator output: the three site-wise AMPA+NMDA current waveforms.
+
+A separate site-to-soma impulse-response operator is then measured for each
+geometry.
+
+Held-out branch-length perturbations:
+
+~~~text
+scale = 0.80 or 1.20
+12 branch x geometry cases
+
+original reconstruction NRMSE       0.0046
+frozen-soma attacker NRMSE          0.0982
+factorized NRMSE                    0.0512
+transport-oracle NRMSE              0.0046
+factorized / frozen                 0.5213
+factorized wins                     9 / 12
+~~~
+
+Classification:
+
+~~~text
+TRANSPORT_X_LOCAL_NONLINEAR_OPERATOR_FACTORIZATION
+~~~
+
+The oracle demonstrates that site-current to soma transport is almost perfectly
+linear at this operating regime. The remaining error comes mainly from the
+fact that changing geometry changes the nonlinear synaptic current waveform
+slightly, while the reusable architecture intentionally freezes the original
+local operator.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) and
+[results/OPERATOR_FACTORIZATION.md](results/OPERATOR_FACTORIZATION.md).
