@@ -76,3 +76,58 @@ clear the same aggregate ruler.
 
 A positive compact-specific result earns a multi-pulse sequence-discrimination
 test. It still does not earn developmental growth.
+
+
+## Receipt — the simple order hypothesis dies
+
+The first CI attempt failed for a bookkeeping reason: single-site traces were
+cropped to their own event windows, so their time grids did not match the
+three-event trace. The shared analysis window was fixed before any scientific
+result was produced.
+
+The corrected six-branch run is unambiguous:
+
+~~~text
+lag                                    4.0 ms
+median passive Rinput match            1.037x
+median passive soma-transfer match     1.126x
+
+HUMAN compact order magnitude          0.0005
+HUMAN dispersed order magnitude        0.0089
+compact branches with >5% order effect 0 / 6
+compact-dispersed excess log          -0.0080
+compact more order-sensitive fraction  0 / 6
+proximal->distal preferred fraction    0.333
+
+restmatched compact order magnitude    0.0012
+restmatched dispersed order magnitude  0.0024
+gamma-specific excess log             -0.0088
+~~~
+
+The compact HUMAN order magnitudes by branch are only approximately:
+
+~~~text
+0.1%
+0.0%
+0.0%
+0.0%
+0.1%
+0.1%
+~~~
+
+while two dispersed controls show larger effects near 6–7%.
+
+Classification:
+
+~~~text
+NO_ROBUST_COMPACT_TEMPORAL_ORDER_EFFECT
+~~~
+
+So Gates 16–18 should **not** be reinterpreted as a local sequence processor.
+At this locked 4-ms spacing, the compact dendritic nonlinearity behaves much
+more like a coactivation/coincidence compartment than an operator that cares
+which end of the branch was stimulated first.
+
+Do not rescue this gate by scanning lags until one works. The next scaffold
+question should move sideways: if individual branches are nonlinear
+compartments, are they also semi-independent from one another?
