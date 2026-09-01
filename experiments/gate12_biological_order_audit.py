@@ -213,6 +213,10 @@ def main() -> None:
             for j, f in enumerate(freqs)
         }
 
+        radius_increases = np.diff(radii) > 1e-12
+        thick_is_real = bool(np.array_equal(thick_to_thin, real_order))
+        real_thick_max_abs_feature_error = float(np.max(np.abs(real_feat - feat_mono[0])))
+
         row = {
             "leaf": int(leaf),
             "segments": int(n),
@@ -221,6 +225,10 @@ def main() -> None:
             "radius_max_um": float(np.max(radii)),
             "linear_taper_slope_um_per_normalized_path": float(slope),
             "linear_taper_r2": float(taper_r2),
+            "radius_increase_steps": int(np.sum(radius_increases)),
+            "fraction_radius_steps_nonincreasing": float(np.mean(~radius_increases)) if len(radius_increases) else 1.0,
+            "stable_thick_to_thin_order_is_exact_real_order": thick_is_real,
+            "real_vs_thick_to_thin_max_abs_transfer_feature_error": real_thick_max_abs_feature_error,
             "full_null": full_stats,
             "endpoint_null": endpoint_stats,
             "coarse_window_nulls": coarse,
@@ -263,6 +271,10 @@ def main() -> None:
         "median_segments_per_path": float(np.median(arr(lambda r: r["segments"]))),
         "median_linear_taper_r2": float(np.median(arr(lambda r: r["linear_taper_r2"]))),
         "median_linear_taper_slope": float(np.median(arr(lambda r: r["linear_taper_slope_um_per_normalized_path"]))),
+        "median_radius_increase_steps": float(np.median(arr(lambda r: r["radius_increase_steps"]))),
+        "median_fraction_radius_steps_nonincreasing": float(np.median(arr(lambda r: r["fraction_radius_steps_nonincreasing"]))),
+        "fraction_paths_exactly_equal_stable_thick_to_thin": float(np.mean(arr(lambda r: float(r["stable_thick_to_thin_order_is_exact_real_order"])))),
+        "max_real_vs_thick_to_thin_transfer_feature_error": float(np.max(arr(lambda r: r["real_vs_thick_to_thin_max_abs_transfer_feature_error"]))),
         "full_permutation": {
             "median_tail_p": float(np.median(full_p)),
             "fraction_tail_p_le_0.05": float(np.mean(full_p <= 0.05)),
@@ -284,7 +296,18 @@ def main() -> None:
     endpoint_signal = aggregate["endpoint_preserving"]["signal"]
     p50_signal = aggregate["coarse_window_preserving"]["50.0"]["signal"]
 
-    if full_signal == "weak":
+    if (
+        aggregate["fraction_paths_exactly_equal_stable_thick_to_thin"] >= 0.90
+        or aggregate["median_real_to_thick_to_thin_distance_z"] <= 1e-6
+    ):
+        classification = "MONOTONIC_TAPER_EXPLAINS_REAL_ORDER"
+        interpretation = (
+            "The biological paths are already the same ordering produced by the simple "
+            "stable thick-to-thin taper ruler (or numerically indistinguishable from it). "
+            "The permutation tail result therefore does not establish additional fine "
+            "operator ordering beyond ordinary taper."
+        )
+    elif full_signal == "weak":
         classification = "REAL_ORDER_NOT_GLOBALLY_UNUSUAL"
         interpretation = (
             "Gate 11's order sensitivity is real, but the biological sequence is not "
@@ -351,6 +374,10 @@ def main() -> None:
     print(f"full permutations/path:          {args.permutations}")
     print(f"constrained permutations/path:   {args.constrained_permutations}")
     print(f"median gross taper R^2:          {aggregate['median_linear_taper_r2']:.4f}")
+    print(f"median radius-increase steps:    {aggregate['median_radius_increase_steps']:.1f}")
+    print(f"median nonincreasing fraction:   {aggregate['median_fraction_radius_steps_nonincreasing']:.6f}")
+    print(f"paths exactly thick->thin:       {aggregate['fraction_paths_exactly_equal_stable_thick_to_thin']:.3f}")
+    print(f"max real/thick transfer error:   {aggregate['max_real_vs_thick_to_thin_transfer_feature_error']:.3e}")
     print(
         "FULL null median p / p<=.05:    "
         f"{aggregate['full_permutation']['median_tail_p']:.4f} / "
@@ -384,6 +411,7 @@ def main() -> None:
     assert np.all((full_p > 0.0) & (full_p <= 1.0))
     assert aggregate["median_segments_per_path"] >= 20
     assert classification in {
+        "MONOTONIC_TAPER_EXPLAINS_REAL_ORDER",
         "REAL_ORDER_NOT_GLOBALLY_UNUSUAL",
         "ENDPOINT_POSITION_EXPLAINS_MUCH",
         "COARSE_TAPER_EXPLAINS_MUCH",
