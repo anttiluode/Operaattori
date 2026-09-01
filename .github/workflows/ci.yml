@@ -101,14 +101,28 @@ jobs:
       - name: Gate 14 — reduced NMDA branch feedback
         run: python experiments/gate14_nmda_branch_feedback.py --branches 10 --no-plot
 
+  gate15-compartment-locality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pip install -r requirements-morphology.txt
+      - name: Gate 15 unit tests
+        run: python -m unittest tests.test_tree_cable tests.test_compartment_match -v
+      - name: Gate 15 — matched compartment locality
+        run: python experiments/gate15_compartment_locality.py --branches 8 --sites 8 --min-dispersed-runs 6 --no-plot
+
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 15 is still absent
+      - name: Verify Gate 16 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate15.py
-          test ! -e experiments/gate15_neuron_nmda_time.py
-          test ! -e experiments/gate15_dynamic_growth.py
-          echo "Gate 15 remains locked behind the reduced NMDA audit."
+          test ! -e experiments/gate16.py
+          test ! -e experiments/gate16_nmda_time_domain.py
+          test ! -e experiments/gate16_dynamic_growth.py
+          echo "Gate 16 remains locked behind the compartment-locality audit."
