@@ -159,12 +159,15 @@ def build_compartment_graph(cell) -> dict:
             boundary_ids[(name, int(k))] = bid
             uf.add(bid)
 
-    max_boundary_mismatch = 0.0
-    nonboundary_connections = []
+    # A child endpoint can connect either to a parent cable boundary or
+    # directly to a parent membrane compartment center (notably soma(0.5)).
+    anchor_requests = []
+    unsupported_connections = []
+    boundary_connections = 0
+    center_connections = 0
 
     for sec in sections:
         name = section_name(sec)
-        pseg = None
         try:
             pseg = sec.parentseg()
         except Exception:
@@ -177,42 +180,62 @@ def build_compartment_graph(cell) -> dict:
 
         orientation = child_orientation(sec)
         child_k = 0 if orientation < 0.5 else int(sec.nseg)
+        child_bid = boundary_ids[(name, child_k)]
 
         px = parent_connection_x(sec)
         if px is None:
             raise RuntimeError(
                 f"could not recover parent connection for {name}"
             )
+
         raw = px * int(parent.nseg)
         parent_k = int(round(raw))
         parent_k = max(0, min(int(parent.nseg), parent_k))
-        mismatch = abs(px - parent_k / int(parent.nseg))
-        max_boundary_mismatch = max(
-            max_boundary_mismatch, mismatch
-        )
-        if mismatch > 1e-6:
-            nonboundary_connections.append(
-                {
-                    "child": name,
-                    "parent": pname,
-                    "parent_x": px,
-                    "nearest_boundary_x": (
-                        parent_k / int(parent.nseg)
-                    ),
-                    "mismatch": mismatch,
-                }
+        boundary_x = parent_k / int(parent.nseg)
+        boundary_mismatch = abs(px - boundary_x)
+
+        if boundary_mismatch <= 1e-6:
+            uf.union(
+                child_bid,
+                boundary_ids[(pname, parent_k)],
             )
+            boundary_connections += 1
+            continue
 
-        uf.union(
-            boundary_ids[(name, child_k)],
-            boundary_ids[(pname, parent_k)],
+        parent_seg = parent(float(px))
+        parent_center_x = float(parent_seg.x)
+        center_mismatch = abs(px - parent_center_x)
+        if center_mismatch <= 1e-6:
+            parent_ids = node_by_section[pname]
+            anchor_node = min(
+                parent_ids,
+                key=lambda idx: abs(
+                    nodes[idx]["x"] - parent_center_x
+                ),
+            )
+            anchor_requests.append(
+                (child_bid, int(anchor_node))
+            )
+            center_connections += 1
+            continue
+
+        unsupported_connections.append(
+            {
+                "child": name,
+                "parent": pname,
+                "parent_x": px,
+                "nearest_boundary_x": boundary_x,
+                "nearest_segment_center_x": parent_center_x,
+                "boundary_mismatch": boundary_mismatch,
+                "center_mismatch": center_mismatch,
+            }
         )
 
-    if nonboundary_connections:
+    if unsupported_connections:
         raise RuntimeError(
-            "direct graph preregistration assumes section connections land on "
-            "compartment boundaries; found "
-            + json.dumps(nonboundary_connections[:10])
+            "connection is neither a compartment boundary nor a membrane "
+            "center in the locked discretization: "
+            + json.dumps(unsupported_connections[:10])
         )
 
     # Every segment center connects to its two boundaries through half of the
@@ -230,23 +253,49 @@ def build_compartment_graph(cell) -> dict:
         incident[left].append((node["node"], g))
         incident[right].append((node["node"], g))
 
+    # Resolve direct-to-membrane anchors after all boundary unions are known.
+    anchored = {}
+    for bid, anchor_node in anchor_requests:
+        root = uf.find(bid)
+        if root in anchored and anchored[root] != anchor_node:
+            raise RuntimeError(
+                "one zero-junction group was anchored to two membrane centers"
+            )
+        anchored[root] = anchor_node
+
     n = len(nodes)
     rows = []
     cols = []
     vals = []
 
-    # Start with membrane leak.
     for node in nodes:
         rows.append(node["node"])
         cols.append(node["node"])
         vals.append(node["leak_uS"])
 
-    # Eliminate every zero-capacitance junction exactly via Schur complement.
     junction_degree_counts = defaultdict(int)
-    for edges in incident.values():
+    anchored_junctions = 0
+
+    for root, edges in incident.items():
         junction_degree_counts[len(edges)] += 1
+
+        if root in anchored:
+            # The zero-length connection is clamped to an existing membrane
+            # center. Each attached half-cable therefore contributes a direct
+            # axial conductance to that center.
+            anchor = anchored[root]
+            anchored_junctions += 1
+            for node, g in edges:
+                if node == anchor:
+                    continue
+                rows.extend([node, anchor, node, anchor])
+                cols.extend([node, anchor, anchor, node])
+                vals.extend([g, g, -g, -g])
+            continue
+
         if len(edges) <= 1:
             continue
+
         total_g = float(sum(g for _, g in edges))
         for i, (ni, gi) in enumerate(edges):
             rows.append(ni)
@@ -278,9 +327,9 @@ def build_compartment_graph(cell) -> dict:
         "node_by_section": node_by_section,
         "G_uS": G,
         "C_nF": C,
-        "max_boundary_mismatch": float(
-            max_boundary_mismatch
-        ),
+        "boundary_connections": int(boundary_connections),
+        "center_connections": int(center_connections),
+        "anchored_junctions": int(anchored_junctions),
         "junction_degree_counts": {
             str(k): int(v)
             for k, v in sorted(
@@ -518,8 +567,14 @@ def main() -> None:
                 "compartments": int(
                     len(graph["nodes"])
                 ),
-                "max_boundary_mismatch": graph[
-                    "max_boundary_mismatch"
+                "boundary_connections": graph[
+                    "boundary_connections"
+                ],
+                "center_connections": graph[
+                    "center_connections"
+                ],
+                "anchored_junctions": graph[
+                    "anchored_junctions"
                 ],
                 "junction_degree_counts": graph[
                     "junction_degree_counts"
