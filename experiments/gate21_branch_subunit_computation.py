@@ -11,6 +11,7 @@ import numpy as np
 from gate17_superposition_attack import (
     FCI_COMMIT,
     MODEL_REL,
+    V_INIT_MV,
     compact_midpoint_rows,
     configure_active,
     dendritic_rows,
@@ -66,7 +67,7 @@ def run_weighted_pair(
     soma_vec = h.Vector().record(cell.soma[0](0.5)._ref_v)
 
     h.dt = 0.025
-    h.finitialize(-70.0)
+    h.finitialize(V_INIT_MV)
     h.fcurrent()
     for i in record_rows:
         syn_df.iloc[int(i)]["exc_netcons"].event(float(event_ms))
