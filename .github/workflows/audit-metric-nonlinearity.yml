@@ -1,0 +1,40 @@
+name: Operaattori metric-nonlinearity audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "audits/metric_nonlinearity.py"
+      - "experiments/gate17_superposition_attack.py"
+      - "experiments/gate20_compartment_modularity.py"
+      - ".github/workflows/audit-metric-nonlinearity.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: operaattori-metric-nonlinearity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  metric-nonlinearity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements.txt
+      - name: Install released-model runtime
+        run: python -m pip install neuron pandas matplotlib
+      - name: Checkout pinned FCI source
+        shell: bash
+        run: |
+          git clone --filter=blob:none https://github.com/ido4848/FCI.git /tmp/fci
+          git -C /tmp/fci checkout 75ad8b4d81a7f51bf888b30650c543592340db06
+          test "$(git -C /tmp/fci rev-parse HEAD)" = "75ad8b4d81a7f51bf888b30650c543592340db06"
+      - name: Compile cell-1125 released mechanisms
+        shell: bash
+        run: |
+          cd /tmp/fci/simulating_neurons/neuron_models/human/eyal/Human_L23_PC_0603_11_937_Eyal_passive_dends_simple_soma
+          nrnivmodl mods
+      - name: Metric to nonlinear branch audit
+        run: python audits/metric_nonlinearity.py --fci-root /tmp/fci --cluster-span-um 55
