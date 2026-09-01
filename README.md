@@ -22,6 +22,31 @@ change was only **9.710e-14**. The 20% intrinsic-metric controls changed
 transfer by **11.84% median**. See
 **[results/SYMMETRY_AUDIT.md](results/SYMMETRY_AUDIT.md)**.
 
+## The reduced circuit generalizes in time
+
+Without any new fit, the same small circuit was tested on synchronous,
+forward, reverse and widely staggered three-site event programs across all six
+branches and all three geometries.
+
+~~~text
+72 full-model comparisons
+
+transport oracle              0.37% median NRMSE
+reduced nonlinear circuit     0.50%
+reduced current waveform      0.26%
+
+open-loop no-feedback model  41.41%
+~~~
+
+Every fixed-point solve converged and the reduced nonlinear circuit beat the
+open-loop model in **72 / 72** cases.
+
+Classification:
+`TEMPORAL_GREEN_CIRCUIT_GENERALIZES_WITHOUT_REFIT`.
+
+See
+**[TEMPORAL_GREEN_CIRCUIT_AUDIT.md](results/TEMPORAL_GREEN_CIRCUIT_AUDIT.md)**.
+
 ## Portable runtime
 
 The earned reduced operator now has a **NEURON-free NumPy implementation** in
