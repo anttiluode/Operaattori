@@ -22,6 +22,41 @@ change was only **9.710e-14**. The 20% intrinsic-metric controls changed
 transfer by **11.84% median**. See
 **[results/SYMMETRY_AUDIT.md](results/SYMMETRY_AUDIT.md)**.
 
+## The architecture now composes
+
+The latest held-out test separates the released model into two reusable pieces:
+
+~~~text
+input
+  |
+  v
+local nonlinear current operator N_b
+  |
+  v
+geometry-dependent transport operator T_g
+  |
+  v
+soma
+~~~
+
+N_b was measured only in the original geometry. Branch length was then changed
+to 0.80x or 1.20x and only T_g was replaced. Across 12 held-out perturbations:
+
+~~~text
+frozen original-soma attacker       9.82% median trace NRMSE
+factorized T_g[N_original]          5.12%
+transport oracle T_g[N_holdout]     0.46%
+
+factorized beats frozen             9 / 12
+~~~
+
+Classification:
+`TRANSPORT_X_LOCAL_NONLINEAR_OPERATOR_FACTORIZATION`.
+
+This is the first result in the repo that behaves like a reusable architecture
+rather than merely a causal boundary. See **[ARCHITECTURE.md](ARCHITECTURE.md)**
+and **[the locked receipt](results/OPERATOR_FACTORIZATION.md)**.
+
 The repo started as a synthetic moving-operator project. From Gate 10 onward it
 became a different and much more concrete investigation:
 
