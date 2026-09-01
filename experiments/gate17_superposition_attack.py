@@ -149,6 +149,8 @@ def run_trace(
 
     return {
         "t": t[post],
+        "soma_baseline_mV": soma_base,
+        "local_baseline_mV": local_base,
         "soma_depol": soma[post] - soma_base,
         "local_depol": local[:, post] - local_base[:, None],
     }
