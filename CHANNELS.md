@@ -371,3 +371,44 @@ operator as interaction complexity grows.
 
 See
 [results/CROSS_INPUT_TRANSPORT_AUDIT.md](results/CROSS_INPUT_TRANSPORT_AUDIT.md).
+
+
+## Local Green matrix x synapse-law reduction
+
+The per-pattern nonlinear-current lookup was removed.
+
+Reduced object:
+
+~~~text
+released HUMAN AMPA/NMDA law
+        x
+3x3 local current-to-voltage Green matrix
+        x
+3 site-to-soma transport kernels
+~~~
+
+Across 54 branch x geometry x pattern cases:
+
+~~~text
+transport oracle soma NRMSE       0.0040
+reduced soma NRMSE                0.0043
+reduced current NRMSE             0.0038
+
+held-out frozen-current NRMSE     0.0282
+held-out reduced NRMSE            0.0043
+reduced/frozen                    0.1527
+reduced wins                      32 / 36
+~~~
+
+Classification:
+
+~~~text
+LOCAL_GREEN_MATRIX_X_SYNAPSE_LAW_REDUCES_RELEASED_NEURON
+~~~
+
+Thus the current decomposition is not merely transport plus a stored nonlinear
+waveform. The local nonlinear current is regenerated from the released synapse
+law and the geometry-specific local Green matrix.
+
+See
+[results/GREEN_CIRCUIT_AUDIT.md](results/GREEN_CIRCUIT_AUDIT.md).
