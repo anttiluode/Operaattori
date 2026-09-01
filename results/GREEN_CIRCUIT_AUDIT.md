@@ -131,3 +131,67 @@ causally decomposed into measured linear transport plus the released nonlinear
 synapse law under held-out metric intervention.
 
 This is an architecture audit, not Gate 25.
+
+
+## Receipt — reduced circuit passes
+
+The 54-case locked audit completed successfully.
+
+~~~text
+6 branches x 3 geometries x 3 patterns = 54
+
+median transport-oracle soma NRMSE        0.0040
+median reduced-circuit soma NRMSE         0.0043
+median reduced current-waveform NRMSE     0.0038
+
+held-out geometry only
+  frozen-current factorization NRMSE      0.0282
+  reduced-circuit soma NRMSE              0.0043
+  reduced / frozen-current                0.1527
+  reduced beats frozen-current            32 / 36
+
+pattern-family reduced soma medians
+  middle single                           0.0030
+  outer pair                              0.0048
+  triple                                  0.0070
+
+fixed-point convergence                   54 / 54
+actual soma spike guard                   0
+~~~
+
+Classification:
+
+~~~text
+LOCAL_GREEN_MATRIX_X_SYNAPSE_LAW_REDUCES_RELEASED_NEURON
+~~~
+
+This removes the per-pattern nonlinear-current lookup used by the previous
+factorization tests.
+
+The reduced object contains only:
+
+1. the released AMPA conductance time course;
+2. the released voltage-independent NMDA conductance time course;
+3. the released HUMAN magnesium-block law with gamma = 0.078 / mV;
+4. a measured 3 x 3 local current-to-voltage Green/impulse matrix for the three
+   compact branch sites;
+5. three measured site-to-soma transport kernels.
+
+The site currents are solved self-consistently from the local voltages and the
+released synapse law. No held-out soma, local-voltage, or nonlinear-current
+trace is fitted.
+
+The near equality between the transport oracle (0.40% median error) and the
+fully reduced nonlinear circuit (0.43%) is the strongest part of the result.
+At this operating regime, almost all of the full released model's response on
+these assays is captured by **linear cable transport plus the explicit local
+conductance nonlinearity**.
+
+This is not a novelty claim for Green-function reduction or nonlinear dendritic
+subunits. The result is the specific held-out causal reduction on the pinned
+human cell-1125 reconstruction.
+
+Compact CI receipt:
+[results/operator_factorization/green_circuit_ci_summary.json](operator_factorization/green_circuit_ci_summary.json)
+
+GitHub Actions: run 33494156490, job 99812336306.
