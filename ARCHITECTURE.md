@@ -460,3 +460,79 @@ operator coordinates
 
 The nonlinear cross-cell closure is still untested. The direct graph result is
 currently passive only.
+
+
+## Cross-cell nonlinear chain
+
+The passive morphology-graph operator was finally connected to the explicit
+AMPA/NMDA voltage-feedback law across all 24 morphologies.
+
+The first implementation used the small Green-kernel circuit's global waveform
+Picard iteration. Its **median** prediction was excellent but the solver was not
+portable:
+
+~~~text
+288 cases
+
+soma NRMSE                         0.0042
+graph transport oracle             0.0040
+global fixed-point convergence     207 / 288
+~~~
+
+Classification:
+
+~~~text
+CROSS_CELL_GRAPH_TRANSPORT_VALID_NONLINEAR_CLOSURE_NOT_PORTABLE
+~~~
+
+A preregistered diagnosis then changed only the numerical solver. The same
+morphology graph was evolved causally and each time step solved only the
+three-dimensional local nonlinear current/voltage closure.
+
+~~~text
+causal soma NRMSE                  0.0025
+causal local voltage NRMSE         0.0008
+causal current NRMSE               0.0172
+
+cell median                        0.0021
+cells <= 0.10                      23 / 24
+
+Newton convergence                 288 / 288
+max Newton iterations              4
+line-search failures               0
+~~~
+
+Classification:
+
+~~~text
+CAUSAL_MORPHOLOGY_GRAPH_NONLINEAR_CLOSURE_VALID
+~~~
+
+Failure mechanism:
+
+~~~text
+GLOBAL_WAVEFORM_PICARD_WAS_THE_NONPORTABLE_COMPONENT
+~~~
+
+Thus the earned cross-cell architecture is now:
+
+~~~text
+morphology graph
+      |
+      v
+passive cable state/operator
+      |
+      v
+causal three-site nonlinear closure
+      |
+      v
+temporal soma response
+~~~
+
+not a single global nonlinear fixed point over the whole waveform.
+
+The one retained cross-cell boundary is rat L6 IPC, whose 11.2% causal
+cell-level soma error follows the earlier passive graph discretization failure.
+
+The HUMAN_PROBE is a standardized nonlinear assay, not a species-physiology
+claim.
