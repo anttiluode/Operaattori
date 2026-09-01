@@ -1,0 +1,2 @@
+morphio>=3.3
+matplotlib>=3.8
