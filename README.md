@@ -22,6 +22,71 @@ change was only **9.710e-14**. The 20% intrinsic-metric controls changed
 transfer by **11.84% median**. See
 **[results/SYMMETRY_AUDIT.md](results/SYMMETRY_AUDIT.md)**.
 
+## Morphology to nonlinear response across 24 cells
+
+The passive graph can now be composed with the explicit voltage-dependent
+AMPA/NMDA law without electrically calibrating the target cell.
+
+A standardized **HUMAN_PROBE** was placed on three deterministic apical
+branches of every one of the 24 released morphologies and driven with four
+timing programs:
+
+~~~text
+24 cells x 3 branches x 4 timings = 288 full NEURON comparisons
+~~~
+
+The target prediction starts from morphology only:
+
+~~~text
+morphology
+   |
+   v
+hand-built passive cable graph
+   |
+   v
+causal 3-site nonlinear closure
+   |
+   v
+soma response
+~~~
+
+Result:
+
+~~~text
+graph-current oracle soma NRMSE     0.40%
+causal nonlinear soma NRMSE         0.25%
+causal local-voltage NRMSE          0.08%
+causal current NRMSE                1.72%
+
+median cell soma NRMSE              0.21%
+cells <= 10%                        23 / 24
+
+Newton convergence                  288 / 288
+max Newton iterations               4
+~~~
+
+Classification:
+`CAUSAL_MORPHOLOGY_GRAPH_NONLINEAR_CLOSURE_VALID`.
+
+The first cross-cell implementation is retained as an important failed arm: a
+global fixed-point solve of the entire Green-kernel waveform converged in only
+**207 / 288** cases even though its median soma error was 0.42%.
+
+The diagnosis therefore earned:
+
+`GLOBAL_WAVEFORM_PICARD_WAS_THE_NONPORTABLE_COMPONENT`.
+
+So the scientific architecture survived, but **causal state matters to the
+numerical architecture**.
+
+The one retained outlier is rat L6 IPC at 11.2% cell-median soma error, matching
+its already-known passive graph discretization weakness.
+
+See
+**[CAUSAL_NONLINEAR_GRAPH_DIAGNOSIS.md](results/CAUSAL_NONLINEAR_GRAPH_DIAGNOSIS.md)**
+and the failed precursor
+**[CROSS_CELL_NONLINEAR_GRAPH_AUDIT.md](results/CROSS_CELL_NONLINEAR_GRAPH_AUDIT.md)**.
+
 ## The whole morphology graph is the cross-cell coordinate
 
 The failed cross-cell feature regressions turned out to be asking the wrong
@@ -132,8 +197,13 @@ The earned reduced operator now has a **NEURON-free NumPy implementation** in
 **[reduced/green_circuit_numpy.py](reduced/green_circuit_numpy.py)**.
 
 It accepts arbitrary compatible local Green kernels, output transport kernels,
-baseline trajectories and AMPA/raw-NMDA conductance programs, then solves the
-same self-consistent voltage-dependent circuit used in the full-model audit.
+baseline trajectories and AMPA/raw-NMDA conductance programs.
+
+**Important boundary:** that portable module currently uses the original global
+waveform fixed-point algorithm. It is validated on the cell-1125 regimes above,
+but the 24-cell cross-cell audit showed that this solver is not universally
+robust. The cross-cell passing result uses a causal state-space graph solver
+with a three-dimensional implicit solve at each time step.
 
 ~~~text
 5 focused unit tests
