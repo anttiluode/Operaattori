@@ -90,6 +90,39 @@ Outputs:
     results/gate12/gate12.json
     results/gate12/biological_order_nulls.png
 
+## First receipt — monotonic taper wins
+
+The 32-path CI audit used 128 unconstrained permutations and 48 members of
+each constrained null per path. The initial permutation-only interpretation
+looked dramatic, but the deterministic taper ruler killed it:
+
+    median gross linear taper R^2            0.4516
+    median radius-increase steps              0
+    median nonincreasing radius fraction      1.000000
+    paths exactly equal stable thick->thin    0.938
+
+    full-null median p                        0.0078
+    full-null fraction p<=0.05                1.000
+    endpoint-null median p                    0.0204
+    10/25/50/100-um null median p             0.0204
+
+    real -> thick-to-thin distance            0.000 null-SD RMS
+    real -> thin-to-thick distance            23.951 null-SD RMS
+
+Classification:
+
+    MONOTONIC_TAPER_EXPLAINS_REAL_ORDER
+
+The permutation tails are real but are not evidence for extra fine biological
+ordering: almost every tested path is already the stable thick-to-thin
+ordering. Shuffling segments at any tested scale damages that taper and
+therefore changes the passive transfer.
+
+This is a useful negative result. Gate 11 remains a valid demonstration that
+heterogeneous cable operators are order-sensitive, but Gate 12 removes the
+stronger claim that the exact fine ordering of those operators carries
+additional information beyond ordinary dendritic taper.
+
 ## Stopping line
 
 Gate 12 distinguishes **order matters** from **the real order is unusual**.
