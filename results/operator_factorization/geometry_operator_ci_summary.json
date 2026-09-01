@@ -1,0 +1,36 @@
+{
+  "object": "held-out linear interpolation of geometry-indexed reduced operator packs",
+  "source": "GitHub Actions run 33501917227, job 99836982368",
+  "endpoints": [
+    0.8,
+    1.2
+  ],
+  "targets": [
+    0.9,
+    1,
+    1.1
+  ],
+  "aggregate": {
+    "median_target_transport_oracle_soma_nrmse": 0.0037,
+    "median_direct_target_reduced_oracle_soma_nrmse": 0.0052,
+    "median_interpolated_reduced_soma_nrmse": 0.0052,
+    "median_interpolated_current_nrmse": 0.006,
+    "median_nearest_endpoint_soma_nrmse": 0.0576,
+    "interpolated_to_nearest_median_error_ratio": 0.0908,
+    "fraction_interpolation_beats_nearest": 1,
+    "target_scale_medians": {
+      "0.9": 0.0045,
+      "1.0": 0.0058,
+      "1.1": 0.0049
+    },
+    "timing_medians": {
+      "synchronous": 0.0058,
+      "forward_5": 0.0045,
+      "reverse_5": 0.0045,
+      "spread_15": 0.0053
+    },
+    "fixed_point_convergence_fraction": 1,
+    "spike_guard_fraction": 0
+  },
+  "classification": "GEOMETRY_INTERPOLATES_REDUCED_OPERATOR"
+}
