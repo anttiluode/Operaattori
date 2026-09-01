@@ -215,3 +215,117 @@ If it passes, the next test may feed graph-generated G/T into the portable
 nonlinear Green circuit on cells never used in the original cell-1125 work.
 
 This is an architecture audit, not Gate 25.
+
+
+## Receipt — morphology graph generates the passive operator
+
+The locked 24-cell direct-physics audit passed.
+
+~~~text
+24 cells
+6 deterministic apical sections per cell
+144 branch operator packs
+
+median joint G/T NRMSE             0.0021
+median local G NRMSE               0.0013
+median soma T NRMSE                0.0024
+
+median held-out-cell joint NRMSE   0.0018
+cells with cell median <= 0.10     23 / 24
+~~~
+
+Classification:
+
+~~~text
+MORPHOLOGY_GRAPH_GENERATES_PASSIVE_OPERATOR
+~~~
+
+No cross-cell fitting, PCA coordinates, species labels, impedance measurements
+or target-cell calibration were used.
+
+The direct solver received the instantiated morphology graph, fixed passive
+constants and the same material addresses, then assembled membrane
+capacitances, leaks and axial conductances. Zero-capacitance branch junctions
+were eliminated with the preregistered Schur-complement construction.
+
+### The former "impossible" cell
+
+Human L5 morphology 2057 was the extreme failure of the learned morphology
+chart:
+
+~~~text
+gross morphology predictor       about 7.97 joint NRMSE
+nearest training branch          about 1.32
+training PCA oracle              about 0.09
+~~~
+
+The direct morphology graph gives a cell-level median joint error of roughly:
+
+~~~text
+0.0001
+~~~
+
+So 2057 was not intrinsically difficult for passive operator construction. It
+was difficult to compress into a small feature vector.
+
+### Retained failure mode
+
+The worst cell is rat L6 IPC:
+
+~~~text
+median G NRMSE                   0.1761
+median T NRMSE                   0.0348
+median joint NRMSE               0.1101
+~~~
+
+It is retained.
+
+The error is concentrated much more strongly in local G than soma T, consistent
+with the hand-built cylindrical half-segment approximation being less faithful
+to some local diameter/3-D discretizations than to downstream somatic
+transport.
+
+No post-hoc diameter correction, NEURON axial-resistance query or fitted gain
+was introduced.
+
+### Architectural interpretation
+
+The failed learned charts and the successful direct solver now separate three
+things:
+
+~~~text
+held-out cross-cell operator family
+    is low-dimensional                 yes (~3% PCA oracle)
+
+small scalar morphology chart
+    locates an unseen cell             no  (~35-41%)
+
+full loaded cable graph
+    generates the passive operator     yes (~0.2%)
+~~~
+
+The conclusion is not that cable theory is new. The conclusion is that
+Operaattori's upstream representation should preserve the loaded morphology
+graph until after the physical cable operator is constructed.
+
+The current cross-cell architecture is therefore:
+
+~~~text
+morphology graph
+      |
+      v
+passive cable construction
+      |
+      +--> local Green matrix G
+      |
+      +--> site-to-soma transport T
+~~~
+
+The nonlinear AMPA/NMDA circuit has not yet been re-run on this cross-cell
+graph-generated operator panel. That remains a separate scientific test.
+
+Compact CI receipt:
+[results/cross_cell_operator/direct_cable_graph_ci_summary.json](cross_cell_operator/direct_cable_graph_ci_summary.json)
+
+GitHub Actions:
+run 33528552446, job 99925516858.
