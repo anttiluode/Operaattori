@@ -1053,7 +1053,7 @@ def main() -> None:
     assert len(rows) == 144
     assert np.all(
         np.isfinite(
-            [x["joint_nrmse"] for x in full["aggregate"]["morphology"]["per_cell"].values()]
+            [x["median_joint_nrmse"] for x in full["aggregate"]["morphology"]["per_cell"].values()]
         )
     )
 
