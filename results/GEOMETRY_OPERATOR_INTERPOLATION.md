@@ -141,3 +141,86 @@ selection, timing change or conductance correction is allowed after seeing the
 result.
 
 This is an architecture audit, not Gate 25.
+
+
+## Receipt — geometry interpolates the operator
+
+The locked 72-case target audit passed.
+
+Only the 0.80x and 1.20x operator packs were used to construct predictions.
+Target operators at 0.90x, 1.00x and 1.10x were measured only afterward for
+diagnostic oracles.
+
+~~~text
+median target transport-oracle soma NRMSE        0.0037
+median direct target reduced-circuit NRMSE       0.0052
+median interpolated-operator reduced NRMSE       0.0052
+median interpolated current-waveform NRMSE       0.0060
+
+nearest measured endpoint reduced NRMSE          0.0576
+interpolated / nearest median error              0.0908
+interpolation beats nearest                      72 / 72
+
+target-scale medians
+  0.90x                                          0.0045
+  1.00x                                          0.0058
+  1.10x                                          0.0049
+
+timing medians
+  synchronous                                    0.0058
+  forward_5                                      0.0045
+  reverse_5                                      0.0045
+  spread_15                                      0.0053
+
+interpolated fixed-point convergence             72 / 72
+actual soma spike guard                          0
+~~~
+
+Classification:
+
+~~~text
+GEOMETRY_INTERPOLATES_REDUCED_OPERATOR
+~~~
+
+The key comparison is direct-target versus interpolated-target reduction:
+
+~~~text
+directly measured target V0/G/T       0.52% median soma error
+interpolated target V0/G/T            0.52%
+~~~
+
+Within this locked one-dimensional intrinsic-length interval, measuring the
+target operator directly therefore gives essentially no median accuracy
+advantage over sample-wise linear interpolation between the two endpoint
+operators.
+
+The nearest-endpoint attacker matters as well. Simply reusing a nearby measured
+operator gives 5.76% median error, while interpolation gives 0.52% and wins all
+72 cases. The result is therefore not explained by the operator changing so
+little that any nearby pack works.
+
+## Scope fence
+
+This result is deliberately narrow.
+
+It establishes interpolation only for:
+
+- one scalar geometry coordinate: selected branch section length;
+- interpolation inside the measured interval [0.80, 1.20];
+- six selected compact branches of the pinned cell-1125 model;
+- the existing subthreshold HUMAN synapse regime and timing panel.
+
+It does **not** establish:
+
+- extrapolation outside the endpoint interval;
+- interpolation across radius, topology or arbitrary morphology;
+- one universal operator family shared between branches;
+- arbitrary active dendritic membrane;
+- a novel mathematical theorem about operator interpolation.
+
+Compact CI receipt:
+[results/operator_factorization/geometry_operator_ci_summary.json](operator_factorization/geometry_operator_ci_summary.json)
+
+GitHub Actions: run 33501917227, job 99836982368.
+
+No polynomial or extrapolation rescue scan is opened.
