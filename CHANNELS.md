@@ -13,6 +13,7 @@ change.
 | **pure isometric embedding** | 22 | 35-degree parent-local SE(3) bend, same lengths/radii/topology | **184.107 um motion; 5.999e-14 max transfer change** | `CABLE_MODEL_IGNORES_ISOMETRIC_3D_EMBEDDING` |
 | **world-space sampling + passive readout** | 23 | original/bent material samples the same smooth field; total drive normalized | **2.11% median soma change; 19.9% >5%; max 22.3%** | `FIXED_WORLD_FIELD_EFFECT_WEAK` |
 | **nonlinear branch compartments** | 20 | compact HUMAN NMDA interaction vs complete branch-alone cross-branch null | **70.19% within; 2.01% cross; 14/15 positive modularity pairs** | `HUMAN_GAMMA_STRENGTHENS_SEMI_INDEPENDENT_COMPARTMENTS` |
+| **real extracellular field x isometric embedding x nonlinear readout** | 24 | same intrinsic cell, 1 V/m field, 35-degree re-embedding | **1.0003x proximal bend factor; 0/3 frequencies >5%; exact zero-field/material-lock controls** | `FIELD_COUPLING_PRESENT_BUT_NOT_COMPARTMENT_SELECTIVE` |
 
 These rows should not be merged into one vague word such as "geometry."
 
@@ -133,10 +134,13 @@ matrix motion
    +-- changes relation to world -------> sampled drive can change
    |
    +-- sampled drive enters nonlinear
-       branch compartments -------------> candidate thresholded amplification
+       branch compartments -------------> tested: coupling exists, selective
+                                           amplification is tiny here
 ~~~
 
-The last arrow is not yet an Operaattori result. It is Gate 24.
+Gate 24 now fills that last arrow negatively at the preregistered scale: the
+field coupling is real, but the isometric bend changes the nonlinear
+interaction by only about 0.03% in the large-subtree arm.
 
 ## Literature fence for Gate 24
 
@@ -169,3 +173,33 @@ A future gate belongs on the scaffold line only if it:
 
 Do not add life simulations, growth, agents or learning merely because the
 scaffold can move.
+
+
+## 5. Real extracellular field x nonlinear compartment — Gate 24
+
+Gate 24 inserts a uniform 1 V/m extracellular potential through NEURON rather
+than converting a world field into injected current.
+
+~~~text
+zero-field control                         0
+material-locked control                    0
+proximal large-subtree HUMAN bend factor   1.0003x
+distal small-subtree HUMAN bend factor     1.0002x
+proximal frequencies >5%                   0 / 3
+proximal/distal median effect ratio         1.206x
+spike guard                                 0
+~~~
+
+Classification:
+
+~~~text
+FIELD_COUPLING_PRESENT_BUT_NOT_COMPARTMENT_SELECTIVE
+~~~
+
+This is useful because it separates two statements that are easy to blur:
+
+1. embedding can become physically relevant once a world-space field exists;
+2. that does **not** imply the resulting perturbation is large enough to
+   recruit a nonlinear compartment differently.
+
+The locked weak-field assay supports the first and rejects the second.
