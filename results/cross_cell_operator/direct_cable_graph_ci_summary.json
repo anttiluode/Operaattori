@@ -1,0 +1,27 @@
+{
+  "object": "direct morphology-graph construction of matched-passive local Green and site-to-soma transport operators",
+  "source": "GitHub Actions run 33528552446, job 99925516858",
+  "aggregate": {
+    "branch_operator_packs": 144,
+    "median_G_nrmse": 0.0013257665734196875,
+    "median_T_nrmse": 0.0023527085155749103,
+    "median_joint_nrmse": 0.0020684191304717733,
+    "median_cell_joint_nrmse": 0.0017891697478184245,
+    "cells_joint_nrmse_le_0p10": 23,
+    "worst_cell": {
+      "cell_order": 2,
+      "species": "rat",
+      "morphology_identifier": "L6 IPC",
+      "median_G_nrmse": 0.1760760629594207,
+      "median_T_nrmse": 0.03482916427226167,
+      "median_joint_nrmse": 0.11009031080431787
+    },
+    "former_regression_outlier_2057": {
+      "cell_order": 17,
+      "species": "human",
+      "morphology_identifier": "2057",
+      "median_joint_nrmse_approx": 0.0001
+    }
+  },
+  "classification": "MORPHOLOGY_GRAPH_GENERATES_PASSIVE_OPERATOR"
+}
