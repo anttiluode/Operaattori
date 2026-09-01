@@ -272,7 +272,8 @@ Detailed receipts: [Gate 0](results/GATE0.md),
 [Gate 5](results/GATE5.md), [Gate 6](results/GATE6.md),
 [Gate 7](results/GATE7.md), [Gate 8](results/GATE8.md),
 [Gate 9](results/GATE9.md), [Gate 10](results/GATE10.md),
-[Gate 11](results/GATE11.md), and [Gate 12](results/GATE12.md).
+[Gate 11](results/GATE11.md), [Gate 12](results/GATE12.md), and
+[Gate 13](results/GATE13.md).
 
 ## Gate 5 first receipt — moving matrix, with the killer beside it
 
@@ -583,11 +584,48 @@ The null shuffles mostly destroy ordinary proximal-to-distal taper.
 
 See [Gate 12](results/GATE12.md).
 
+## Gate 13 — branch junctions become operators
+
+Gate 13 puts the complete passive dendritic tree into the algebra rather than
+treating each root-to-tip cable as isolated.
+
+Two independent calculations agree:
+
+1. exact whole-tree Schur elimination;
+2. the selected tapering path with every off-path subtree replaced by its exact
+   shunt admittance matrix.
+
+~~~text
+dendritic tips                       110
+median branch junctions/path         5.0
+tree/shunt-product max error         4.558e-11
+
+FULL vs same isolated path           0.2676 median relative difference
+median |gain change|                 1.712 dB
+median phase change                  0.1660 rad
+tips median effect >10%              0.864
+branch-count/effect correlation      0.958
+~~~
+
+So bifurcations are not decorative. Side branches materially change the
+transfer along an otherwise identical tapering route.
+
+But the passive portfolio remains nearly rank one:
+
+~~~text
+effective rank FULL tree             1.030
+effective rank isolated paths        1.024
+~~~
+
+That negative result matters. Passive branch loading changes signals strongly,
+but does not by itself manufacture a rich repertoire of distinct computations.
+
+See [Gate 13](results/GATE13.md).
+
 ## Current stopping line
 
-> **Serial root-to-tip cable order has hit the taper explanation. The next
-> neuron-specific object is the branch junction: daughter impedances combine in
-> parallel, side branches load shared trunks, and many routes coexist. Gate 13
-> must put the full branching tree into the transport algebra and compare it
-> against isolated-path/equivalent-cable attackers before any growth or
-> intelligence claim.**
+> **The geometric scaffold, taper transport, and branch loading are now explicit.
+> Passive physics still leaves the tip-transfer repertoire almost rank one.
+> Gate 14 must therefore import the paper's actual nonlinear synaptic mechanism,
+> with a passive/nonlinear ablation, before any activity-dependent growth is
+> allowed.**
