@@ -141,6 +141,16 @@ def relative_log_factor(a: float, b: float) -> float:
     return float(abs(math.log((b + 1e-30) / (a + 1e-30))))
 
 
+def canonical_section_name(name: str) -> str:
+    """Drop only the NEURON template-instance prefix.
+
+    Fresh copies of the same released cell are named Model[0].apic[100],
+    Model[1].apic[100], ... .  The stable anatomical identity is apic[100].
+    """
+    value = str(name)
+    return value.split("].", 1)[1] if "]." in value else value
+
+
 def make_cell(fci_root: Path):
     builder = import_builder(fci_root)
     return builder.create_cell(path=str(fci_root / MODEL_REL) + "/")
@@ -185,12 +195,16 @@ def main() -> None:
 
         sites = np.asarray(branch["sites"], dtype=int)
         names = {
-            syn.iloc[int(i)]["segments"].sec.name()
+            canonical_section_name(
+                syn.iloc[int(i)]["segments"].sec.name()
+            )
             for i in sites
         }
-        if names != {branch["section"]}:
+        expected_name = canonical_section_name(branch["section"])
+        if names != {expected_name}:
             raise RuntimeError(
-                f"site identity changed for {branch['section']}: {names}"
+                "site identity changed for "
+                f"{branch['section']}: expected {expected_name}, got {names}"
             )
 
         sec = syn.iloc[int(sites[0])]["segments"].sec
