@@ -10,6 +10,8 @@ on:
       - "**/*.jpg"
       - "**/*.jpeg"
       - "**/*.webp"
+      - "audits/**"
+      - ".github/workflows/audit-*.yml"
   pull_request:
 
 concurrency:
