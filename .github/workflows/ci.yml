@@ -112,8 +112,10 @@ jobs:
       - run: python -m pip install -r requirements-morphology.txt
       - name: Gate 15 unit tests
         run: python -m unittest tests.test_tree_cable tests.test_compartment_match -v
-      - name: Gate 15 — matched compartment locality
+      - name: Gate 15a — whole-branch matched locality
         run: python experiments/gate15_compartment_locality.py --branches 8 --sites 8 --min-dispersed-runs 6 --no-plot
+      - name: Gate 15b — compact 50-um matched locality
+        run: python experiments/gate15_compartment_locality.py --branches 8 --sites 8 --min-dispersed-runs 6 --cluster-span-um 50 --out-dir results/gate15_compact --no-plot
 
   locked-gates:
     runs-on: ubuntu-latest
