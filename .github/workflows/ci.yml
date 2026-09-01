@@ -41,7 +41,7 @@ jobs:
       - name: Gate 9 — path through operator space
         run: python experiments/gate9_lie_path.py
 
-  real-neuron-gates-10-12:
+  real-neuron-gates-10-11:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -58,6 +58,16 @@ jobs:
         run: python -m unittest tests.test_cable_path -v
       - name: Gate 11 — passive cable path order
         run: python experiments/gate11_cable_path_order.py --no-plot
+
+  gate12-biological-order:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pip install -r requirements-morphology.txt
       - name: Gate 12 unit tests
         run: python -m unittest tests.test_order_nulls -v
       - name: Gate 12 — biological order audit
