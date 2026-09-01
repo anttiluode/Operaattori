@@ -86,13 +86,10 @@ def cross_branch_metrics(
     actual_soma_auc = positive_auc(together["soma_depol"], t)
     predicted_soma_auc = positive_auc(predicted_soma, t)
 
-    above = together["soma_depol"] + float(
-        # run_trace stores a baseline-subtracted soma trace, so recover the
-        # approximate absolute voltage from a settled soma near -70 mV only
-        # for a conservative spike guard below. We also use the much simpler
-        # large-depolarization guard, which does not depend on exact baseline.
-        -70.0
-    ) >= -20.0
+    absolute_soma = (
+        together["soma_depol"] + float(together["soma_baseline_mV"])
+    )
+    above = absolute_soma >= -20.0
     spike_crossings = int(
         np.sum((~above[:-1]) & above[1:])
     ) if len(above) > 1 else 0
