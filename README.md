@@ -22,6 +22,35 @@ change was only **9.710e-14**. The 20% intrinsic-metric controls changed
 transfer by **11.84% median**. See
 **[results/SYMMETRY_AUDIT.md](results/SYMMETRY_AUDIT.md)**.
 
+## Cross-cell generalization boundary
+
+The hard next test was **not** another within-cell perturbation. We measured
+matched-passive operators on all **24 released FCI morphologies** and asked a
+leave-one-cell-out model to predict an unseen neuron's local Green matrix and
+site-to-soma transport from morphology alone.
+
+~~~text
+24 cells x 6 deterministic apical sections = 144 operators
+
+training-basis PCA oracle       3.07% joint NRMSE
+morphology predictor           35.22%
+nearest training branch        31.99%
+training mean                  66.86%
+
+morphology beats nearest       11 / 24 cells
+~~~
+
+Classification:
+`CROSS_CELL_OPERATOR_LOW_DIMENSIONAL_BUT_MORPHOLOGY_MAP_WEAK`.
+
+So the operator family itself remains highly compressible, but the obvious
+length/diameter/path/tree descriptors do **not** provide a sufficiently good
+cross-cell coordinate system. Within-cell geometry interpolation survives;
+arbitrary morphology-to-operator prediction does not.
+
+See
+**[CROSS_CELL_OPERATOR_AUDIT.md](results/CROSS_CELL_OPERATOR_AUDIT.md)**.
+
 ## The reduced circuit generalizes in time
 
 Without any new fit, the same small circuit was tested on synchronous,
