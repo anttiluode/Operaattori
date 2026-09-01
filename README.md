@@ -202,8 +202,16 @@ FIELD_COUPLING_PRESENT_BUT_NOT_COMPARTMENT_SELECTIVE
 
 So a real world-space field gives the isometric embedding a physical coupling,
 but under this weak-field protocol it does **not** materially change the
-already-measured nonlinear branch interaction. That is a completed row, not a
-failed search to be rescued by turning up field strength.
+already-measured nonlinear branch interaction.
+
+A bounded follow-up amplitude audit then held branch, bend, synaptic dose and
+frequency fixed and varied only the field from 0.25 to 2 V/m. The bend effect
+was almost perfectly linear through the origin (**R² = 0.999970**), with a
+first-order scale of about **175 V/m** for the old 5% effect ruler. That value
+is an extrapolated scale, not a simulated high-field result. See
+**[FIELD_SCALING_AUDIT.md](results/FIELD_SCALING_AUDIT.md)**.
+
+This closes rather than rescues the weak-field route.
 
 No Gate 25 is open.
 
