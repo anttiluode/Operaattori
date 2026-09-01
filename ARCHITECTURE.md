@@ -241,3 +241,63 @@ geometry parameters  --->  G_g, T_g
 ~~~
 
 At present those kernels are still measured separately for each geometry.
+
+
+## Geometry now indexes the reduced operator
+
+The remaining upstream map was tested by measuring complete operator packs only
+at branch-length factors 0.80 and 1.20:
+
+~~~text
+P_lambda = (V0_lambda, G_lambda, T_lambda)
+~~~
+
+and linearly interpolating every sample of those objects to held-out 0.90,
+1.00 and 1.10 targets.
+
+Across six branches and four temporal programs:
+
+~~~text
+72 held-out target responses
+
+target transport oracle               0.0037 median NRMSE
+direct target reduced circuit         0.0052
+interpolated operator circuit         0.0052
+
+nearest endpoint circuit              0.0576
+interpolated / nearest                0.0908
+interpolation wins                    72 / 72
+~~~
+
+Classification:
+
+~~~text
+GEOMETRY_INTERPOLATES_REDUCED_OPERATOR
+~~~
+
+So the current tested architecture is:
+
+~~~text
+intrinsic length lambda
+        |
+        v
+interpolate P_lambda = (V0, G, T)
+        |
+        +-------------------+
+        |                   |
+        v                   v
+ local Green feedback     output transport
+        |                   ^
+        v                   |
+ released AMPA/NMDA law ---+
+        |
+        v
+       currents
+~~~
+
+Within the measured interval, the interpolated operator is as accurate in
+median as directly measuring the target operator.
+
+This is not a claim that arbitrary morphology lives on one linear operator
+manifold. It is one experimentally supported one-dimensional coordinate on one
+real reconstruction.
