@@ -301,3 +301,48 @@ median as directly measuring the target operator.
 This is not a claim that arbitrary morphology lives on one linear operator
 manifold. It is one experimentally supported one-dimensional coordinate on one
 real reconstruction.
+
+
+## Cross-cell boundary
+
+The within-cell geometry-indexed operator does **not** yet generalize from one
+morphology to another using a small obvious morphology feature map.
+
+A 24-cell matched-passive leave-one-cell-out audit measured six deterministic
+apical branch operators per released FCI morphology.
+
+~~~text
+morphology predictor joint NRMSE     0.3522
+nearest morphology branch            0.3199
+training mean                         0.6686
+training-basis PCA oracle             0.0307
+~~~
+
+Classification:
+
+~~~text
+CROSS_CELL_OPERATOR_LOW_DIMENSIONAL_BUT_MORPHOLOGY_MAP_WEAK
+~~~
+
+This sharply limits the current architecture claim.
+
+Within one cell, a scalar intrinsic-length coordinate indexed the reduced
+operator extremely well. Across cells, the operator family remains highly
+compressible, but ten simple morphology coordinates are not an adequate chart
+on that family.
+
+Therefore the current earned map is:
+
+~~~text
+WITHIN ONE RECONSTRUCTION
+  intrinsic length lambda -> operator P_lambda     yes
+
+ACROSS RECONSTRUCTIONS
+  simple morphology features -> operator P         no
+~~~
+
+The full receipt is
+[results/CROSS_CELL_OPERATOR_AUDIT.md](results/CROSS_CELL_OPERATOR_AUDIT.md).
+
+No larger learned model is justified until the missing physical coordinates
+are understood.
