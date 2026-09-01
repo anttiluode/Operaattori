@@ -792,13 +792,71 @@ first.
 
 See [Gate 19](results/GATE19.md).
 
+## Gate 20 — the scaffold decomposes into nonlinear branch subunits
+
+Gate 20 passed in the pinned released cell-1125 model.
+
+~~~text
+HUMAN within-branch nonlinearity       70.19% median
+extra cross-branch interaction          2.01% median
+modularity margin (log)                 0.4582
+positive margin                        14 / 15 pairs
+somatic spike guard                     0 / 15
+
+rest-matched gamma=.062 margin          0.0579
+HUMAN extra gamma-specific margin       0.3971
+~~~
+
+The important null is hierarchical: a cross-branch pair is compared with the
+sum of its **two complete branch-alone responses**, so all nonlinearity already
+occurring inside either branch is present in the null. The remaining
+cross-branch interaction is small relative to the within-branch interaction.
+
+Classification:
+
+~~~text
+HUMAN_GAMMA_STRENGTHENS_SEMI_INDEPENDENT_COMPARTMENTS
+~~~
+
+See [Gate 20](results/GATE20.md).
+
+## Gate 21 — equal-budget redistribution across the branch basis
+
+Gate 21 is the first explicit computation/usefulness attack on the compartment
+picture.
+
+For every pair of the same six measured compact branches, keep the same six
+physical sites active and keep the global budget fixed at 48 virtual synapses.
+Only redistribute that budget between the two branch compartments:
+
+~~~text
+12 + 36 synapses
+24 + 24 synapses
+36 + 12 synapses
+~~~
+
+The actual soma trace is challenged by three rulers:
+
+1. **total-input ruler** — all three redistributions are identical because the
+   total input is identical;
+2. **independent-site ruler** — sum the six matching single-site responses,
+   preserving branch identity and passive transfer but removing within-branch
+   interaction;
+3. **nonlinear-subunit ruler** — sum the two measured branch-alone responses at
+   the exact two doses, preserving within-branch nonlinearity but assuming the
+   branches combine independently.
+
+The key metric is the centered log-AUC signature across the three
+redistributions for each fixed branch pair. If the nonlinear-subunit ruler
+predicts those equal-budget signatures substantially better than the
+independent-site ruler, the branch decomposition has bought a compact
+factorization of an input-output function rather than merely a descriptive
+anatomical label.
+
 ## Current stopping line
 
-> **Do not scan lags to rescue Gate 19, and still do not add growth. The next
-> scaffold question is modularity: if a compact branch is a nonlinear
-> compartment, is that interaction substantially stronger within a branch than
-> between different branch compartments? Gate 20 should compare within-branch
-> nonadditivity against all cross-branch pairs using each pair's own branch-alone
-> superposition null. A positive result would finally support the useful
-> abstraction "many semi-independent nonlinear subunits on one physical
-> scaffold."**
+> **Still do not add growth. Gate 21 must first show that redistributing the
+> same total drive across the measured branch compartments changes the somatic
+> output in a way predicted by nonlinear branch subunits better than by
+> independent sites. If it passes, the next attacker must remove the exact
+> dose-lookup-table crutch before any developmental claim is allowed.**

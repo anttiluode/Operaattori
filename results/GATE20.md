@@ -82,3 +82,46 @@ growth or development could construct useful scaffolds.
 A positive modularity result earns a branch-subunit computation assay with the
 same global input budget distributed differently across compartments. It still
 does not earn growth by itself.
+
+
+## Receipt
+
+The pinned cell-1125 released model passed the preregistered modularity audit:
+
+~~~text
+branches / branch pairs                 6 / 15
+synapses per active branch / pair      24 / 48
+
+HUMAN
+median within-branch nonlinearity      70.19%
+branches with >5% interaction           6 / 6
+median extra cross-branch interaction   2.01%
+median modularity margin (log)          0.4582
+positive modularity margin             14 / 15
+margin >= log(1.05)                    14 / 15
+
+rest-matched gamma=0.062
+median modularity margin (log)          0.0579
+
+HUMAN minus rest-matched
+median extra modularity margin          0.3971
+positive                                14 / 15
+
+somatic spike guard                      0 / 15
+~~~
+
+Classification:
+
+~~~text
+HUMAN_GAMMA_STRENGTHENS_SEMI_INDEPENDENT_COMPARTMENTS
+~~~
+
+The cross-branch null is already the sum of each complete nonlinear
+branch-alone response, so this result is not simply "there is NMDA
+nonlinearity somewhere." In this assay, the additional interaction between two
+already-nonlinear branch units is small compared with the interaction inside
+each compact branch.
+
+This earns the working abstraction **many semi-independent nonlinear subunits
+on one physical scaffold**. It does not yet show that redistributing a fixed
+global input budget across those subunits creates a useful output code.
