@@ -53,9 +53,26 @@ factorized beats frozen             9 / 12
 Classification:
 `TRANSPORT_X_LOCAL_NONLINEAR_OPERATOR_FACTORIZATION`.
 
+A second attacker then reused each held-out geometry's **same transport
+operator across three distinct input patterns** (middle single site, outer
+pair, and triple). Across 36 holdouts:
+
+~~~text
+frozen-soma attacker       9.31% median NRMSE
+factorized                 2.82%
+transport oracle           0.39%
+factorized wins            28 / 36
+~~~
+
+Pattern medians were 1.25%, 3.73% and 5.12% respectively.
+
+Classification:
+`TRANSPORT_OPERATOR_REUSES_ACROSS_INPUT_PATTERNS`.
+
 This is the first result in the repo that behaves like a reusable architecture
-rather than merely a causal boundary. See **[ARCHITECTURE.md](ARCHITECTURE.md)**
-and **[the locked receipt](results/OPERATOR_FACTORIZATION.md)**.
+rather than merely a causal boundary. See **[ARCHITECTURE.md](ARCHITECTURE.md)**,
+**[the factorization receipt](results/OPERATOR_FACTORIZATION.md)** and
+**[the cross-input attacker](results/CROSS_INPUT_TRANSPORT_AUDIT.md)**.
 
 The repo started as a synthetic moving-operator project. From Gate 10 onward it
 became a different and much more concrete investigation:
