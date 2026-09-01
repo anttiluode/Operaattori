@@ -65,3 +65,48 @@ Soma-voltage AUC and somatic spike counts are secondary guards.
 Gate 16 is the last allowed rescue of the Gate-15 locality hypothesis. A
 negative result closes this mechanistic branch before any developmental
 growth is introduced.
+
+
+## Receipt — the time-domain model reverses Gate 15
+
+The pinned FCI cell-1125 model compiled and ran under NEURON in CI. The
+single-synapse smoke test produced finite AMPA and NMDA currents plus local and
+somatic voltage transients using the released human parameters.
+
+The scientific six-branch assay then gave:
+
+~~~text
+median compact span                    41.92 um
+median passive Rinput match             1.037x
+median passive soma-transfer match      1.126x
+
+48-synapse local-AUC locality           1.5143
+fraction branches locality >1.05        0.833  (5 / 6)
+median soma-AUC locality                1.1359
+branches with somatic spikes            0 / 6
+~~~
+
+Per-branch high-dose locality:
+
+~~~text
+2.0015
+1.0712
+1.0091
+1.7099
+2.2514
+1.3188
+~~~
+
+Classification:
+
+~~~text
+DYNAMIC_NMDA_LOCALITY_ADVANTAGE_PRESENT
+~~~
+
+So the quasi-static Gate-15 negative was not the end of the mechanism. When the
+authors' released AMPA/NMDA kinetics are restored, compact coactivation on a
+single dendritic section gains a robust HUMAN/FROZEN interaction advantage
+relative to matched dispersed inputs.
+
+This result does not by itself identify the cause. Gate 17 therefore attacks it
+with each exact site's own time-domain superposition null.
