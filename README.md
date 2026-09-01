@@ -22,6 +22,25 @@ change was only **9.710e-14**. The 20% intrinsic-metric controls changed
 transfer by **11.84% median**. See
 **[results/SYMMETRY_AUDIT.md](results/SYMMETRY_AUDIT.md)**.
 
+## Portable runtime
+
+The earned reduced operator now has a **NEURON-free NumPy implementation** in
+**[reduced/green_circuit_numpy.py](reduced/green_circuit_numpy.py)**.
+
+It accepts arbitrary compatible local Green kernels, output transport kernels,
+baseline trajectories and AMPA/raw-NMDA conductance programs, then solves the
+same self-consistent voltage-dependent circuit used in the full-model audit.
+
+~~~text
+5 focused unit tests
+5 passed
+NEURON dependency: none
+~~~
+
+Cell-1125-specific derived kernels are intentionally not bundled with this
+portable runtime while model-data provenance/licensing is kept separate from
+the generic operator code. See **[reduced/README.md](reduced/README.md)**.
+
 ## The full branch now reduces to a tiny nonlinear circuit
 
 The strongest current result removes the cached nonlinear current waveform
