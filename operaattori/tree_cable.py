@@ -345,3 +345,64 @@ def green_impedance_mohm(
         v_volts = solve_tree_perturbation(parents, clamped, state, inj)
         Z[:, j] = v_volts[sites] * 1e3
     return Z
+
+
+
+def driving_point_impedance_mohm(
+    parents: np.ndarray,
+    clamped: np.ndarray,
+    state: TreeFrequencyState,
+) -> np.ndarray:
+    """All-node driving-point impedance by exact tree rerooting.
+
+    This computes diag(Y^-1) in O(N) for the unclamped passive tree. It is the
+    local input resistance/impedance seen by a current source at each node,
+    including both distal descendants and the complete proximal/side-branch
+    network.
+    """
+    parents = np.asarray(parents, dtype=np.int64)
+    clamped = np.asarray(clamped, dtype=bool)
+    n = len(parents)
+
+    # Effective input admittance of each child subtree as seen at its parent.
+    child_seen = np.zeros(n, dtype=np.complex128)
+    for i in range(1, n):
+        if not state.edge_active[i]:
+            continue
+        child_seen[i] = (
+            state.y11[i]
+            - (state.y12[i] * state.y12[i]) / state.a_effective[i]
+        )
+
+    # Distal-side admittance at a node excluding its parent edge.
+    y_down = np.zeros(n, dtype=np.complex128)
+    for i in range(1, n):
+        if not state.edge_active[i]:
+            continue
+        y_down[int(parents[i])] += child_seen[i]
+
+    # Proximal-side message, including the parent edge and everything above it.
+    y_up = np.zeros(n, dtype=np.complex128)
+    for i in range(1, n):
+        if not state.edge_active[i]:
+            continue
+        p = int(parents[i])
+        if clamped[p]:
+            # Parent voltage is fixed: the child sees the edge's Y22 directly.
+            y_up[i] = state.y22[i]
+        else:
+            parent_excluding_i = y_up[p] + y_down[p] - child_seen[i]
+            denom = state.y11[i] + parent_excluding_i
+            y_up[i] = (
+                state.y22[i]
+                - (state.y12[i] * state.y12[i]) / denom
+            )
+
+    z_mohm = np.zeros(n, dtype=np.complex128)
+    for i in range(1, n):
+        if not state.edge_active[i]:
+            continue
+        y_total = y_up[i] + y_down[i]
+        if abs(y_total) > 0:
+            z_mohm[i] = (1.0 / y_total) / 1e6
+    return z_mohm
