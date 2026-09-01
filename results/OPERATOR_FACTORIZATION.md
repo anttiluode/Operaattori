@@ -245,3 +245,63 @@ No scientific parameter or preregistered ruler changed:
 
 The invalid run is retained as an implementation failure, not counted as a
 scientific test of factorization.
+
+
+## Corrected receipt — factorization passes
+
+After matched no-input subtraction, the transport construction became
+numerically well behaved and the locked assay passed.
+
+Original-geometry reconstruction:
+
+~~~text
+section      T_original[J_original] NRMSE
+apic[100]    0.0049
+apic[77]     0.0041
+apic[96]     0.0049
+apic[64]     0.0044
+apic[58]     0.0053
+apic[69]     0.0033
+
+median       0.0046
+~~~
+
+Held-out intrinsic length perturbations:
+
+~~~text
+                       median NRMSE
+frozen original soma      0.0982
+T_g[J_original]           0.0512
+T_g[J_actual] oracle      0.0046
+
+factorized / frozen       0.5213
+factorized beats frozen   9 / 12
+median J waveform drift   0.0560
+spike guard               0
+~~~
+
+The factorized architecture therefore halves median held-out trace error while
+using no held-out soma fit and no held-out nonlinear current waveform.
+
+Classification:
+
+~~~text
+TRANSPORT_X_LOCAL_NONLINEAR_OPERATOR_FACTORIZATION
+~~~
+
+The oracle is the important diagnostic. Supplying the actual held-out synaptic
+current waveforms to the same geometry-specific transport kernels reconstructs
+the soma at roughly 0.46 percent median NRMSE. Thus the linear transport module
+is not the limiting approximation. The remaining factorized error is mostly
+the cost of freezing the original local nonlinear current operator while
+geometry perturbs its currents by about 5.6 percent median waveform NRMSE.
+
+One branch/scale case is a real failure mode: apic[58] at 0.80x has factorized
+NRMSE 0.1665 and is worse than the frozen-soma attacker. It is retained. The
+architecture passes the preregistered aggregate rulers, not every individual
+case.
+
+Raw compact CI receipt:
+[results/operator_factorization/ci_summary.json](operator_factorization/ci_summary.json)
+
+GitHub Actions: run 33492898788, job 99808299742.
