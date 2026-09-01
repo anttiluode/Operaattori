@@ -272,8 +272,8 @@ Detailed receipts: [Gate 0](results/GATE0.md),
 [Gate 5](results/GATE5.md), [Gate 6](results/GATE6.md),
 [Gate 7](results/GATE7.md), [Gate 8](results/GATE8.md),
 [Gate 9](results/GATE9.md), [Gate 10](results/GATE10.md),
-[Gate 11](results/GATE11.md), [Gate 12](results/GATE12.md), and
-[Gate 13](results/GATE13.md).
+[Gate 11](results/GATE11.md), [Gate 12](results/GATE12.md),
+[Gate 13](results/GATE13.md), and [Gate 14](results/GATE14.md).
 
 ## Gate 5 first receipt — moving matrix, with the killer beside it
 
@@ -622,10 +622,37 @@ but does not by itself manufacture a rich repertoire of distinct computations.
 
 See [Gate 13](results/GATE13.md).
 
+## Gate 14 — NMDA adds gain, not a new dimension
+
+Gate 14 closes selected real branches through the Aizenbud/released-code NMDA
+voltage gate while keeping the exact passive tree as the surrounding linear
+operator.
+
+~~~text
+human / frozen-block at 48 synapses     1.1122 median
+branches above +10%                     0.800
+
+human cooperativity                     0.1871
+frozen-block cooperativity              0.1730
+
+dose-response rank HUMAN                1.070
+dose-response rank FROZEN               1.051
+rank gain                               0.020
+
+coarse branch-scalar attacker R²        0.586
+~~~
+
+So voltage-dependent NMDA gives a real but modest nonlinear boost. It does not,
+in this reduced quasi-static assay, create the large repertoire jump we were
+looking for.
+
+See [Gate 14](results/GATE14.md).
+
 ## Current stopping line
 
-> **The geometric scaffold, taper transport, and branch loading are now explicit.
-> Passive physics still leaves the tip-transfer repertoire almost rank one.
-> Gate 14 must therefore import the paper's actual nonlinear synaptic mechanism,
-> with a passive/nonlinear ablation, before any activity-dependent growth is
-> allowed.**
+> **Do not jump to growth yet. The next missing Aizenbud-shaped ingredient is
+> compartmentalization itself: matched synapses clustered within one branch
+> versus dispersed across different branches. Gate 15 must ask whether branch
+> locality amplifies the NMDA-specific interaction after matching individual
+> passive input resistance and soma transfer. If not, this reduced scaffold has
+> hit another ceiling.**
