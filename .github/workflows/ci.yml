@@ -37,7 +37,7 @@ jobs:
       - name: Gate 9 — path through operator space
         run: python experiments/gate9_lie_path.py
 
-  gate10-real-neuron:
+  real-neuron-gates-10-11:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,15 +50,19 @@ jobs:
         run: python -m unittest tests.test_real_scaffold -v
       - name: Gate 10 — real neuron matrix scaffold
         run: python experiments/gate10_real_neuron_scaffold.py --no-plot
+      - name: Gate 11 unit tests
+        run: python -m unittest tests.test_cable_path -v
+      - name: Gate 11 — passive cable path order
+        run: python experiments/gate11_cable_path_order.py --no-plot
 
   locked-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Gate 11 is still absent
+      - name: Verify Gate 12 is still absent
         shell: bash
         run: |
-          test ! -e experiments/gate11.py
-          test ! -e experiments/gate11_spatial_operator_order.py
-          test ! -e experiments/gate11_dynamic_scaffold.py
-          echo "Gate 11 remains locked behind the real-neuron scaffold audit."
+          test ! -e experiments/gate12.py
+          test ! -e experiments/gate12_dynamic_scaffold.py
+          test ! -e experiments/gate12_learned_growth.py
+          echo "Gate 12 remains locked behind the passive transport-order audit."
