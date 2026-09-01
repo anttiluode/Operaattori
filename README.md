@@ -22,6 +22,42 @@ change was only **9.710e-14**. The 20% intrinsic-metric controls changed
 transfer by **11.84% median**. See
 **[results/SYMMETRY_AUDIT.md](results/SYMMETRY_AUDIT.md)**.
 
+## The full branch now reduces to a tiny nonlinear circuit
+
+The strongest current result removes the cached nonlinear current waveform
+entirely.
+
+For each compact three-site branch, the reduced model contains only:
+
+~~~text
+released AMPA/NMDA law
+        x
+3x3 local Green matrix
+        x
+site-to-soma transport kernels
+~~~
+
+The local currents are solved self-consistently from voltage-dependent NMDA
+feedback. Across **54 comparisons** spanning six real cell-1125 branches,
+original/0.8x/1.2x intrinsic length, and three input patterns:
+
+~~~text
+transport oracle soma error        0.40% median NRMSE
+fully reduced circuit              0.43%
+reduced current-waveform error     0.38%
+
+held-out frozen-current model      2.82%
+held-out reduced circuit           0.43%
+reduced wins                       32 / 36
+~~~
+
+Classification:
+`LOCAL_GREEN_MATRIX_X_SYNAPSE_LAW_REDUCES_RELEASED_NEURON`.
+
+This is the current reusable mathematical object of Operaattori. See
+**[ARCHITECTURE.md](ARCHITECTURE.md)** and
+**[GREEN_CIRCUIT_AUDIT.md](results/GREEN_CIRCUIT_AUDIT.md)**.
+
 ## The architecture now composes
 
 The latest held-out test separates the released model into two reusable pieces:
