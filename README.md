@@ -658,11 +658,54 @@ looking for.
 
 See [Gate 14](results/GATE14.md).
 
+## Gate 15 — electrical locality survives; the NMDA-locality hypothesis does not
+
+Gate 15 matched same-branch inputs against inputs on different branches using
+their individual passive driving-point impedance and soma transfer.
+
+The first version spread the "cluster" over whole 293–385-um unbranched runs.
+It was negative. We therefore tightened the definition rather than accepting an
+easy kill: eight sites were restricted to compact 39–49-um windows and matched
+again to sites on six to eight other branch runs.
+
+~~~text
+compact Gate 15b
+
+median passive Rinput match             1.059x
+median passive soma-transfer match      1.080x
+cluster/dispersed Green coupling        9.557x
+
+NMDA-specific locality:
+  soma current H/F                      0.9241
+  local voltage H/F                     0.9196
+  max local voltage H/F                 0.9652
+
+branches >1.05                          0 / 8
+
+median local voltage, 48 synapses:
+  compact HUMAN / FROZEN               -2.61 / -5.43 mV
+  dispersed HUMAN / FROZEN            -11.14 / -17.93 mV
+~~~
+
+So compact branch sites are very clearly an **electrically interacting
+compartment**. But in this quasi-static model they do not selectively amplify
+the human NMDA voltage dependence. They are already driven close to the
+excitatory reversal potential with the Mg block frozen, and the relative NMDA
+advantage is actually smaller than in the dispersed matched control.
+
+The correct result is therefore narrower than "branches are not compartments":
+
+~~~text
+NO_ROBUST_NMDA_LOCALITY_ADVANTAGE
+~~~
+
+See [Gate 15](results/GATE15.md).
+
 ## Current stopping line
 
-> **Do not jump to growth yet. The next missing Aizenbud-shaped ingredient is
-> compartmentalization itself: matched synapses clustered within one branch
-> versus dispersed across different branches. Gate 15 must ask whether branch
-> locality amplifies the NMDA-specific interaction after matching individual
-> passive input resistance and soma transfer. If not, this reduced scaffold has
-> hit another ceiling.**
+> **Do not rescue the compact-locality result with growth. If we continue this
+> mechanistic line, Gate 16 must use the authors' released time-domain NEURON
+> model for cell 1125 and its actual AMPA/NMDA kinetics on a small matched
+> clustered/dispersed protocol. The question is whether equilibrium saturation
+> erased a temporal compartment effect. If that bounded reproduction is not
+> practical, stop here rather than invent another surrogate.**
