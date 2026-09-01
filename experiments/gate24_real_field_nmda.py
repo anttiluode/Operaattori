@@ -209,8 +209,13 @@ def load_fielddrive(cell):
     import neuron
     from neuron import h
 
-    # CI compiles mechanisms/ into the repo root x86_64 directory.
-    neuron.load_mechanisms(str(ROOT))
+    # nrnivmodl in the working directory can be auto-loaded by NEURON on
+    # interpreter startup. Load explicitly only when the mechanism is absent;
+    # loading the same DLL twice raises "user defined name already exists".
+    if not hasattr(h, "drive_fielddrive"):
+        neuron.load_mechanisms(str(ROOT))
+    if not hasattr(h, "drive_fielddrive"):
+        raise RuntimeError("fielddrive mechanism did not load")
     for sec in cell.all:
         sec.insert("extracellular")
         sec.insert("fielddrive")
