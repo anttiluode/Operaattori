@@ -363,6 +363,7 @@ def solve_all_sources(
     graph: dict,
     cell,
     branches: list[dict],
+    reference_time: np.ndarray,
 ) -> dict:
     G = graph["G_uS"]
     C = graph["C_nF"]
@@ -407,9 +408,32 @@ def solve_all_sources(
     ).tocsc()
     lu = splu(A)
 
+    reference_time = np.asarray(reference_time, dtype=float)
+    if reference_time.ndim != 1 or len(reference_time) == 0:
+        raise ValueError("reference_time must be a nonempty vector")
+
+    sample_steps = np.rint(
+        reference_time / DT_MS
+    ).astype(int)
+    if np.any(sample_steps < 0):
+        raise RuntimeError("negative graph sample step")
+    if not np.allclose(
+        reference_time,
+        sample_steps * DT_MS,
+        rtol=0,
+        atol=1e-9,
+    ):
+        raise RuntimeError(
+            "reference times are not on the locked 0.05 ms grid"
+        )
+
+    nt = len(reference_time)
+    max_step = int(np.max(sample_steps))
+    step_to_columns = defaultdict(list)
+    for out_index, step in enumerate(sample_steps):
+        step_to_columns[int(step)].append(int(out_index))
+
     state = np.zeros((n, ns), dtype=float)
-    steps = int(round(POST_MS / DT_MS))
-    nt = steps + 1
 
     soma = np.zeros((ns, nt), dtype=float)
     local = {
@@ -417,25 +441,30 @@ def solve_all_sources(
         for key in outputs
     }
 
+    def record(step: int) -> None:
+        for out_index in step_to_columns.get(step, []):
+            soma[:, out_index] = state[soma_node, :]
+            for key, node in outputs.items():
+                local[key][:, out_index] = state[node, :]
+
+    record(0)
+
     input_matrix = np.zeros((n, ns), dtype=float)
     for col, src in enumerate(sources):
         input_matrix[src["node"], col] = IMPULSE_NA
 
-    for step in range(1, nt):
+    for step in range(1, max_step + 1):
         rhs = d[:, None] * state
         if step == 1:
             rhs += input_matrix
         state = lu.solve(rhs)
-
-        soma[:, step] = state[soma_node, :]
-        for key, node in outputs.items():
-            local[key][:, step] = state[node, :]
+        record(step)
 
     return {
         "sources": sources,
         "soma": soma,
         "local": local,
-        "time": np.arange(nt, dtype=float) * DT_MS,
+        "time": reference_time.copy(),
     }
 
 
@@ -508,18 +537,8 @@ def main() -> None:
 
         graph = build_compartment_graph(cell)
         solved = solve_all_sources(
-            graph, cell, branches
+            graph, cell, branches, noinput["t"]
         )
-
-        if not np.allclose(
-            solved["time"],
-            noinput["t"],
-            rtol=0,
-            atol=1e-12,
-        ):
-            raise RuntimeError(
-                "graph/reference time grid mismatch"
-            )
 
         cell_scores = []
         for branch in branches:
