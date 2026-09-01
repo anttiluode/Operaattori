@@ -87,6 +87,41 @@ The uniform-radius control preserves total path length and membrane surface
 area but removes operator heterogeneity. It should be order-invariant to
 roundoff.
 
+## First full-cell attempt — functional gate positive, microscopic meter wrong
+
+The first 64-path CI run produced a strong path-order effect but failed the
+preregistered adjacent-point commutator threshold:
+
+```text
+paths audited                         64
+median path length                    357.6 um
+median point segments/path            241
+
+point-adjacent commutator action      4.145e-17   <- failed meter
+
+real vs reversed impedance            0.315524
+real vs shuffled impedance            0.174423
+real vs reversed gain                 0.315524
+median gain phase difference          0.237898 rad
+median group-delay difference         1.52477 ms
+
+uniform-radius reverse control        1.077e-14
+```
+
+The failure is kept rather than relabeled as a pass.
+
+The ASC morphology is sampled at roughly micron-scale point spacing. A
+commutator between two immediately adjacent infinitesimal cable transfer
+pieces is second-order in those tiny lengths, so that particular diagnostic
+falls at numerical precision even though hundreds of pieces compose into a
+large order-dependent transfer.
+
+The gate was therefore **not weakened on the functional result**. The revised
+diagnostic composes contiguous pieces into 25-um physical cable blocks and
+measures block commutators. Reversal and shuffle of the exact same segment
+multiset remain the primary causal tests; the area-matched uniform-radius path
+remains the commuting attacker.
+
 ## What a pass means
 
 A pass earns:
