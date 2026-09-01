@@ -5,6 +5,7 @@ import numpy as np
 from operaattori.compartment_match import (
     greedy_dispersed_match,
     normalized_offdiagonal_coupling,
+    select_compact_midpoint_sites,
     select_even_sites,
 )
 
@@ -17,6 +18,15 @@ class CompartmentMatchTests(unittest.TestCase):
         self.assertEqual(s[0], 10)
         self.assertEqual(s[-1], 109)
         self.assertEqual(len(np.unique(s)), len(s))
+
+    def test_compact_midpoint_sites_respect_span(self):
+        run = list(range(1, 21))
+        lengths = np.ones(21) * 5.0
+        sites, span = select_compact_midpoint_sites(run, lengths, 5, 30.0)
+        self.assertEqual(len(sites), 5)
+        self.assertLessEqual(span, 30.0 + 1e-12)
+        self.assertGreater(sites[0], run[0])
+        self.assertLess(sites[-1], run[-1])
 
     def test_match_avoids_target_run_and_spreads(self):
         n = 80
