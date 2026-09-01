@@ -1,0 +1,128 @@
+{
+  "object": "held-out composition of original local nonlinear synaptic-current operator with geometry-specific linear site-to-soma transport",
+  "invalid_first_attempt": {
+    "status": "implementation failure before scientific interpretation",
+    "cause": "impulse response used scalar pre-event baseline instead of matched no-input control",
+    "original_median_nrmse": 100979.7298
+  },
+  "corrected_run": {
+    "original_reconstruction_nrmse_by_branch": {
+      "apic[100]": 0.0049,
+      "apic[77]": 0.0041,
+      "apic[96]": 0.0049,
+      "apic[64]": 0.0044,
+      "apic[58]": 0.0053,
+      "apic[69]": 0.0033
+    },
+    "holdouts": [
+      {
+        "scale": 0.8,
+        "section": "apic[100]",
+        "frozen_nrmse": 0.0988,
+        "factorized_nrmse": 0.0096,
+        "oracle_nrmse": 0.0052,
+        "local_current_drift_nrmse": 0.023
+      },
+      {
+        "scale": 0.8,
+        "section": "apic[77]",
+        "frozen_nrmse": 0.0496,
+        "factorized_nrmse": 0.069,
+        "oracle_nrmse": 0.0042,
+        "local_current_drift_nrmse": 0.0507
+      },
+      {
+        "scale": 0.8,
+        "section": "apic[96]",
+        "frozen_nrmse": 0.1256,
+        "factorized_nrmse": 0.0589,
+        "oracle_nrmse": 0.0052,
+        "local_current_drift_nrmse": 0.0947
+      },
+      {
+        "scale": 0.8,
+        "section": "apic[64]",
+        "frozen_nrmse": 0.0954,
+        "factorized_nrmse": 0.0784,
+        "oracle_nrmse": 0.0046,
+        "local_current_drift_nrmse": 0.0993
+      },
+      {
+        "scale": 0.8,
+        "section": "apic[58]",
+        "frozen_nrmse": 0.1422,
+        "factorized_nrmse": 0.1665,
+        "oracle_nrmse": 0.0056,
+        "local_current_drift_nrmse": 0.1629
+      },
+      {
+        "scale": 0.8,
+        "section": "apic[69]",
+        "frozen_nrmse": 0.0495,
+        "factorized_nrmse": 0.0459,
+        "oracle_nrmse": 0.0034,
+        "local_current_drift_nrmse": 0.0371
+      },
+      {
+        "scale": 1.2,
+        "section": "apic[100]",
+        "frozen_nrmse": 0.1253,
+        "factorized_nrmse": 0.0232,
+        "oracle_nrmse": 0.0047,
+        "local_current_drift_nrmse": 0.0257
+      },
+      {
+        "scale": 1.2,
+        "section": "apic[77]",
+        "frozen_nrmse": 0.0486,
+        "factorized_nrmse": 0.0564,
+        "oracle_nrmse": 0.004,
+        "local_current_drift_nrmse": 0.0502
+      },
+      {
+        "scale": 1.2,
+        "section": "apic[96]",
+        "frozen_nrmse": 0.1307,
+        "factorized_nrmse": 0.035,
+        "oracle_nrmse": 0.0047,
+        "local_current_drift_nrmse": 0.0614
+      },
+      {
+        "scale": 1.2,
+        "section": "apic[64]",
+        "frozen_nrmse": 0.0975,
+        "factorized_nrmse": 0.0412,
+        "oracle_nrmse": 0.0042,
+        "local_current_drift_nrmse": 0.0665
+      },
+      {
+        "scale": 1.2,
+        "section": "apic[58]",
+        "frozen_nrmse": 0.0998,
+        "factorized_nrmse": 0.0679,
+        "oracle_nrmse": 0.005,
+        "local_current_drift_nrmse": 0.0959
+      },
+      {
+        "scale": 1.2,
+        "section": "apic[69]",
+        "frozen_nrmse": 0.0537,
+        "factorized_nrmse": 0.0317,
+        "oracle_nrmse": 0.0033,
+        "local_current_drift_nrmse": 0.0313
+      }
+    ],
+    "aggregate": {
+      "median_original_reconstruction_nrmse": 0.0046,
+      "median_frozen_soma_attacker_nrmse": 0.0982,
+      "median_factorized_holdout_nrmse": 0.0512,
+      "median_transport_oracle_nrmse": 0.0046,
+      "factorized_to_frozen_median_nrmse_ratio": 0.5213,
+      "fraction_factorized_beats_frozen": 0.75,
+      "median_local_current_waveform_drift_nrmse": 0.056,
+      "fraction_actual_holdouts_spike_guard": 0
+    },
+    "classification": "TRANSPORT_X_LOCAL_NONLINEAR_OPERATOR_FACTORIZATION"
+  },
+  "source": "GitHub Actions run 33492898788, job 99808299742"
+}
