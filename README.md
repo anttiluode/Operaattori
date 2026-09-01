@@ -82,6 +82,14 @@ repo from calling every beautiful geometric deformation "computation."
 
 The mathematical version of this boundary is in **[SYMMETRY.md](SYMMETRY.md)**.
 
+A direct released-model audit then connected this strong metric channel to the
+six Gate-20 nonlinear branches. Stretching each selected branch section by 20%
+changed passive site properties by **8.77% median**, but changed the exact
+single-site-subtracted nonlinear interaction by only **2.74% median**; just
+**1 / 6** branches exceeded 5%. In this assay, **metric changes transport more
+than the normalized nonlinear law**. See
+**[METRIC_NONLINEARITY_AUDIT.md](results/METRIC_NONLINEARITY_AUDIT.md)**.
+
 ## Where the nonlinear result enters
 
 Gates 16–20 then found something the passive picture does not contain.
