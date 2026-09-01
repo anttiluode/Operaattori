@@ -287,3 +287,61 @@ def standardized_effective_rank(features: np.ndarray) -> float:
     if denom <= 0:
         return 0.0
     return float((np.sum(power) ** 2) / denom)
+
+
+def solve_tree_perturbation(
+    parents: np.ndarray,
+    clamped: np.ndarray,
+    state: TreeFrequencyState,
+    injections_amp: np.ndarray,
+) -> np.ndarray:
+    """Solve node voltage perturbations for arbitrary current injections.
+
+    The clamped boundary is zero perturbation. The factorization already stored
+    in state.a_effective is reused, so one solve is O(N) on the tree.
+    Positive injection means current entering the dendritic node.
+    """
+    parents = np.asarray(parents, dtype=np.int64)
+    clamped = np.asarray(clamped, dtype=bool)
+    b = np.asarray(injections_amp, dtype=np.complex128).copy()
+    if b.shape != parents.shape:
+        raise ValueError("injections must have one value per tree node")
+
+    b[clamped] = 0.0
+
+    for i in range(len(parents) - 1, 0, -1):
+        if not state.edge_active[i]:
+            continue
+        p = int(parents[i])
+        if clamped[p]:
+            continue
+        b[p] -= state.y12[i] * b[i] / state.a_effective[i]
+
+    v = np.zeros(len(parents), dtype=np.complex128)
+    for i in range(1, len(parents)):
+        if not state.edge_active[i]:
+            continue
+        p = int(parents[i])
+        rhs = b[i]
+        if not clamped[p]:
+            rhs -= state.y12[i] * v[p]
+        v[i] = rhs / state.a_effective[i]
+    return v
+
+
+def green_impedance_mohm(
+    parents: np.ndarray,
+    clamped: np.ndarray,
+    state: TreeFrequencyState,
+    sites: np.ndarray,
+) -> np.ndarray:
+    """Driving/transfer impedance matrix among selected sites, in megaohms."""
+    sites = np.asarray(sites, dtype=int)
+    m = len(sites)
+    Z = np.zeros((m, m), dtype=np.complex128)
+    for j, site in enumerate(sites):
+        inj = np.zeros(len(parents), dtype=np.complex128)
+        inj[int(site)] = 1e-9
+        v_volts = solve_tree_perturbation(parents, clamped, state, inj)
+        Z[:, j] = v_volts[sites] * 1e3
+    return Z
