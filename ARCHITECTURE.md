@@ -142,3 +142,56 @@ The remaining limitation is now clearer. N_b is still supplied as a measured
 original-geometry current waveform for each input pattern. The next reduction
 should replace that lookup with a geometry-independent synaptic nonlinearity
 coupled through a local geometry-dependent Green/impulse matrix.
+
+
+## Reduced nonlinear circuit
+
+The per-pattern local-current lookup can now be removed entirely.
+
+A three-site reduced circuit was built from:
+
+~~~text
+released AMPA/NMDA conductance law
+        x
+3x3 local Green matrix G_g
+        x
+site-to-soma transport T_g
+~~~
+
+The nonlinear site currents are solved self-consistently:
+
+~~~text
+V_local = V_noinput + G_g * J
+J       = synapse_law(V_local, input)
+V_soma  = T_g * J
+~~~
+
+Across 54 full-model comparisons spanning six branches, three geometries
+(original, 0.80x length, 1.20x length) and three input patterns:
+
+~~~text
+transport oracle soma NRMSE      0.0040
+reduced circuit soma NRMSE       0.0043
+reduced current NRMSE            0.0038
+
+held-out frozen-current model    0.0282
+held-out reduced circuit         0.0043
+reduced / frozen-current         0.1527
+reduced wins                     32 / 36
+~~~
+
+Classification:
+
+~~~text
+LOCAL_GREEN_MATRIX_X_SYNAPSE_LAW_REDUCES_RELEASED_NEURON
+~~~
+
+This is the current reusable object of Operaattori.
+
+The full released branch response no longer needs to be cached as a nonlinear
+waveform. Its behavior is reconstructed from an explicit local synapse law
+embedded in measured linear transport.
+
+The next attack is temporal rather than geometric: reuse the same reduced object
+for asynchronous event patterns without fitting new conductance shapes or
+transport kernels.
