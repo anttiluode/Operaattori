@@ -55,9 +55,26 @@ def configure_active(
         syn = row["exc_synapses"]
         nc = row["exc_netcons"]
 
+        v_rest = float(baseline_by_row[int(i)])
         if condition == "human":
             syn.gamma = HUMAN_GAMMA
             syn.NMDA_ratio = HUMAN_RATIO
+        elif condition == "hybrid_b":
+            # Exact paper/released-code Hybrid B: all human synaptic kinetics
+            # and raw conductances, but the smaller rat NMDA gamma.
+            syn.gamma = RAT_GAMMA
+            syn.NMDA_ratio = HUMAN_RATIO
+        elif condition == "gamma062_restmatched":
+            # Harder slope-only attacker. Keep gamma=0.062, but rescale the raw
+            # ratio so effective NMDA conductance at this site's actual settled
+            # pre-event voltage equals HUMAN. The immediate resting strength is
+            # matched; only subsequent voltage dependence differs.
+            syn.gamma = RAT_GAMMA
+            syn.NMDA_ratio = (
+                HUMAN_RATIO
+                * block(v_rest, HUMAN_GAMMA)
+                / block(v_rest, RAT_GAMMA)
+            )
         elif condition == "frozen":
             # Exact per-site frozen-at-rest effective NMDA conductance:
             # gamma=0 makes the released Mg gate constant at B_ZERO_GAMMA.
@@ -67,7 +84,7 @@ def configure_active(
             syn.gamma = 0.0
             syn.NMDA_ratio = (
                 HUMAN_RATIO
-                * block(float(baseline_by_row[int(i)]))
+                * block(v_rest, HUMAN_GAMMA)
                 / B_ZERO_GAMMA
             )
         else:
