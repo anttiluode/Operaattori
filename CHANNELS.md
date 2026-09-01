@@ -233,3 +233,31 @@ This is useful because it separates two statements that are easy to blur:
    recruit a nonlinear compartment differently.
 
 The locked weak-field assay supports the first and rejects the second.
+
+
+## Weak-field amplitude audit — route closure
+
+After Gate 24, field amplitude was audited without changing any other knob:
+
+~~~text
+field        bend factor
+0.25 V/m     1.000069x
+0.50 V/m     1.000138x
+1.00 V/m     1.000277x
+2.00 V/m     1.000559x
+
+through-origin R2                       0.999970
+local first-order field scale for 5%    175.049 V/m
+~~~
+
+Classification:
+
+~~~text
+WEAK_FIELD_BEND_EFFECT_IN_LOCAL_LINEAR_REGIME
+~~~
+
+This is not a high-field prediction. It says the measured weak-field effect is
+a clean, tiny small-signal coupling. Increasing field strength until the 5%
+ruler is crossed is explicitly not part of the protocol.
+
+See [results/FIELD_SCALING_AUDIT.md](results/FIELD_SCALING_AUDIT.md).
