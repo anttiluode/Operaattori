@@ -209,3 +209,39 @@ Failure is equally informative: it tells us exactly which attempted modular
 boundary does not survive composition.
 
 This is an architecture audit, not Gate 25.
+
+
+## Implementation correction before scientific interpretation
+
+The first executable attempt produced absurd original-geometry transport errors
+of order 1e5 NRMSE. That cannot be a biological result because the operator
+failed before any holdout.
+
+The cause was identified before interpreting the architecture: the tiny 0.001
+nA impulse response was baseline-corrected with a single pre-event voltage
+number. Residual slow settling of the released model was therefore divided by
+0.001 and mistaken for impulse response.
+
+The corrected kernel is the causal matched-control difference:
+
+~~~text
+h(t) = [V_pulse(t) - V_no-pulse(t)] / 0.001 nA
+~~~
+
+and the event-driven soma trace is likewise:
+
+~~~text
+V_event(t) - V_no-event(t).
+~~~
+
+No scientific parameter or preregistered ruler changed:
+
+- same six branches;
+- same plus/minus 20 percent holdouts;
+- same 24 virtual synapses;
+- same 0.001 nA one-step impulse;
+- same temporal alignment;
+- same pass/fail thresholds.
+
+The invalid run is retained as an implementation failure, not counted as a
+scientific test of factorization.
