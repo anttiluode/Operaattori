@@ -22,6 +22,54 @@ change was only **9.710e-14**. The 20% intrinsic-metric controls changed
 transfer by **11.84% median**. See
 **[results/SYMMETRY_AUDIT.md](results/SYMMETRY_AUDIT.md)**.
 
+## The whole morphology graph is the cross-cell coordinate
+
+The failed cross-cell feature regressions turned out to be asking the wrong
+question.
+
+A direct matched-passive cable solver was built from each released morphology's
+**full loaded section graph** — lengths, diameters, membrane areas, topology and
+the fixed passive constants — with no cross-cell fitting.
+
+Across all **24 FCI morphologies × 6 apical branches = 144 operator packs**:
+
+~~~text
+direct morphology graph
+
+median joint G/T NRMSE          0.21%
+median local G NRMSE            0.13%
+median soma T NRMSE             0.24%
+
+median cell-level error         0.18%
+cells <= 10%                    23 / 24
+~~~
+
+Classification:
+`MORPHOLOGY_GRAPH_GENERATES_PASSIVE_OPERATOR`.
+
+The extreme human L5 morphology `2057`, which the scalar morphology map missed
+by nearly 8× error, is reconstructed by the direct graph at roughly **0.01%**
+cell-level error.
+
+So the cross-cell result is not "find a better morphology feature vector." It is:
+
+~~~text
+morphology graph
+      |
+      v
+passive cable construction
+      |
+      +--> local Green matrix G
+      +--> soma transport T
+~~~
+
+The operator becomes low-dimensional **after** the cable physics acts; forcing
+the input morphology through a tiny scalar chart first destroys important
+boundary/load information.
+
+See
+**[DIRECT_CABLE_GRAPH_AUDIT.md](results/DIRECT_CABLE_GRAPH_AUDIT.md)**.
+
 ## Cross-cell generalization boundary
 
 The hard next test was **not** another within-cell perturbation. We measured
