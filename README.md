@@ -47,6 +47,8 @@ Classification:
 See
 **[TEMPORAL_GREEN_CIRCUIT_AUDIT.md](results/TEMPORAL_GREEN_CIRCUIT_AUDIT.md)**.
 
+The reduced equations and current validity envelope are written explicitly in **[MODEL.md](MODEL.md)**.
+
 ## Portable runtime
 
 The earned reduced operator now has a **NEURON-free NumPy implementation** in
