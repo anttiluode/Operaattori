@@ -82,6 +82,36 @@ def physical_segments(tree, leaf: int) -> tuple[np.ndarray, np.ndarray, list[int
     return np.asarray(lengths), np.asarray(radii), child_nodes
 
 
+def block_transfer_matrices(
+    lengths: np.ndarray,
+    radii: np.ndarray,
+    frequency_hz: float,
+    params: PassiveCableParams,
+    target_length_um: float = 25.0,
+) -> list[np.ndarray]:
+    """Compose point-scale pieces into finite contiguous cable blocks.
+
+    The ASC reconstruction is sampled much more finely than the electrical
+    length scale. Pairwise commutators of immediately adjacent ~micron pieces
+    are therefore second-order tiny and can sit at floating-point scale even
+    when the accumulated path is strongly order-sensitive. This diagnostic
+    asks the same algebraic question at a finite physical scale.
+    """
+    blocks: list[np.ndarray] = []
+    acc = np.eye(2, dtype=np.complex128)
+    acc_len = 0.0
+    for l, r in zip(lengths, radii):
+        acc = acc @ cable_abcd(float(l), float(r), frequency_hz, params)
+        acc_len += float(l)
+        if acc_len >= target_length_um:
+            blocks.append(acc)
+            acc = np.eye(2, dtype=np.complex128)
+            acc_len = 0.0
+    if acc_len > 0.0:
+        blocks.append(acc)
+    return blocks
+
+
 def plot_sensitive_path(path: Path, freq: np.ndarray, real_h, reverse_h, uniform_h, title: str) -> None:
     import matplotlib
     matplotlib.use("Agg")
@@ -158,6 +188,8 @@ def main() -> None:
         uniform_reverse_z = []
         shuffle_z_diff = []
         adjacent_comm = []
+        block_comm = []
+        uniform_block_comm = []
 
         # A deterministic shuffle family per path, preserving the exact
         # (length,radius) segment multiset.
@@ -201,6 +233,25 @@ def main() -> None:
                 scores.append(commutator_action_score(A, B))
             adjacent_comm.append(float(np.mean(scores)) if scores else 0.0)
 
+            # Same question at a finite 25-um scale. The point reconstruction
+            # itself is usually sampled at only ~1--2 um, where a two-piece
+            # commutator is O(dl^2) and can be numerically invisible.
+            blocks = block_transfer_matrices(lengths, radii, f, params, 25.0)
+            block_scores = [
+                commutator_action_score(blocks[j], blocks[j + 1])
+                for j in range(len(blocks) - 1)
+            ]
+            block_comm.append(float(np.mean(block_scores)) if block_scores else 0.0)
+
+            ublocks = block_transfer_matrices(lengths, uniform_radii, f, params, 25.0)
+            ublock_scores = [
+                commutator_action_score(ublocks[j], ublocks[j + 1])
+                for j in range(len(ublocks) - 1)
+            ]
+            uniform_block_comm.append(
+                float(np.mean(ublock_scores)) if ublock_scores else 0.0
+            )
+
         real_gain = np.asarray(real_gain)
         reverse_gain = np.asarray(reverse_gain)
         uniform_gain = np.asarray(uniform_gain)
@@ -227,7 +278,9 @@ def main() -> None:
             "radius_min_um": float(np.min(radii)),
             "radius_max_um": float(np.max(radii)),
             "area_preserving_uniform_radius_um": float(r_uniform),
-            "median_adjacent_commutator_action": float(np.median(adjacent_comm)),
+            "median_point_adjacent_commutator_action": float(np.median(adjacent_comm)),
+            "median_25um_block_commutator_action": float(np.median(block_comm)),
+            "max_uniform_25um_block_commutator_action": float(np.max(uniform_block_comm)),
             "median_reverse_input_impedance_relative_difference": float(np.median(z_reverse_diff)),
             "max_reverse_input_impedance_relative_difference": float(np.max(z_reverse_diff)),
             "median_shuffle_input_impedance_relative_difference": float(np.median(shuffle_z_diff)),
@@ -275,7 +328,9 @@ def main() -> None:
         "aggregate": {
             "median_path_length_um": float(np.median(vals("path_length_um"))),
             "median_segments_per_path": float(np.median(vals("segments"))),
-            "median_adjacent_commutator_action": float(np.median(vals("median_adjacent_commutator_action"))),
+            "median_point_adjacent_commutator_action": float(np.median(vals("median_point_adjacent_commutator_action"))),
+            "median_25um_block_commutator_action": float(np.median(vals("median_25um_block_commutator_action"))),
+            "max_uniform_25um_block_commutator_action": float(np.max(vals("max_uniform_25um_block_commutator_action"))),
             "median_reverse_impedance_difference": float(np.median(vals("median_reverse_input_impedance_relative_difference"))),
             "median_shuffle_impedance_difference": float(np.median(vals("median_shuffle_input_impedance_relative_difference"))),
             "median_reverse_gain_difference": float(np.median(vals("median_reverse_gain_relative_difference"))),
@@ -287,11 +342,12 @@ def main() -> None:
         "paths": rows,
         "stopping_line": (
             "Real dendritic geometry supplies a spatially ordered set of passive cable "
-            "transport matrices. Radius variation makes those local operators "
-            "noncommuting, so reversing or shuffling the exact same segment multiset "
-            "changes impedance, attenuation and phase. An area-matched uniform-radius "
-            "control commutes and loses this order sensitivity. This earns a physical "
-            "path-order degree of freedom, not learning or useful intelligence."
+            "transport matrices. Reversing or shuffling the exact same heterogeneous "
+            "segment multiset changes impedance, attenuation and phase, while an "
+            "area-matched uniform-radius control loses the order sensitivity. "
+            "Point-adjacent commutators are numerically tiny at the ASC sampling scale; "
+            "finite cable-block commutators are the appropriate local diagnostic. "
+            "This earns a physical path-order degree of freedom, not learning or useful intelligence."
         ),
     }
 
@@ -316,7 +372,9 @@ def main() -> None:
     print(f"dendritic paths audited:         {len(rows)}")
     print(f"median path length:             {a['median_path_length_um']:.1f} um")
     print(f"median segments/path:           {a['median_segments_per_path']:.0f}")
-    print(f"median adjacent commutator:     {a['median_adjacent_commutator_action']:.3e}")
+    print(f"point-adjacent commutator:      {a['median_point_adjacent_commutator_action']:.3e}")
+    print(f"25-um block commutator:         {a['median_25um_block_commutator_action']:.3e}")
+    print(f"uniform block commutator max:   {a['max_uniform_25um_block_commutator_action']:.3e}")
     print(f"real vs REVERSED impedance:     {a['median_reverse_impedance_difference']:.6g}")
     print(f"real vs SHUFFLED impedance:     {a['median_shuffle_impedance_difference']:.6g}")
     print(f"real vs REVERSED gain:          {a['median_reverse_gain_difference']:.6g}")
@@ -330,7 +388,14 @@ def main() -> None:
     # cable must show measurable order sensitivity, while the matched uniform
     # cable must collapse it to roundoff.
     assert len(rows) >= 16
-    assert a["median_adjacent_commutator_action"] > 1e-10
+    # Do not gate on the point-adjacent commutator: the first CI run showed
+    # that it is at numerical floor because the reconstruction is oversampled
+    # relative to the cable scale. The causal order tests below are the primary
+    # gate. The finite-block diagnostic must still rise above its uniform
+    # commuting control.
+    assert a["median_25um_block_commutator_action"] > 1e2 * max(
+        a["max_uniform_25um_block_commutator_action"], 1e-16
+    )
     assert a["median_reverse_impedance_difference"] > 1e-7
     assert a["median_shuffle_impedance_difference"] > 1e-7
     assert a["max_commuting_control_reverse_impedance_difference"] < 1e-9
