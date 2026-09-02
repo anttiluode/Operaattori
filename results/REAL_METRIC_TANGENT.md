@@ -84,6 +84,46 @@ All six local intrinsic-metric directions are negative at this operating point:
 locally adding membrane/cable load reduces the soma peak. The effect is small
 for a 1% perturbation and this is **not** yet a literal growth-cone experiment.
 
+## Full tested-branch sensitivity map
+
+After validating six directions against centered recompilation, the same
+analytic tangent was evaluated for **every compartment** on the tested
+`apic[100]` branch:
+
+~~~text
+31 compartments x {length, diameter} = 62 analytic directions
+~~~
+
+No additional finite-difference sweep is needed.
+
+At the same 2.355717 mV soma peak:
+
+~~~text
+length tangent:
+    positive compartments        7
+    negative compartments       24
+    strongest |gradient|        -0.0457299 mV / log-scale
+    strongest position           x = 0.661
+
+diameter tangent:
+    positive compartments        0
+    negative compartments       31
+    strongest |gradient|        -0.0974406 mV / log-scale
+    strongest position           x = 0.210
+~~~
+
+The length tangent is slightly positive from x≈0.016 through x≈0.210, then
+flips negative at the compartment containing the first nonlinear site near
+x=0.25 and remains negative downstream. Diameter is negative across the entire
+branch and is strongest immediately proximal to that first site.
+
+This gives the derivative a spatial structure rather than only a scalar
+"geometry matters" result. It is consistent with competing cable effects
+(membrane/load and axial coupling), but the sign pattern alone does not identify
+a biological objective.
+
+**[Open the archived branch gradient map](../gradient_map.html).**
+
 ## What this earns
 
 The real morphology pipeline can now be written as
