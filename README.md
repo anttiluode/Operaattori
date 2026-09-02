@@ -136,6 +136,16 @@ length changes sign near the first nonlinear site. See the
 **[real metric-tangent receipt](results/REAL_METRIC_TANGENT.md)** and the
 **[live branch gradient map](https://anttiluode.github.io/Operaattori/gradient_map.html)**.
 
+**Prior-art fence.** This repo does **not** claim to be the first differentiable
+neuron simulator or the first code to optimize dendritic shape. Jaxley
+(Nature Methods, 2025) explicitly differentiates morphological parameters and
+demonstrates gradient-based training of compartment **length and radius** in a
+nonlinear single-neuron task. Operaattori's narrower object is an explicit,
+zero-fit morphology-to-cable compiler with a hand-derived analytic tangent
+through its junction elimination and local implicit NMDA closure, validated on
+a released human reconstruction. Whether that narrower construction is novel is
+a literature question, not a result established by these audits.
+
 The one retained outlier is rat L6 IPC at 11.2% cell-median soma error, matching
 its already-known passive graph discretization weakness.
 
