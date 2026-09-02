@@ -4,19 +4,50 @@
 
 **Operaattori** is Finnish for **operator**.
 
-## [▶ Live Bend Fence demo](https://anttiluode.github.io/Operaattori/)
+## [▶ Live Compiler Lab](https://anttiluode.github.io/Operaattori/)
 
-**Drag a real human dendritic subtree through space.** A 35° rigid bend moves it
-**184.107 µm** while the classical passive cable transfer changes by only
-**5.999e-14**. Switch to intrinsic stretch and a much less dramatic-looking
-20% metric change produces a **36.34% median passive-transfer change**.
+The public page now puts the surviving architecture in one interaction:
 
-The browser computes the geometry live and displays the locked Gate-22
-electrical measurements as measured anchors; it does not fabricate interpolated
-electrophysiology.
+~~~text
+real morphology
+     |
+     +--> pose only ---------> compiler no-op
+     |
+     +--> intrinsic metric --> rebuild passive operator
+                                  |
+                                  v
+                         local implicit NMDA
+                                  |
+                                  v
+                              soma trace
+~~~
 
-A separate **72-bend symmetry audit** then repeated the null across six
-bifurcations, all three local axes and positive/negative bend angles: the
+The left pane is the archived **real human cell-1125** Bend Fence. A 35° rigid
+bend moves the selected dendritic subtree **184.107 µm** while the measured
+classical passive transfer changes by only **5.999e-14**. Switching to a 20%
+intrinsic stretch changes the measured passive transfer by **36.34% median**.
+
+The right pane is a transparent **reference specimen** of the extracted causal
+runtime. It recompiles a passive cable from intrinsic metric, solves the
+voltage-dependent three-site NMDA step with Newton iteration, plots the soma
+trace, and compares it with a frozen-rest-current attacker. Rigid screen-space
+pose is deliberately invisible to that compiler; intrinsic stretch rebuilds
+the operator live.
+
+The **HUNT NMDA KNEE** control adapts the old variance-seeking feedback idea into
+an adversarial validator: small ±2.5% drive probes scan for the regime with the
+largest local soma gain. Its purpose is to seek the nonlinear region that a
+median error can hide, not to manufacture a new biological measurement.
+
+**Fence:** the browser circuit is illustrative. It is not a redistributed
+cell-1125 kernel pack and it does not re-measure the 24-cell NEURON audit.
+Those accuracy claims remain attached to the archived receipts.
+
+### [Open the Bend Fence directly](https://anttiluode.github.io/Operaattori/bend_fence.html)
+
+The Bend Fence keeps the locked Gate-22 measurements separate from the browser
+geometry. A separate **72-bend symmetry audit** repeated the pose null across
+six bifurcations, all three local axes and positive/negative bend angles: the
 largest subtree motion was **619.350 µm**, while the largest passive-transfer
 change was only **9.710e-14**. The 20% intrinsic-metric controls changed
 transfer by **11.84% median**. See
@@ -78,6 +109,13 @@ The diagnosis therefore earned:
 
 So the scientific architecture survived, but **causal state matters to the
 numerical architecture**.
+
+That passing numerical organization is now extracted from the audit harness as
+**[reduced/causal_graph_circuit.py](reduced/causal_graph_circuit.py)**: a
+pure-NumPy compiled state-space runtime with an implicit local NMDA solve. Its
+unit tests cover the backward-Euler compiler, analytic current derivative,
+zero-input rest state, nonlinear site closure, and invariance to compartment
+relabeling.
 
 The one retained outlier is rat L6 IPC at 11.2% cell-median soma error, matching
 its already-known passive graph discretization weakness.
