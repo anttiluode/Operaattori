@@ -1,0 +1,60 @@
+{
+  "object": "exact local length/diameter derivatives through the cell-1125 direct cable compiler and causal NMDA soma trace",
+  "fci_commit": "75ad8b4d81a7f51bf888b30650c543592340db06",
+  "cell": {
+    "order": 24,
+    "species": "human",
+    "layer": "L2/3",
+    "morphology_identifier": "1125",
+    "compartments": 1653,
+    "branch": "PassiveDendsSimpleSomaModel[0].apic[100]",
+    "site_nodes": [1619, 1627, 1635],
+    "site_x": [0.25, 0.5, 0.75]
+  },
+  "protocol": {
+    "parameterization": "theta = log(local metric scale)",
+    "directions": "local segment length and diameter at each of the three branch sites; pose is exact-zero control",
+    "finite_difference_log_step": 2e-05,
+    "dt_ms": 0.025,
+    "window_ms": 40.0,
+    "timing_ms": [0.0, 5.0, 10.0],
+    "conductance_program": "released HUMAN_PROBE template",
+    "topology_fixed": true,
+    "no_neuron_rerun_for_metric_perturbations": true
+  },
+  "base_reassembly": {
+    "G_relative_error": 1.8218596947318648e-16,
+    "C_relative_error": 0.0
+  },
+  "graph_tangent_checks": [
+    {"source_index":0,"site_x":0.25,"node":1619,"kind":"length","dG_relative_error":3.9331016625669185e-11,"dC_relative_error":6.4632962792677e-11},
+    {"source_index":0,"site_x":0.25,"node":1619,"kind":"diameter","dG_relative_error":1.340829702871488e-10,"dC_relative_error":6.4632962792677e-11},
+    {"source_index":1,"site_x":0.5,"node":1627,"kind":"length","dG_relative_error":4.0665573164464784e-11,"dC_relative_error":6.463513978384103e-11},
+    {"source_index":1,"site_x":0.5,"node":1627,"kind":"diameter","dG_relative_error":1.373111406571543e-10,"dC_relative_error":6.463513978384103e-11},
+    {"source_index":2,"site_x":0.75,"node":1635,"kind":"length","dG_relative_error":4.414050085575894e-11,"dC_relative_error":6.463513978384103e-11},
+    {"source_index":2,"site_x":0.75,"node":1635,"kind":"diameter","dG_relative_error":1.352881232519818e-10,"dC_relative_error":6.463513978384103e-11}
+  ],
+  "causal_tangent": {
+    "base_trace_match_relative_error": 0.0,
+    "all_converged": true,
+    "max_newton_iterations": 2,
+    "max_site_consistency_mV": 2.2890134232511627e-11,
+    "max_site_tangent_consistency_mV_per_logscale": 8.881784197001252e-16,
+    "trace_checks": [
+      {"source_index":0,"site_x":0.25,"node":1619,"kind":"length","trace_tangent_relative_error":1.1700985638810391e-07,"peak_time_ms":27.05,"base_peak_mV":2.3557171588108856,"analytic_dpeak_mV_per_logscale":-0.01459846629341649,"numeric_dpeak_mV_per_logscale":-0.014598469533222412,"one_percent_peak_change_mV_linearized":-0.0001459846629341649,"plus_converged":true,"minus_converged":true},
+      {"source_index":0,"site_x":0.25,"node":1619,"kind":"diameter","trace_tangent_relative_error":3.601674616118144e-08,"peak_time_ms":27.05,"base_peak_mV":2.3557171588108856,"analytic_dpeak_mV_per_logscale":-0.06822773931695263,"numeric_dpeak_mV_per_logscale":-0.06822773657155778,"one_percent_peak_change_mV_linearized":-0.0006822773931695262,"plus_converged":true,"minus_converged":true},
+      {"source_index":1,"site_x":0.5,"node":1627,"kind":"length","trace_tangent_relative_error":8.837359698898585e-08,"peak_time_ms":27.05,"base_peak_mV":2.3557171588108856,"analytic_dpeak_mV_per_logscale":-0.0382156433880069,"numeric_dpeak_mV_per_logscale":-0.03821564658057497,"one_percent_peak_change_mV_linearized":-0.000382156433880069,"plus_converged":true,"minus_converged":true},
+      {"source_index":1,"site_x":0.5,"node":1627,"kind":"diameter","trace_tangent_relative_error":4.424696992978234e-08,"peak_time_ms":27.05,"base_peak_mV":2.3557171588108856,"analytic_dpeak_mV_per_logscale":-0.03816589223341781,"numeric_dpeak_mV_per_logscale":-0.038165890470232,"one_percent_peak_change_mV_linearized":-0.00038165892233417816,"plus_converged":true,"minus_converged":true},
+      {"source_index":2,"site_x":0.75,"node":1635,"kind":"length","trace_tangent_relative_error":8.411039769653213e-08,"peak_time_ms":27.05,"base_peak_mV":2.3557171588108856,"analytic_dpeak_mV_per_logscale":-0.04325189893961244,"numeric_dpeak_mV_per_logscale":-0.04325190223752883,"one_percent_peak_change_mV_linearized":-0.0004325189893961244,"plus_converged":true,"minus_converged":true},
+      {"source_index":2,"site_x":0.75,"node":1635,"kind":"diameter","trace_tangent_relative_error":1.3717808013413173e-07,"peak_time_ms":27.05,"base_peak_mV":2.3557171588108856,"analytic_dpeak_mV_per_logscale":-0.03410918874546521,"numeric_dpeak_mV_per_logscale":-0.03410918441026922,"one_percent_peak_change_mV_linearized":-0.0003410918874546521,"plus_converged":true,"minus_converged":true}
+    ]
+  },
+  "pose_zero_control": true,
+  "aggregate": {
+    "max_dG_relative_error": 1.373111406571543e-10,
+    "max_dC_relative_error": 6.463513978384103e-11,
+    "max_soma_trace_tangent_relative_error": 1.3717808013413173e-07
+  },
+  "classification": "REAL_MORPHOLOGY_METRIC_TANGENT_VALID",
+  "stopping_line": "This validates differentiation of the compiled cable abstraction. It does not establish that biological dendrites optimize soma peak, nor does it model intracellular organelles unless they change the effective membrane, axial, channel, or topology state."
+}
