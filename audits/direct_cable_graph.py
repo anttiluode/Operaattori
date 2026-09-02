@@ -275,9 +275,24 @@ def build_compartment_graph(cell) -> dict:
 
     junction_degree_counts = defaultdict(int)
     anchored_junctions = 0
+    junctions = []
 
     for root, edges in incident.items():
         junction_degree_counts[len(edges)] += 1
+        junctions.append(
+            {
+                "anchored_node": (
+                    int(anchored[root]) if root in anchored else None
+                ),
+                "edges": [
+                    {
+                        "node": int(node),
+                        "half_axial_uS": float(g),
+                    }
+                    for node, g in edges
+                ],
+            }
+        )
 
         if root in anchored:
             # The zero-length connection is clamped to an existing membrane
@@ -330,6 +345,7 @@ def build_compartment_graph(cell) -> dict:
         "boundary_connections": int(boundary_connections),
         "center_connections": int(center_connections),
         "anchored_junctions": int(anchored_junctions),
+        "junctions": junctions,
         "junction_degree_counts": {
             str(k): int(v)
             for k, v in sorted(
