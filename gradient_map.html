@@ -3,37 +3,51 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Operaattori — Real Branch Gradient Map</title>
+<title>Operaattori — Geometry Gradient Operating Points</title>
 <style>
-:root{color-scheme:dark;--bg:#07090c;--panel:#0e1319;--ink:#f2f5f7;--muted:#8d99a6;--border:#202a34;--line:#3a4652;--hot:#eef4f8}
+:root{color-scheme:dark;--bg:#07090c;--panel:#0e1319;--ink:#f2f5f7;--muted:#8d99a6;--border:#202a34}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
 main{max-width:1180px;margin:auto;padding:28px}
 .eyebrow{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:var(--muted)}
 h1{font-size:clamp(36px,6vw,76px);line-height:.9;letter-spacing:-.06em;margin:7px 0 10px}
-.lede{max-width:930px;color:#c7cfd7;line-height:1.55;margin:0 0 18px}
+.lede{max-width:950px;color:#c7cfd7;line-height:1.55;margin:0 0 18px}
 .card{background:linear-gradient(180deg,#10161d,#0b1015);border:1px solid var(--border);border-radius:18px;padding:16px;margin-top:14px}
+.controls{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end;margin-bottom:12px}
+label{display:block;font:700 10px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px}
+input[type=range]{width:100%}
+.drive{font:900 34px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.05em;min-width:110px;text-align:right}
 canvas{display:block;width:100%;height:520px;background:#080c10;border:1px solid var(--border);border-radius:14px}
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-top:12px}
 .metric{background:#0a0f14;border:1px solid var(--border);border-radius:13px;padding:12px}
 .k{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.v{font:800 22px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;margin-top:5px;letter-spacing:-.04em}
+.v{font:800 20px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;margin-top:5px;letter-spacing:-.04em}
 .s{color:var(--muted);font-size:10px;line-height:1.4;margin-top:5px}
-.note{color:var(--muted);font-size:11px;line-height:1.55;margin-top:12px}
+.note{color:#aeb8c2;font-size:12px;line-height:1.6;margin-top:12px}
+.note strong{color:#f1f5f8}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:10px}
 .sw{display:inline-block;width:22px;height:2px;vertical-align:middle;margin-right:6px;background:currentColor}
+.result{font-size:clamp(22px,3vw,40px);line-height:1.05;letter-spacing:-.045em;margin:4px 0}
+.smallgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 footer{margin-top:16px;color:#7e8995;font-size:11px;line-height:1.55}
 a{color:#bcd6eb}
-@media(max-width:720px){main{padding:14px}.metrics{grid-template-columns:1fr 1fr}canvas{height:430px}}
+@media(max-width:820px){main{padding:14px}.metrics{grid-template-columns:1fr 1fr}.smallgrid{grid-template-columns:1fr}canvas{height:440px}.controls{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main>
-<div class="eyebrow">OPERAATTORI / CELL 1125 / EXACT METRIC TANGENT</div>
-<h1>BRANCH GRADIENT MAP</h1>
-<p class="lede">A verified analytic derivative through the real human morphology compiler and the causal NMDA loop. Each point asks: if this one compartment becomes 1% longer or 1% wider, what is the linearized change in the soma peak? The three vertical markers are the nonlinear synaptic sites.</p>
+<div class="eyebrow">OPERAATTORI / HUMAN CELL 1125 / 1653 COMPILED COMPARTMENTS</div>
+<h1>GEOMETRY GRADIENT<br>OPERATING POINTS</h1>
+<p class="lede">The analytic morphology gradient is real. The surprising part is that its <em>sign field changes with drive</em>. Move the slider: the same branch switches from one cable-sensitivity regime to another as the local nonlinear sites approach and pass the NMDA operating region.</p>
 
 <div class="card">
+  <div class="controls">
+    <div>
+      <label for="drive">released HUMAN_PROBE drive scale</label>
+      <input id="drive" type="range" min="0" max="6" step="1" value="3">
+    </div>
+    <div class="drive" id="driveLabel">1.00×</div>
+  </div>
   <div class="legend">
     <span style="color:#edf3f7"><span class="sw"></span>length tangent</span>
     <span style="color:#9aa9b7"><span class="sw"></span>diameter tangent</span>
@@ -41,56 +55,102 @@ a{color:#bcd6eb}
   </div>
   <canvas id="cv"></canvas>
   <div class="metrics">
-    <div class="metric"><div class="k">branch compartments</div><div class="v">31</div><div class="s">62 analytic metric directions</div></div>
-    <div class="metric"><div class="k">diameter sign</div><div class="v">31 / 31 −</div><div class="s">wider locally lowers peak everywhere on this branch</div></div>
-    <div class="metric"><div class="k">length sign</div><div class="v">7 + / 24 −</div><div class="s">sign flips near first nonlinear site</div></div>
-    <div class="metric"><div class="k">gradient validation</div><div class="v">1.36e−7</div><div class="s">worst soma-trace tangent relative error vs centered recompile</div></div>
+    <div class="metric"><div class="k">soma peak</div><div class="v" id="peak"></div><div class="s">mV depolarization</div></div>
+    <div class="metric"><div class="k">max local depol</div><div class="v" id="local"></div><div class="s">mV at nonlinear sites</div></div>
+    <div class="metric"><div class="k">length sign</div><div class="v" id="lsign"></div><div class="s">positive / negative compartments</div></div>
+    <div class="metric"><div class="k">diameter sign</div><div class="v" id="dsign"></div><div class="s">positive / negative compartments</div></div>
+    <div class="metric"><div class="k">gradient L2</div><div class="v" id="g2"></div><div class="s">mV per unit log-metric budget</div></div>
   </div>
-  <div class="note"><strong>Read the vertical scale carefully:</strong> it is d(soma peak)/d log(local metric scale), in mV. These are small local effects. The strongest diameter direction predicts about −0.000974 mV for a 1% change on a 2.356 mV peak. This is a sensitivity map, not evidence that dendrites literally perform gradient descent.</div>
+  <div class="note" id="interpretation"></div>
 </div>
 
 <div class="card">
-  <div class="note">
-    The spatial pattern is the interesting part. Before the first synaptic site, local length has a tiny positive tangent. At the compartment containing the first site it flips negative; downstream it stays negative. Diameter is negative across the entire branch and is strongest immediately proximal to the first site. This is compatible with competing cable effects—added membrane/load versus axial coupling—but the map itself does not assign a biological optimization objective.
+  <div class="eyebrow">FINITE GEOMETRY CHECK / DRIVE = 1×</div>
+  <div class="result">The gradient survives leaving the infinitesimal limit.</div>
+  <div class="smallgrid">
+    <div class="metric">
+      <div class="k">distributed steepest ascent</div>
+      <div class="v">+2.97% peak</div>
+      <div class="s">L2 log-metric budget 0.20; largest local metric change ≈5.72%. Fresh G,C recompile. First-order prediction +0.070019 mV; actual +0.069994 mV.</div>
+    </div>
+    <div class="metric">
+      <div class="k">literal one-segment lengthening</div>
+      <div class="v">tiny → modest</div>
+      <div class="s">+22.14% before site 1: +0.0137% peak. +22.14% at x=.661: −0.430% peak. A useful optimizer signal does not imply strong biological growth computation.</div>
+    </div>
   </div>
+  <div class="note"><strong>Important fence:</strong> the 1× pre-site positive-length region is not a general law. It vanishes below and above this operating point. At high drive, diameter even changes from all-negative to mostly positive. The nonlinear state changes what geometry “wants.”</div>
+</div>
+
+<div class="card">
+  <div class="eyebrow">PRIOR ART</div>
+  <div class="note"><strong>This is not the first differentiable dendritic morphology.</strong> Jaxley (Nature Methods, 2025) differentiates morphological parameters and trains compartment length and radius. Operaattori’s narrower object is an explicit zero-fit morphology→cable compiler with a hand-derived tangent through junction elimination and the local implicit NMDA closure, validated here on a released human reconstruction.</div>
 </div>
 
 <footer>
   <a href="compiler.html">Compiler Lab</a> ·
   <a href="results/REAL_METRIC_TANGENT.md">metric-tangent receipt</a> ·
-  <a href="audits/real_metric_tangent.py">audit source</a> ·
+  <a href="results/GRADIENT_OPERATING_POINT.md">operating-point receipt</a> ·
+  <a href="audits/gradient_operating_point.py">audit source</a> ·
   <a href="https://github.com/anttiluode/Operaattori">repository</a>
 </footer>
 </main>
 <script>
 const X=[0.016129,0.048387,0.080645,0.112903,0.145161,0.177419,0.209677,0.241935,0.274194,0.306452,0.33871,0.370968,0.403226,0.435484,0.467742,0.5,0.532258,0.564516,0.596774,0.629032,0.66129,0.693548,0.725806,0.758065,0.790323,0.822581,0.854839,0.887097,0.919355,0.951613,0.983871];
-const L=[0.00154528,0.001544985,0.001544673,0.00154435,0.001544028,0.001543725,0.001543466,-0.014598466,-0.030651302,-0.030651916,-0.030652452,-0.030652924,-0.030653334,-0.030653671,-0.030653909,-0.038215643,-0.045729088,-0.045729466,-0.045729716,-0.04572986,-0.045729902,-0.045729826,-0.045729602,-0.043251899,-0.038362252,-0.03373979,-0.033739927,-0.033739981,-0.033739992,-0.033739986,-0.03373998];
-const D=[-0.078673101,-0.081805399,-0.084946025,-0.088087502,-0.091222122,-0.094342228,-0.097440634,-0.068227739,-0.038609678,-0.041023822,-0.043351104,-0.045578616,-0.047695021,-0.049690508,-0.051557075,-0.038165892,-0.02444189,-0.025597752,-0.026598467,-0.027437955,-0.028112748,-0.028621902,-0.028967337,-0.034109189,-0.036746682,-0.032255734,-0.032741227,-0.033130924,-0.033423389,-0.03361827,-0.033715645];
+const SCALES=["0.25","0.5","0.75","1","1.5","2","3"];
+const DRIVE_DATA={
+"0.25":{"peak":0.4596997,"local":12.9513,"lp":0,"ln":31,"dp":10,"dn":21,"l2":0.0368834,"L":[-0.00669423,-0.00669426,-0.00669428,-0.0066943,-0.00669432,-0.00669434,-0.00669435,-0.00655597,-0.00641991,-0.00641996,-0.00642,-0.00642004,-0.00642007,-0.00642009,-0.00642011,-0.00617205,-0.00592466,-0.00592471,-0.00592474,-0.00592477,-0.00592479,-0.0059248,-0.0059248,-0.00557817,-0.00490203,-0.00430771,-0.00430771,-0.00430772,-0.00430771,-0.00430771,-0.00430771],"D":[0.00337348,0.0030752,0.00277953,0.00248701,0.00219817,0.0019135,0.00163345,0.00108154,0.000525672,0.000248032,-0.000022446,-0.000284761,-0.000538038,-0.000781523,-0.0010146,-0.00173295,-0.00244322,-0.00264781,-0.00284058,-0.00302072,-0.0031876,-0.00334074,-0.00347988,-0.00429824,-0.00472565,-0.00414617,-0.00419924,-0.00424166,-0.00427341,-0.00429453,-0.00430508]},
+"0.5":{"peak":0.9198307,"local":24.2854,"lp":0,"ln":31,"dp":5,"dn":26,"l2":0.0711932,"L":[-0.0117732,-0.01177328,-0.01177336,-0.01177344,-0.01177351,-0.01177358,-0.01177363,-0.01210606,-0.01245335,-0.01245353,-0.01245368,-0.01245381,-0.01245393,-0.01245404,-0.01245411,-0.01235656,-0.01227855,-0.0122787,-0.01227883,-0.01227892,-0.012279,-0.01227904,-0.01227905,-0.01150453,-0.01010038,-0.00890128,-0.0089013,-0.0089013,-0.00890129,-0.00890128,-0.00890127],"D":[0.00278088,0.00215363,0.00153599,0.000929826,0.000336995,-0.000240719,-0.000801743,-0.000680084,-0.000598673,-0.00119013,-0.00175607,-0.00229281,-0.00279713,-0.00326616,-0.00369748,-0.00428448,-0.0049111,-0.00534325,-0.00573365,-0.00607939,-0.00637812,-0.00662806,-0.00682812,-0.00852707,-0.00952418,-0.00837392,-0.00854738,-0.00868592,-0.0087895,-0.00885835,-0.00889269]},
+"0.75":{"peak":1.4798164,"local":35.2987,"lp":0,"ln":31,"dp":0,"dn":31,"l2":0.142432,"L":[-0.01136046,-0.01136063,-0.01136082,-0.01136101,-0.0113612,-0.01136138,-0.01136154,-0.01518398,-0.01901958,-0.01902,-0.01902037,-0.01902072,-0.01902103,-0.01902131,-0.01902155,-0.02128031,-0.023572,-0.02357236,-0.02357265,-0.0235729,-0.02357309,-0.02357322,-0.02357326,-0.02251092,-0.02023514,-0.01785564,-0.01785568,-0.01785567,-0.01785564,-0.01785561,-0.01785559],"D":[-0.01676673,-0.01819345,-0.01961112,-0.0210153,-0.02240138,-0.02376479,-0.02510121,-0.01876233,-0.01243942,-0.01374239,-0.01499094,-0.01617605,-0.01728945,-0.01832356,-0.01927165,-0.01561093,-0.0119904,-0.01286007,-0.01362877,-0.01428942,-0.01483623,-0.01526466,-0.01557169,-0.01788092,-0.01888991,-0.01662533,-0.01703047,-0.0173537,-0.01759519,-0.01775561,-0.01783561]},
+"1":{"peak":2.3557172,"local":46.6529,"lp":7,"ln":24,"dp":0,"dn":31,"l2":0.3500936,"L":[0.00154528,0.00154499,0.00154467,0.00154435,0.00154403,0.00154373,0.00154347,-0.01459847,-0.0306513,-0.03065192,-0.03065245,-0.03065292,-0.03065333,-0.03065367,-0.03065391,-0.03821564,-0.04572909,-0.04572947,-0.04572972,-0.04572986,-0.0457299,-0.04572983,-0.0457296,-0.0432519,-0.03836225,-0.03373979,-0.03373993,-0.03373998,-0.03373999,-0.03373999,-0.03373998],"D":[-0.0786731,-0.0818054,-0.08494603,-0.0880875,-0.09122212,-0.09434223,-0.09744063,-0.06822774,-0.03860968,-0.04102382,-0.0433511,-0.04557862,-0.04769502,-0.04969051,-0.05155708,-0.03816589,-0.02444189,-0.02559775,-0.02659847,-0.02743795,-0.02811275,-0.0286219,-0.02896734,-0.03410919,-0.03674668,-0.03225573,-0.03274123,-0.03313092,-0.03342339,-0.03361827,-0.03371564]},
+"1.5":{"peak":3.9379971,"local":60.569,"lp":0,"ln":31,"dp":19,"dn":12,"l2":0.3092166,"L":[-0.05566173,-0.05566179,-0.05566185,-0.05566189,-0.0556619,-0.05566188,-0.0556618,-0.05607189,-0.05640024,-0.05640042,-0.05640052,-0.05640056,-0.05640054,-0.05640046,-0.05640031,-0.04487198,-0.03333991,-0.03333992,-0.03333988,-0.03333979,-0.03333966,-0.03333951,-0.03333931,-0.02751659,-0.02033138,-0.01775093,-0.01775097,-0.017751,-0.01775101,-0.01775102,-0.01775102],"D":[0.05158385,0.05041998,0.04930496,0.04824008,0.04722625,0.04626385,0.04535225,0.04530986,0.04564664,0.04538472,0.0451847,0.04504909,0.04497883,0.04497345,0.04503101,0.02209172,-0.000789989,-0.00058035,-0.000343327,-0.0000799575,0.000207657,0.000516544,0.000842917,-0.01046287,-0.02056558,-0.01796299,-0.01789252,-0.01783692,-0.01779557,-0.01776813,-0.01775444]},
+"2":{"peak":4.6616148,"local":64.9043,"lp":0,"ln":31,"dp":23,"dn":8,"l2":0.5256427,"L":[-0.09281823,-0.09281827,-0.0928183,-0.09281831,-0.09281829,-0.09281823,-0.0928181,-0.07704859,-0.06126193,-0.06126208,-0.06126214,-0.06126215,-0.06126211,-0.06126202,-0.06126188,-0.04330896,-0.02542874,-0.0254288,-0.02542883,-0.02542883,-0.02542881,-0.02542878,-0.02542872,-0.01926709,-0.01234218,-0.01076137,-0.01076139,-0.0107614,-0.0107614,-0.01076141,-0.01076141],"D":[0.13347564,0.13328346,0.13318488,0.13318057,0.13327078,0.13345503,0.13373172,0.10255899,0.07153178,0.07214494,0.0728283,0.07358354,0.07441084,0.07530918,0.0762764,0.04140375,0.00627579,0.00691511,0.00756259,0.0082189,0.0088841,0.00955777,0.01023904,-0.00139647,-0.01260366,-0.01099996,-0.01092144,-0.01085889,-0.01081207,-0.01078089,-0.0107653]},
+"3":{"peak":5.3225807,"local":67.5936,"lp":0,"ln":31,"dp":24,"dn":7,"l2":0.7262456,"L":[-0.12824348,-0.12824353,-0.12824356,-0.12824357,-0.12824355,-0.12824347,-0.12824331,-0.09078796,-0.05343643,-0.05343663,-0.05343675,-0.0534368,-0.0534368,-0.05343676,-0.05343668,-0.03444459,-0.01559837,-0.01559846,-0.01559852,-0.01559856,-0.01559859,-0.0155986,-0.0155986,-0.01107549,-0.00623779,-0.00543411,-0.00543411,-0.00543411,-0.00543411,-0.0054341,-0.0054341],"D":[0.2102811,0.21107581,0.21201734,0.21310647,0.21434344,0.21572764,0.21725708,0.14401759,0.0704623,0.07167094,0.07294485,0.0742869,0.07569837,0.07717935,0.07872891,0.04236122,0.00544305,0.00621798,0.00699556,0.00777731,0.00856424,0.00935692,0.01015562,0.00191412,-0.00640912,-0.0055911,-0.00553977,-0.00549864,-0.00546771,-0.00544704,-0.00543669]}
+};
+
 const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
+const slider=document.getElementById("drive");
+function data(){return DRIVE_DATA[SCALES[+slider.value]]}
+function fmt(v,n=3){return Number(v).toFixed(n)}
+function interpretation(d,s){
+  if(s==="1") return "<strong>Baseline knee-like regime:</strong> length is positive only in the seven pre-site compartments, then flips negative at site 1. Diameter is negative everywhere.";
+  if(+s<1) return "<strong>Below baseline:</strong> the pre-site positive-length pocket is gone. Length is negative across the entire branch. Diameter moves from mixed signs toward all-negative as drive approaches 0.75×.";
+  return "<strong>Above baseline:</strong> length is again negative everywhere, but diameter reverses over most of the branch. The same geometry parameter can push the soma in the opposite direction after the nonlinear sites change operating state.";
+}
+function update(){
+  const s=SCALES[+slider.value],d=data();
+  document.getElementById("driveLabel").textContent=Number(s).toFixed(2)+"×";
+  document.getElementById("peak").textContent=fmt(d.peak,3);
+  document.getElementById("local").textContent=fmt(d.local,1);
+  document.getElementById("lsign").textContent=d.lp+" / "+d.ln;
+  document.getElementById("dsign").textContent=d.dp+" / "+d.dn;
+  document.getElementById("g2").textContent=fmt(d.l2,3);
+  document.getElementById("interpretation").innerHTML=interpretation(d,s);
+  draw();
+}
 function draw(){
-  const dpr=Math.min(2,devicePixelRatio||1),r=cv.getBoundingClientRect();
+  const d=data(),dpr=Math.min(2,devicePixelRatio||1),r=cv.getBoundingClientRect();
   cv.width=Math.floor(r.width*dpr);cv.height=Math.floor(r.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
-  const w=r.width,h=r.height,pL=58,pR=18,pT=24,pB=46;
-  ctx.clearRect(0,0,w,h);
-  const ymin=-.105,ymax=.012;
+  const w=r.width,h=r.height,pL=62,pR=18,pT=24,pB=46, all=d.L.concat(d.D);
+  let ymin=Math.min(-.01,...all),ymax=Math.max(.01,...all),span=ymax-ymin;
+  ymin-=span*.12;ymax+=span*.12;
   const sx=x=>pL+x*(w-pL-pR), sy=y=>pT+(ymax-y)/(ymax-ymin)*(h-pT-pB);
-  ctx.font="10px ui-monospace,monospace";
-  ctx.strokeStyle="#1f2a34";ctx.fillStyle="#7e8b97";ctx.lineWidth=1;
+  ctx.clearRect(0,0,w,h);ctx.font="10px ui-monospace,monospace";ctx.lineWidth=1;
+  ctx.strokeStyle="#1f2a34";ctx.fillStyle="#7e8b97";
   for(let k=0;k<=5;k++){const v=ymin+(ymax-ymin)*k/5,yy=sy(v);ctx.beginPath();ctx.moveTo(pL,yy);ctx.lineTo(w-pR,yy);ctx.stroke();ctx.fillText(v.toFixed(3),5,yy+3)}
   for(let k=0;k<=4;k++){const x=k/4,xx=sx(x);ctx.beginPath();ctx.moveTo(xx,pT);ctx.lineTo(xx,h-pB);ctx.stroke();ctx.fillText(x.toFixed(2),xx-12,h-20)}
-  const zero=sy(0);ctx.strokeStyle="#53616e";ctx.beginPath();ctx.moveTo(pL,zero);ctx.lineTo(w-pR,zero);ctx.stroke();
+  ctx.strokeStyle="#53616e";ctx.beginPath();ctx.moveTo(pL,sy(0));ctx.lineTo(w-pR,sy(0));ctx.stroke();
   [0.25,0.5,0.75].forEach((x,i)=>{const xx=sx(x);ctx.strokeStyle="#667481";ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(xx,pT);ctx.lineTo(xx,h-pB);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#94a1ad";ctx.fillText("site "+(i+1),xx-18,pT+12)});
   function trace(arr,color,width){
     ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();
     arr.forEach((v,i)=>{const xx=sx(X[i]),yy=sy(v);i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)});ctx.stroke();
-    ctx.fillStyle=color;arr.forEach((v,i)=>{ctx.beginPath();ctx.arc(sx(X[i]),sy(v),2.3,0,Math.PI*2);ctx.fill()});
+    ctx.fillStyle=color;arr.forEach((v,i)=>{ctx.beginPath();ctx.arc(sx(X[i]),sy(v),2.25,0,Math.PI*2);ctx.fill()});
   }
-  trace(D,"rgba(154,169,183,.9)",1.5);
-  trace(L,"rgba(237,243,247,.98)",2);
+  trace(d.D,"rgba(154,169,183,.9)",1.5);trace(d.L,"rgba(237,243,247,.98)",2);
   ctx.fillStyle="#87939f";ctx.fillText("branch position x",w/2-42,h-7);
-  ctx.save();ctx.translate(12,h/2+70);ctx.rotate(-Math.PI/2);ctx.fillText("d peak / d log(metric scale)  [mV]",0,0);ctx.restore();
+  ctx.save();ctx.translate(12,h/2+74);ctx.rotate(-Math.PI/2);ctx.fillText("d soma peak / d log(metric scale)  [mV]",0,0);ctx.restore();
 }
-window.addEventListener("resize",draw);draw();
+slider.addEventListener("input",update);window.addEventListener("resize",draw);update();
 </script>
 </body>
 </html>
