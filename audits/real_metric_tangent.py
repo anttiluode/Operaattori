@@ -643,6 +643,99 @@ def main() -> None:
             }
         )
 
+    # The six finite-difference directions above validate the tangent.
+    # Now use that analytic object to map every compartment on the tested
+    # branch without doing another finite-difference sweep.
+    branch_name = section_name(branch)
+    branch_nodes = [
+        int(x) for x in graph["node_by_section"][branch_name]
+    ]
+    branch_directions = []
+    branch_meta = []
+    for node_index in branch_nodes:
+        node = graph["nodes"][node_index]
+        for kind in ("length", "diameter"):
+            branch_directions.append(
+                metric_tangent(graph, node_index, kind)
+            )
+            branch_meta.append(
+                {
+                    "node": int(node_index),
+                    "seg_index": int(node["seg_index"]),
+                    "x": float(node["x"]),
+                    "length_um": float(node["length_um"]),
+                    "diam_um": float(node["diam_um"]),
+                    "kind": kind,
+                }
+            )
+
+    branch_tangent = simulate_with_metric_tangents(
+        graph["G_uS"],
+        graph["C_nF"],
+        site_nodes,
+        soma_node,
+        ga,
+        gn,
+        branch_directions,
+    )
+    peak_index = int(np.argmax(base["soma_mV"]))
+    base_peak = float(base["soma_mV"][peak_index])
+    branch_map = []
+    for pi, meta in enumerate(branch_meta):
+        dpeak = float(
+            branch_tangent[
+                "soma_tangent_mV_per_logscale"
+            ][pi, peak_index]
+        )
+        branch_map.append(
+            {
+                **meta,
+                "dpeak_mV_per_logscale": dpeak,
+                "one_percent_peak_change_mV_linearized": float(
+                    0.01 * dpeak
+                ),
+                "one_percent_peak_change_percent_of_peak": float(
+                    100.0 * (0.01 * dpeak) / (base_peak + 1e-30)
+                ),
+            }
+        )
+
+    def strongest(rows, kind):
+        subset = [x for x in rows if x["kind"] == kind]
+        return max(
+            subset,
+            key=lambda x: abs(x["dpeak_mV_per_logscale"]),
+        )
+
+    length_rows = [x for x in branch_map if x["kind"] == "length"]
+    diameter_rows = [x for x in branch_map if x["kind"] == "diameter"]
+    branch_summary = {
+        "compartments": int(len(branch_nodes)),
+        "directions": int(len(branch_map)),
+        "peak_time_ms": float((peak_index + 1) * DT_MS),
+        "base_peak_mV": base_peak,
+        "length_positive": int(
+            sum(x["dpeak_mV_per_logscale"] > 0 for x in length_rows)
+        ),
+        "length_negative": int(
+            sum(x["dpeak_mV_per_logscale"] < 0 for x in length_rows)
+        ),
+        "diameter_positive": int(
+            sum(x["dpeak_mV_per_logscale"] > 0 for x in diameter_rows)
+        ),
+        "diameter_negative": int(
+            sum(x["dpeak_mV_per_logscale"] < 0 for x in diameter_rows)
+        ),
+        "strongest_length": strongest(branch_map, "length"),
+        "strongest_diameter": strongest(branch_map, "diameter"),
+        "all_converged": bool(branch_tangent["all_converged"]),
+        "max_site_tangent_consistency_mV_per_logscale": float(
+            branch_tangent[
+                "max_site_tangent_consistency_mV_per_logscale"
+            ]
+        ),
+    }
+
     max_graph_G_error = max(
         x["dG_relative_error"] for x in graph_checks
     )
@@ -664,6 +757,10 @@ def main() -> None:
         and pose_zero
         and tangent["all_converged"]
         and tangent[
+            "max_site_tangent_consistency_mV_per_logscale"
+        ] <= 1e-7
+        and branch_tangent["all_converged"]
+        and branch_tangent[
             "max_site_tangent_consistency_mV_per_logscale"
         ] <= 1e-7
     )
@@ -723,6 +820,10 @@ def main() -> None:
             "trace_checks": trace_checks,
         },
         "pose_zero_control": bool(pose_zero),
+        "branch_sensitivity_map": {
+            "summary": branch_summary,
+            "rows": branch_map,
+        },
         "aggregate": {
             "max_dG_relative_error": float(
                 max_graph_G_error
@@ -769,6 +870,20 @@ def main() -> None:
     print(
         "pose tangent exact zero: "
         f"{pose_zero}"
+    )
+    print(
+        "branch sensitivity directions: "
+        f"{branch_summary['directions']}"
+    )
+    print(
+        "strongest length dpeak: "
+        f"{branch_summary['strongest_length']['dpeak_mV_per_logscale']:.6g} "
+        f"at x={branch_summary['strongest_length']['x']:.3f}"
+    )
+    print(
+        "strongest diameter dpeak: "
+        f"{branch_summary['strongest_diameter']['dpeak_mV_per_logscale']:.6g} "
+        f"at x={branch_summary['strongest_diameter']['x']:.3f}"
     )
     print(
         "classification: "
