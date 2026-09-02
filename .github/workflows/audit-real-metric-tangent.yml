@@ -1,0 +1,45 @@
+name: Operaattori real metric tangent audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "audits/real_metric_tangent.py"
+      - "audits/direct_cable_graph.py"
+      - "audits/causal_nonlinear_graph.py"
+      - ".github/workflows/audit-real-metric-tangent.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: operaattori-real-metric-tangent-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  real-metric-tangent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install numpy scipy neuron
+      - name: Checkout pinned FCI source
+        shell: bash
+        run: |
+          git clone --filter=blob:none https://github.com/ido4848/FCI.git /tmp/fci
+          git -C /tmp/fci checkout 75ad8b4d81a7f51bf888b30650c543592340db06
+          test "$(git -C /tmp/fci rev-parse HEAD)" = "75ad8b4d81a7f51bf888b30650c543592340db06"
+      - name: Compile shared released mechanisms once
+        shell: bash
+        run: |
+          cd /tmp/fci/simulating_neurons/neuron_models/rat/hay/Rat_L5b_PC_2_Hay_passive_dends_simple_soma
+          nrnivmodl mods
+      - name: Run cell-1125 metric tangent audit
+        run: python audits/real_metric_tangent.py --fci-root /tmp/fci
+      - name: Upload compact JSON receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-metric-tangent-receipt
+          path: results/cross_cell_operator/real_metric_tangent.json
