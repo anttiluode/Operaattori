@@ -21,3 +21,4 @@ jobs:
         run: |
           python -m unittest reduced/test_green_circuit_numpy.py -v
           python -m unittest reduced/test_causal_graph_circuit.py -v
+          python -m unittest reduced/test_operator_tangent.py -v
