@@ -168,7 +168,8 @@ waveform. At weak drive it is almost identical to the full gradient
 reverses **15/62** geometry signs. Crucially, transport-only length is negative
 in 31/31 compartments at 1x: all seven positive pre-site length directions in
 the full map are created by voltage-dependent feedback. See the
-**[transport/NMDA decomposition](results/GRADIENT_TRANSPORT_FEEDBACK.md)**.
+**[transport/NMDA decomposition](results/GRADIENT_TRANSPORT_FEEDBACK.md)** and the
+**[interactive operator split](https://anttiluode.github.io/Operaattori/operator_split.html)**.
 
 **Prior-art fence.** This repo does **not** claim to be the first differentiable
 neuron simulator or the first code to optimize dendritic shape. Jaxley
