@@ -159,6 +159,17 @@ geometry trajectories change sign somewhere over the same drive sweep
 on only 4/6 branches. See the
 **[within-cell gradient regime panel](results/GRADIENT_BRANCH_PANEL.md)**.
 
+The sign changes can now be assigned to the two halves of the architecture.
+On `apic[100]`, a counterfactual **frozen-current transport tangent** was
+computed by changing geometry while replaying the exact nonlinear base-current
+waveform. At weak drive it is almost identical to the full gradient
+(cosine 0.996). At 1x the NMDA-feedback contribution has norm **0.314** versus
+**0.168** for transport, rotates the full gradient to cosine **0.446**, and
+reverses **15/62** geometry signs. Crucially, transport-only length is negative
+in 31/31 compartments at 1x: all seven positive pre-site length directions in
+the full map are created by voltage-dependent feedback. See the
+**[transport/NMDA decomposition](results/GRADIENT_TRANSPORT_FEEDBACK.md)**.
+
 **Prior-art fence.** This repo does **not** claim to be the first differentiable
 neuron simulator or the first code to optimize dendritic shape. Jaxley
 (Nature Methods, 2025) explicitly differentiates morphological parameters and
