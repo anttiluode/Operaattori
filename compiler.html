@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Operaattori — Morphology Compiler Lab</title>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#07090c;--panel:#0e1319;--panel2:#0a0e13;--ink:#f2f5f7;
+  --muted:#8d99a6;--border:#202a34;--line:#3a4652;--good:#b8f3cf;
+  --warn:#f0d2a8;--hot:#edf3f7;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+body{min-height:100vh}
+main{max-width:1560px;margin:auto;padding:24px}
+header{display:grid;grid-template-columns:1fr auto;gap:22px;align-items:end;margin-bottom:18px}
+.eyebrow{font:700 11px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:var(--muted)}
+h1{font-size:clamp(34px,5vw,74px);line-height:.9;letter-spacing:-.06em;margin:6px 0 9px}
+.lede{max-width:960px;margin:0;color:#c5cdd5;font-size:16px;line-height:1.55}
+.badge{border:1px solid var(--border);border-radius:999px;padding:9px 12px;font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;color:#aeb8c2;white-space:nowrap}
+.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(420px,.9fr);gap:16px}
+.card{background:linear-gradient(180deg,#10161d,#0b1015);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.cardHead{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;align-items:center}
+.cardHead strong{font-size:13px}
+.subtle{font-size:11px;color:var(--muted)}
+iframe{display:block;width:100%;height:780px;border:0;background:#080a0d}
+.runtime{padding:16px;display:flex;flex-direction:column;gap:13px}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:7px;align-items:center;font:700 11px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace}
+.flow .box{border:1px solid #2c3844;border-radius:11px;padding:10px 8px;text-align:center;background:#0a0f14}
+.flow .arr{color:#62707d}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.metric{background:var(--panel2);border:1px solid var(--border);border-radius:13px;padding:11px}
+.metric .k{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.metric .v{margin-top:5px;font:800 20px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.04em}
+.metric .s{margin-top:5px;color:var(--muted);font-size:10px;line-height:1.35}
+canvas{display:block;width:100%;height:320px;background:#080c10;border:1px solid var(--border);border-radius:14px}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.control{border:1px solid var(--border);border-radius:13px;background:#0a0f14;padding:11px}
+.label{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:11px;margin-bottom:8px}
+.value{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace}
+input[type=range]{width:100%;accent-color:#e7eef4}
+button{appearance:none;border:1px solid #34414d;background:#111923;color:#c6d0d9;border-radius:11px;padding:11px 12px;font-weight:800;cursor:pointer}
+button:hover{border-color:#73808c}
+button.active{background:#edf3f7;color:#061018;border-color:#edf3f7}
+.buttonrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.status{border-left:3px solid #d9e4ec;padding:3px 0 3px 12px;font-size:14px;line-height:1.45}
+.note{font-size:11px;line-height:1.55;color:var(--muted)}
+.receipt{border:1px solid #2b3844;border-radius:13px;padding:12px;background:#0c1218;font:600 10px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:#b7c2cd;white-space:pre-wrap}
+footer{margin-top:16px;color:#7e8995;font-size:11px;line-height:1.55}
+a{color:#bcd6eb}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}iframe{height:700px}}
+@media(max-width:620px){main{padding:12px}.metrics{grid-template-columns:1fr 1fr}.controls{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.flow .arr{transform:rotate(90deg);justify-self:center}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div>
+    <div class="eyebrow">OPERAATTORI / MORPHOLOGY → OPERATOR → CAUSAL CIRCUIT</div>
+    <h1>COMPILER LAB</h1>
+    <p class="lede">The repo stopped behaving like a neuron-theory hunt and started behaving like a compiler. The real reconstruction on the left decides whether geometry changed only in <em>pose</em> or in its intrinsic cable metric. The reference runtime on the right then recompiles a passive cable and solves the local voltage-dependent NMDA step causally.</p>
+  </div>
+  <div class="badge">no simulator in browser · no fitting</div>
+</header>
+
+<section class="layout">
+  <div class="card">
+    <div class="cardHead">
+      <strong>1 · REAL MORPHOLOGY CHANNEL</strong>
+      <span class="subtle" id="morphState">reading Bend Fence…</span>
+    </div>
+    <iframe id="bendFrame" src="bend_fence.html" title="Operaattori Bend Fence"></iframe>
+  </div>
+
+  <div class="card runtime">
+    <div class="cardHead" style="margin:-16px -16px 0">
+      <strong>2 · LIVE CAUSAL CIRCUIT</strong>
+      <span class="subtle">representative compiled passive graph</span>
+    </div>
+
+    <div class="flow">
+      <div class="box">METRIC<br>G, C</div><div class="arr">→</div>
+      <div class="box">COMPILE<br>P, X, R</div><div class="arr">→</div>
+      <div class="box">IMPLICIT<br>NMDA</div>
+    </div>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="k">geometry channel</div>
+        <div class="v" id="geomMode">—</div>
+        <div class="s" id="geomSub">waiting for iframe</div>
+      </div>
+      <div class="metric">
+        <div class="k">soma peak</div>
+        <div class="v" id="peak">—</div>
+        <div class="s">live nonlinear solve</div>
+      </div>
+      <div class="metric">
+        <div class="k">vs base metric</div>
+        <div class="v" id="delta">—</div>
+        <div class="s">peak-response change</div>
+      </div>
+      <div class="metric">
+        <div class="k">max local depol</div>
+        <div class="v" id="local">—</div>
+        <div class="s">three implicit sites</div>
+      </div>
+      <div class="metric">
+        <div class="k">Newton max</div>
+        <div class="v" id="newton">—</div>
+        <div class="s">iterations / time step</div>
+      </div>
+      <div class="metric">
+        <div class="k">site consistency</div>
+        <div class="v" id="consistency">—</div>
+        <div class="s">|state(site) − solved z|</div>
+      </div>
+    </div>
+
+    <canvas id="plot"></canvas>
+
+    <div class="controls">
+      <div class="control">
+        <div class="label"><strong>synaptic drive</strong><span class="value" id="driveValue">1.00×</span></div>
+        <input id="drive" type="range" min=".15" max="5.5" step=".01" value="1">
+      </div>
+      <div class="control">
+        <div class="label"><strong>timing</strong><span class="value" id="timingValue">forward 1 ms</span></div>
+        <input id="timing" type="range" min="0" max="3" step="1" value="1">
+      </div>
+    </div>
+
+    <div class="buttonrow">
+      <button id="seek">HUNT NMDA KNEE</button>
+      <button id="feedback" class="active">LOCAL FEEDBACK ON</button>
+    </div>
+
+    <div class="status" id="status">Rigid pose is intentionally a compiler no-op: the electrical trace is computed from intrinsic metric, not from screen coordinates.</div>
+
+    <div class="receipt" id="receipt">P/X compiler: NumPy-equivalent dense backward Euler
+local solve: z = p + R J(-70 + z)
+Jacobian: I - R diag(dJ/dV)
+browser specimen: 4 passive states, 3 nonlinear sites</div>
+
+    <div class="note">
+      <strong>Fence:</strong> the Bend Fence iframe uses the archived real human cell-1125 reconstruction and its measured Gate-22 anchors. This right-hand browser circuit is a transparent <em>reference specimen</em> of the causal runtime, not a redistributed cell-1125 kernel pack and not a new NEURON comparison. The 24-cell / 288-case accuracy claim remains the archived audit result, not something this browser re-measures.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="https://github.com/anttiluode/Operaattori">GitHub repository</a> ·
+  <a href="bend_fence.html">open Bend Fence directly</a> ·
+  <a href="reduced/causal_graph_circuit.py">causal NumPy runtime</a> ·
+  <a href="results/CAUSAL_NONLINEAR_GRAPH_DIAGNOSIS.md">288-case causal receipt</a> ·
+  <a href="results/DIRECT_CABLE_GRAPH_AUDIT.md">24-cell passive-graph receipt</a>
+</footer>
+</main>
+
+<script>
+const DT=.05, NSTATE=4, SITES=[1,2,3], SOMA=0;
+const BASE_C=[.05,.04,.035,.05], BASE_LEAK=.005, BASE_AXIAL=.02;
+const plot=document.getElementById("plot"), ctx=plot.getContext("2d");
+const drive=document.getElementById("drive"), timing=document.getElementById("timing");
+const frame=document.getElementById("bendFrame");
+let feedbackOn=true, lastMorphKey="", cachedBase=null, seekBusy=false;
+
+function zeros(r,c){return Array.from({length:r},()=>Array(c).fill(0))}
+function eye(n){const a=zeros(n,n);for(let i=0;i<n;i++)a[i][i]=1;return a}
+function matVec(A,x){return A.map(row=>row.reduce((s,v,j)=>s+v*x[j],0))}
+function matMul(A,B){
+  const r=A.length,k=B.length,c=B[0].length,out=zeros(r,c);
+  for(let i=0;i<r;i++)for(let q=0;q<k;q++){const aq=A[i][q];for(let j=0;j<c;j++)out[i][j]+=aq*B[q][j]}
+  return out;
+}
+function solveMatrix(Ain,Bin){
+  const n=Ain.length,m=Bin[0].length;
+  const A=Ain.map(r=>r.slice()), B=Bin.map(r=>r.slice());
+  for(let col=0;col<n;col++){
+    let piv=col;
+    for(let r=col+1;r<n;r++)if(Math.abs(A[r][col])>Math.abs(A[piv][col]))piv=r;
+    if(Math.abs(A[piv][col])<1e-14)throw Error("singular passive compiler");
+    [A[col],A[piv]]=[A[piv],A[col]];[B[col],B[piv]]=[B[piv],B[col]];
+    const d=A[col][col];
+    for(let j=col;j<n;j++)A[col][j]/=d;
+    for(let j=0;j<m;j++)B[col][j]/=d;
+    for(let r=0;r<n;r++)if(r!==col){
+      const f=A[r][col]; if(!f)continue;
+      for(let j=col;j<n;j++)A[r][j]-=f*A[col][j];
+      for(let j=0;j<m;j++)B[r][j]-=f*B[col][j];
+    }
+  }
+  return B;
+}
+function solveVector(A,b){return solveMatrix(A,b.map(x=>[x])).map(r=>r[0])}
+
+function compile(metricScale){
+  const q=metricScale, gl=BASE_LEAK*q, ga=BASE_AXIAL/q;
+  const G=[
+    [gl+ga,-ga,0,0],
+    [-ga,gl+2*ga,-ga,0],
+    [0,-ga,gl+2*ga,-ga],
+    [0,0,-ga,gl+ga]
+  ];
+  const C=BASE_C.map(x=>x*q), d=C.map(x=>x/DT);
+  const A=G.map((row,i)=>row.map((x,j)=>x+(i===j?d[i]:0)));
+  const B=zeros(NSTATE,3);SITES.forEach((node,j)=>B[node][j]=1);
+  const rhs=zeros(NSTATE,NSTATE+3);
+  for(let i=0;i<NSTATE;i++){rhs[i][i]=d[i];for(let j=0;j<3;j++)rhs[i][NSTATE+j]=B[i][j]}
+  const M=solveMatrix(A,rhs);
+  const P=M.map(r=>r.slice(0,NSTATE)), X=M.map(r=>r.slice(NSTATE));
+  const R=SITES.map(i=>X[i].slice());
+  return {P,X,R,q};
+}
+function block(v){return 1/(1+Math.exp(-.078*v)/3.57)}
+function currentLaw(v,ga,gn){
+  return v.map((x,i)=>(ga[i]+gn[i]*block(x))*(0-x));
+}
+function currentDerivative(v,ga,gn){
+  return v.map((x,i)=>{
+    const b=block(x),bp=.078*b*(1-b);
+    return gn[i]*bp*(0-x)-(ga[i]+gn[i]*b);
+  });
+}
+function residual(z,p,R,ga,gn){
+  const v=z.map(x=>-70+x),j=currentLaw(v,ga,gn),Rj=matVec(R,j);
+  return {F:z.map((x,i)=>x-p[i]-Rj[i]),j,v};
+}
+function solveSites(p,R,ga,gn,z0){
+  if(!feedbackOn){
+    const v=Array(3).fill(-70),j=currentLaw(v,ga,gn),Rj=matVec(R,j);
+    return {z:p.map((x,i)=>x+Rj[i]),j,iterations:0,residual:0,ok:true};
+  }
+  let z=z0.slice(),maxIt=30;
+  for(let it=1;it<=maxIt;it++){
+    const r=residual(z,p,R,ga,gn), norm=Math.max(...r.F.map(Math.abs));
+    if(norm<=1e-10)return {z,j:r.j,iterations:it-1,residual:norm,ok:true};
+    const dJ=currentDerivative(r.v,ga,gn), J=eye(3);
+    for(let i=0;i<3;i++)for(let k=0;k<3;k++)J[i][k]-=R[i][k]*dJ[k];
+    let delta; try{delta=solveVector(J,r.F)}catch(e){return {z,j:r.j,iterations:it,residual:norm,ok:false}}
+    let alpha=1,accepted=false;
+    for(let bt=0;bt<=8;bt++){
+      const cand=z.map((x,i)=>x-alpha*delta[i]), nr=residual(cand,p,R,ga,gn);
+      const cn=Math.max(...nr.F.map(Math.abs));
+      if(cn<norm){z=cand;accepted=true;break}
+      alpha*=.5;if(alpha<1/256-1e-15)break;
+    }
+    if(!accepted)return {z,j:r.j,iterations:it,residual:norm,ok:false};
+  }
+  const r=residual(z,p,R,ga,gn);
+  return {z,j:r.j,iterations:maxIt,residual:Math.max(...r.F.map(Math.abs)),ok:false};
+}
+function biexp(t,onset,tr,td){
+  const x=t-onset;if(x<=0)return 0;
+  return Math.exp(-x/td)-Math.exp(-x/tr);
+}
+function normalizedTemplate(onset,tr,td,ntime){
+  const a=Array(ntime);let mx=0;
+  for(let i=0;i<ntime;i++){a[i]=biexp(i*DT,onset,tr,td);if(a[i]>mx)mx=a[i]}
+  return a.map(x=>mx?x/mx:0);
+}
+const timingNames=["synchronous","forward 1 ms","reverse 1 ms","spread 6 ms"];
+const timingDelays=[[0,0,0],[0,1,2],[2,1,0],[0,3,6]];
+
+function simulate(scale,metricScale){
+  const ntime=1800, op=compile(metricScale), delays=timingDelays[+timing.value];
+  const a=delays.map(d=>normalizedTemplate(4+d,.20,1.70,ntime));
+  const n=delays.map(d=>normalizedTemplate(4+d,.29,43.0,ntime));
+  let state=Array(NSTATE).fill(0), zprev=Array(3).fill(0);
+  const soma=Array(ntime), open=Array(ntime), local=Array(ntime);
+  let openState=Array(NSTATE).fill(0), maxIt=0,maxRes=0,maxCons=0,allOk=true;
+  for(let ti=0;ti<ntime;ti++){
+    const ga=a.map(x=>x[ti]*.002*scale), gn=n.map(x=>x[ti]*.012*scale);
+    const passive=matVec(op.P,state), p=SITES.map(i=>passive[i]);
+    const sol=solveSites(p,op.R,ga,gn,zprev);
+    maxIt=Math.max(maxIt,sol.iterations);maxRes=Math.max(maxRes,sol.residual);allOk=allOk&&sol.ok;
+    const j=feedbackOn?currentLaw(sol.z.map(x=>-70+x),ga,gn):sol.j;
+    const Xj=matVec(op.X,j);state=passive.map((x,i)=>x+Xj[i]);
+    const cons=Math.max(...SITES.map((node,i)=>Math.abs(state[node]-sol.z[i])));maxCons=Math.max(maxCons,cons);
+    zprev=SITES.map(i=>state[i]);soma[ti]=state[SOMA];local[ti]=Math.max(...zprev);
+
+    // Frozen-rest-current attacker, always shown for comparison.
+    const opass=matVec(op.P,openState), j0=currentLaw(Array(3).fill(-70),ga,gn), ox=matVec(op.X,j0);
+    openState=opass.map((x,i)=>x+ox[i]);open[ti]=openState[SOMA];
+  }
+  return {soma,open,local,peak:Math.max(...soma),localPeak:Math.max(...local),maxIt,maxRes,maxCons,allOk,q:metricScale};
+}
+function morphState(){
+  try{
+    const d=frame.contentDocument;
+    if(!d)return {mode:"bend",value:0,disp:"—",label:"loading"};
+    const pill=d.getElementById("modePill"),sl=d.getElementById("slider"),disp=d.getElementById("disp");
+    if(!pill||!sl)return {mode:"bend",value:0,disp:"—",label:"loading"};
+    const stretch=(pill.textContent||"").includes("STRETCH");
+    return {mode:stretch?"stretch":"bend",value:+sl.value,disp:disp?disp.textContent:"—",label:pill.textContent};
+  }catch(e){return {mode:"bend",value:0,disp:"—",label:"iframe unavailable"}}
+}
+function peakChange(a,b){return b===0?0:100*(a-b)/Math.abs(b)}
+function fmt(x,d=2){return Number.isFinite(x)?x.toFixed(d):"—"}
+
+function drawPlot(cur,base){
+  const dpr=Math.min(2,devicePixelRatio||1),r=plot.getBoundingClientRect();
+  plot.width=Math.max(1,Math.floor(r.width*dpr));plot.height=Math.max(1,Math.floor(r.height*dpr));
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=r.width,h=r.height,padL=42,padR=12,padT=22,padB=28;
+  ctx.clearRect(0,0,w,h);
+  const all=cur.soma.concat(cur.open,base?base.soma:[]);
+  let ymin=Math.min(0,...all),ymax=Math.max(1e-4,...all);ymax*=1.08;
+  const x=i=>padL+i/(cur.soma.length-1)*(w-padL-padR);
+  const y=v=>padT+(ymax-v)/(ymax-ymin||1)*(h-padT-padB);
+  ctx.strokeStyle="#1e2832";ctx.lineWidth=1;
+  for(let k=0;k<=4;k++){const yy=padT+k*(h-padT-padB)/4;ctx.beginPath();ctx.moveTo(padL,yy);ctx.lineTo(w-padR,yy);ctx.stroke()}
+  ctx.fillStyle="#788592";ctx.font="10px ui-monospace,monospace";
+  ctx.fillText(ymax.toFixed(1)+" mV",4,padT+4);ctx.fillText("0",24,y(0)+3);ctx.fillText("time →",w-55,h-8);
+  function trace(arr,stroke,width,dash=[]){
+    ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.beginPath();
+    for(let i=0;i<arr.length;i++){const xx=x(i),yy=y(arr[i]);i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)}ctx.stroke();ctx.setLineDash([]);
+  }
+  trace(cur.open,"rgba(173,185,196,.55)",1.1,[5,4]);
+  if(base)trace(base.soma,"rgba(107,128,146,.48)",1.0,[2,4]);
+  trace(cur.soma,"rgba(240,246,250,.96)",1.8);
+  ctx.fillStyle="#dce6ee";ctx.fillText("nonlinear causal",padL+7,padT+12);
+  ctx.fillStyle="#a8b3bd";ctx.fillText("frozen-rest attacker",padL+7,padT+26);
+  if(base){ctx.fillStyle="#768897";ctx.fillText("base metric",padL+7,padT+40)}
+}
+
+function render(){
+  const ms=morphState(), q=ms.mode==="stretch"?1+ms.value/100:1;
+  const s=+drive.value;
+  const oldFeedback=feedbackOn;
+  const cur=simulate(s,q);
+  feedbackOn=oldFeedback;
+  const base=simulate(s,1);
+  document.getElementById("driveValue").textContent=s.toFixed(2)+"×";
+  document.getElementById("timingValue").textContent=timingNames[+timing.value];
+  document.getElementById("geomMode").textContent=ms.mode==="stretch"?"METRIC":"POSE";
+  document.getElementById("geomSub").textContent=ms.mode==="stretch"?("q="+q.toFixed(3)+" · recompiles"):("screen motion only · q=1");
+  document.getElementById("morphState").textContent=ms.label+" · "+ms.disp+" max motion";
+  document.getElementById("peak").textContent=fmt(cur.peak,2)+" mV";
+  document.getElementById("delta").textContent=(ms.mode==="bend"?"0.000":fmt(peakChange(cur.peak,base.peak),1))+"%";
+  document.getElementById("local").textContent=fmt(cur.localPeak,1)+" mV";
+  document.getElementById("newton").textContent=String(cur.maxIt);
+  document.getElementById("consistency").textContent=cur.maxCons<1e-8?"<1e−8":cur.maxCons.toExponential(1);
+  if(ms.mode==="bend"){
+    document.getElementById("status").textContent="POSE NULL: the real arbor can swing through 3-D, but this compiler consumes intrinsic cable metric. P, X and the soma trace stay exactly unchanged.";
+  }else{
+    document.getElementById("status").textContent="METRIC ACTIVE: intrinsic length changed, so axial conductance, membrane area/capacitance, P/X and the nonlinear soma response are rebuilt live.";
+  }
+  document.getElementById("receipt").textContent=
+    "metric q="+q.toFixed(4)+" · drive="+s.toFixed(2)+"× · "+timingNames[+timing.value]+"\n"+
+    "Newton converged="+cur.allOk+" · max iterations="+cur.maxIt+"\n"+
+    "max residual="+cur.maxRes.toExponential(2)+" mV · site consistency="+cur.maxCons.toExponential(2)+" mV\n"+
+    "browser operator is illustrative; archived 288-case receipt remains separate";
+  drawPlot(cur,base);
+}
+function sensitivityAt(s,q){
+  const eps=.025,old=feedbackOn;feedbackOn=true;
+  const hi=simulate(s*(1+eps),q).peak,lo=simulate(s*(1-eps),q).peak;
+  feedbackOn=old;
+  return Math.abs((hi-lo)/(2*eps*s));
+}
+async function hunt(){
+  if(seekBusy)return;seekBusy=true;document.getElementById("seek").textContent="SCANNING…";
+  const ms=morphState(),q=ms.mode==="stretch"?1+ms.value/100:1;
+  let best={s:+drive.value,g:-Infinity};
+  for(let i=0;i<54;i++){
+    const s=.25+i*(5.25/53),g=sensitivityAt(s,q);
+    if(g>best.g)best={s,g};
+    if(i%9===0)await new Promise(r=>requestAnimationFrame(r));
+  }
+  drive.value=best.s.toFixed(2);render();
+  document.getElementById("status").textContent="ADVERSARIAL SEEK: small ±2.5% drive probes found the largest local soma gain near "+best.s.toFixed(2)+"× (≈"+best.g.toFixed(2)+" mV per drive unit). This is the browser's NMDA-sensitive regime, not a new biological measurement.";
+  document.getElementById("seek").textContent="HUNT NMDA KNEE";seekBusy=false;
+}
+drive.oninput=render;timing.oninput=render;
+document.getElementById("seek").onclick=hunt;
+document.getElementById("feedback").onclick=()=>{
+  feedbackOn=!feedbackOn;
+  const b=document.getElementById("feedback");b.classList.toggle("active",feedbackOn);
+  b.textContent=feedbackOn?"LOCAL FEEDBACK ON":"LOCAL FEEDBACK OFF";
+  render();
+};
+frame.addEventListener("load",()=>{lastMorphKey="";render()});
+setInterval(()=>{
+  const m=morphState(),key=m.mode+":"+m.value+":"+m.disp;
+  if(key!==lastMorphKey){lastMorphKey=key;render()}
+},160);
+window.addEventListener("resize",render);
+render();
+</script>
+</body>
+</html>
