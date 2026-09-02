@@ -126,6 +126,16 @@ finite differences, including a multi-parameter path. This is the first step
 from geometry as fixed input to geometry as a controllable state variable; it
 is not yet a claim about an optimal biological shape.
 
+That tangent has now crossed the reference-model boundary. On the **real human
+cell-1125 graph (1653 compartments)**, local length/diameter derivatives through
+the cable compiler and causal NMDA loop match centered metric recompilation to
+**1.37e-7 worst soma-trace relative error**; the pose tangent is exact zero.
+A 31-compartment map on one real apical branch gives **62 analytic geometry
+directions**: diameter sensitivity is negative across 31/31 compartments, while
+length changes sign near the first nonlinear site. See the
+**[real metric-tangent receipt](results/REAL_METRIC_TANGENT.md)** and the
+**[live branch gradient map](https://anttiluode.github.io/Operaattori/gradient_map.html)**.
+
 The one retained outlier is rat L6 IPC at 11.2% cell-median soma error, matching
 its already-known passive graph discretization weakness.
 
