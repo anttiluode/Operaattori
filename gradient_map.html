@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Operaattori — Real Branch Gradient Map</title>
+<style>
+:root{color-scheme:dark;--bg:#07090c;--panel:#0e1319;--ink:#f2f5f7;--muted:#8d99a6;--border:#202a34;--line:#3a4652;--hot:#eef4f8}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1180px;margin:auto;padding:28px}
+.eyebrow{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:var(--muted)}
+h1{font-size:clamp(36px,6vw,76px);line-height:.9;letter-spacing:-.06em;margin:7px 0 10px}
+.lede{max-width:930px;color:#c7cfd7;line-height:1.55;margin:0 0 18px}
+.card{background:linear-gradient(180deg,#10161d,#0b1015);border:1px solid var(--border);border-radius:18px;padding:16px;margin-top:14px}
+canvas{display:block;width:100%;height:520px;background:#080c10;border:1px solid var(--border);border-radius:14px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px}
+.metric{background:#0a0f14;border:1px solid var(--border);border-radius:13px;padding:12px}
+.k{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.v{font:800 22px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;margin-top:5px;letter-spacing:-.04em}
+.s{color:var(--muted);font-size:10px;line-height:1.4;margin-top:5px}
+.note{color:var(--muted);font-size:11px;line-height:1.55;margin-top:12px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:10px}
+.sw{display:inline-block;width:22px;height:2px;vertical-align:middle;margin-right:6px;background:currentColor}
+footer{margin-top:16px;color:#7e8995;font-size:11px;line-height:1.55}
+a{color:#bcd6eb}
+@media(max-width:720px){main{padding:14px}.metrics{grid-template-columns:1fr 1fr}canvas{height:430px}}
+</style>
+</head>
+<body>
+<main>
+<div class="eyebrow">OPERAATTORI / CELL 1125 / EXACT METRIC TANGENT</div>
+<h1>BRANCH GRADIENT MAP</h1>
+<p class="lede">A verified analytic derivative through the real human morphology compiler and the causal NMDA loop. Each point asks: if this one compartment becomes 1% longer or 1% wider, what is the linearized change in the soma peak? The three vertical markers are the nonlinear synaptic sites.</p>
+
+<div class="card">
+  <div class="legend">
+    <span style="color:#edf3f7"><span class="sw"></span>length tangent</span>
+    <span style="color:#9aa9b7"><span class="sw"></span>diameter tangent</span>
+    <span style="color:#667481">│ nonlinear sites x=.25/.50/.75</span>
+  </div>
+  <canvas id="cv"></canvas>
+  <div class="metrics">
+    <div class="metric"><div class="k">branch compartments</div><div class="v">31</div><div class="s">62 analytic metric directions</div></div>
+    <div class="metric"><div class="k">diameter sign</div><div class="v">31 / 31 −</div><div class="s">wider locally lowers peak everywhere on this branch</div></div>
+    <div class="metric"><div class="k">length sign</div><div class="v">7 + / 24 −</div><div class="s">sign flips near first nonlinear site</div></div>
+    <div class="metric"><div class="k">gradient validation</div><div class="v">1.36e−7</div><div class="s">worst soma-trace tangent relative error vs centered recompile</div></div>
+  </div>
+  <div class="note"><strong>Read the vertical scale carefully:</strong> it is d(soma peak)/d log(local metric scale), in mV. These are small local effects. The strongest diameter direction predicts about −0.000974 mV for a 1% change on a 2.356 mV peak. This is a sensitivity map, not evidence that dendrites literally perform gradient descent.</div>
+</div>
+
+<div class="card">
+  <div class="note">
+    The spatial pattern is the interesting part. Before the first synaptic site, local length has a tiny positive tangent. At the compartment containing the first site it flips negative; downstream it stays negative. Diameter is negative across the entire branch and is strongest immediately proximal to the first site. This is compatible with competing cable effects—added membrane/load versus axial coupling—but the map itself does not assign a biological optimization objective.
+  </div>
+</div>
+
+<footer>
+  <a href="compiler.html">Compiler Lab</a> ·
+  <a href="results/REAL_METRIC_TANGENT.md">metric-tangent receipt</a> ·
+  <a href="audits/real_metric_tangent.py">audit source</a> ·
+  <a href="https://github.com/anttiluode/Operaattori">repository</a>
+</footer>
+</main>
+<script>
+const X=[0.016129,0.048387,0.080645,0.112903,0.145161,0.177419,0.209677,0.241935,0.274194,0.306452,0.33871,0.370968,0.403226,0.435484,0.467742,0.5,0.532258,0.564516,0.596774,0.629032,0.66129,0.693548,0.725806,0.758065,0.790323,0.822581,0.854839,0.887097,0.919355,0.951613,0.983871];
+const L=[0.00154528,0.001544985,0.001544673,0.00154435,0.001544028,0.001543725,0.001543466,-0.014598466,-0.030651302,-0.030651916,-0.030652452,-0.030652924,-0.030653334,-0.030653671,-0.030653909,-0.038215643,-0.045729088,-0.045729466,-0.045729716,-0.04572986,-0.045729902,-0.045729826,-0.045729602,-0.043251899,-0.038362252,-0.03373979,-0.033739927,-0.033739981,-0.033739992,-0.033739986,-0.03373998];
+const D=[-0.078673101,-0.081805399,-0.084946025,-0.088087502,-0.091222122,-0.094342228,-0.097440634,-0.068227739,-0.038609678,-0.041023822,-0.043351104,-0.045578616,-0.047695021,-0.049690508,-0.051557075,-0.038165892,-0.02444189,-0.025597752,-0.026598467,-0.027437955,-0.028112748,-0.028621902,-0.028967337,-0.034109189,-0.036746682,-0.032255734,-0.032741227,-0.033130924,-0.033423389,-0.03361827,-0.033715645];
+const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
+function draw(){
+  const dpr=Math.min(2,devicePixelRatio||1),r=cv.getBoundingClientRect();
+  cv.width=Math.floor(r.width*dpr);cv.height=Math.floor(r.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=r.width,h=r.height,pL=58,pR=18,pT=24,pB=46;
+  ctx.clearRect(0,0,w,h);
+  const ymin=-.105,ymax=.012;
+  const sx=x=>pL+x*(w-pL-pR), sy=y=>pT+(ymax-y)/(ymax-ymin)*(h-pT-pB);
+  ctx.font="10px ui-monospace,monospace";
+  ctx.strokeStyle="#1f2a34";ctx.fillStyle="#7e8b97";ctx.lineWidth=1;
+  for(let k=0;k<=5;k++){const v=ymin+(ymax-ymin)*k/5,yy=sy(v);ctx.beginPath();ctx.moveTo(pL,yy);ctx.lineTo(w-pR,yy);ctx.stroke();ctx.fillText(v.toFixed(3),5,yy+3)}
+  for(let k=0;k<=4;k++){const x=k/4,xx=sx(x);ctx.beginPath();ctx.moveTo(xx,pT);ctx.lineTo(xx,h-pB);ctx.stroke();ctx.fillText(x.toFixed(2),xx-12,h-20)}
+  const zero=sy(0);ctx.strokeStyle="#53616e";ctx.beginPath();ctx.moveTo(pL,zero);ctx.lineTo(w-pR,zero);ctx.stroke();
+  [0.25,0.5,0.75].forEach((x,i)=>{const xx=sx(x);ctx.strokeStyle="#667481";ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(xx,pT);ctx.lineTo(xx,h-pB);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#94a1ad";ctx.fillText("site "+(i+1),xx-18,pT+12)});
+  function trace(arr,color,width){
+    ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();
+    arr.forEach((v,i)=>{const xx=sx(X[i]),yy=sy(v);i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)});ctx.stroke();
+    ctx.fillStyle=color;arr.forEach((v,i)=>{ctx.beginPath();ctx.arc(sx(X[i]),sy(v),2.3,0,Math.PI*2);ctx.fill()});
+  }
+  trace(D,"rgba(154,169,183,.9)",1.5);
+  trace(L,"rgba(237,243,247,.98)",2);
+  ctx.fillStyle="#87939f";ctx.fillText("branch position x",w/2-42,h-7);
+  ctx.save();ctx.translate(12,h/2+70);ctx.rotate(-Math.PI/2);ctx.fillText("d peak / d log(metric scale)  [mV]",0,0);ctx.restore();
+}
+window.addEventListener("resize",draw);draw();
+</script>
+</body>
+</html>
