@@ -85,6 +85,58 @@ See [../compiler.html](../compiler.html) for the browser reference specimen and
 [../results/CAUSAL_NONLINEAR_GRAPH_DIAGNOSIS.md](../results/CAUSAL_NONLINEAR_GRAPH_DIAGNOSIS.md)
 for the archived 288-case receipt.
 
+## Exact operator / geometry tangents
+
+The compiled causal object is now differentiable without an autodiff framework.
+`operator_tangent.py` propagates first-order changes through the whole chain:
+
+~~~text
+(G, C)
+  |
+  v
+(P, X)
+  |
+  v
+implicit local NMDA
+  |
+  v
+state trajectory
+  |
+  v
+soma trace
+~~~
+
+For (A = G + D), (D = diag(C/dt)), (P=A^{-1}D), and (X=A^{-1}B),
+the passive compiler tangent is analytic:
+
+~~~text
+dP = A^-1 (dD - dA P)
+dX = -A^-1 dA X
+~~~
+
+At every nonlinear time step the site tangent reuses the implicit Newton
+Jacobian:
+
+~~~text
+K  = I - R diag(dJ/dV)
+dz = K^-1 [ d(passive_sites) + dR J ]
+~~~
+
+The implementation accepts a stack of geometry/control parameters, so a caller
+can propagate several independent (dG/dtheta, dC/dtheta) directions in one
+run. Conductance programs are held fixed.
+
+The unit tests check the compiled (dP,dX) against centered finite
+differences, then check the complete soma-trace tangent through the causal NMDA
+loop against an independently recompiled finite difference. A two-parameter
+path is checked as well.
+
+This is a derivative of the **compiled circuit**. It does not assert that a
+particular dendritic shape objective is biologically preferred. The next
+scientific use is to connect these tangents to segment-level metric changes in
+the real morphology compiler and use them for sensitivity/adversarial
+validation.
+
 ## What is and is not shipped here
 
 The runtime is generic NumPy code.
