@@ -152,6 +152,13 @@ See the **[real metric-tangent receipt](results/REAL_METRIC_TANGENT.md)**,
 the **[operating-point receipt](results/GRADIENT_OPERATING_POINT.md)** and the
 **[interactive gradient map](https://anttiluode.github.io/Operaattori/gradient_map.html)**.
 
+The operating-state effect also recurs within the same neuron. Across six long
+apical branches, four probe positions and both metric directions, **32/48**
+geometry trajectories change sign somewhere over the same drive sweep
+(length 10/24; diameter 22/24). At 1x the proximal length direction is positive
+on only 4/6 branches. See the
+**[within-cell gradient regime panel](results/GRADIENT_BRANCH_PANEL.md)**.
+
 **Prior-art fence.** This repo does **not** claim to be the first differentiable
 neuron simulator or the first code to optimize dendritic shape. Jaxley
 (Nature Methods, 2025) explicitly differentiates morphological parameters and
