@@ -130,11 +130,27 @@ That tangent has now crossed the reference-model boundary. On the **real human
 cell-1125 graph (1653 compartments)**, local length/diameter derivatives through
 the cable compiler and causal NMDA loop match centered metric recompilation to
 **1.37e-7 worst soma-trace relative error**; the pose tangent is exact zero.
-A 31-compartment map on one real apical branch gives **62 analytic geometry
-directions**: diameter sensitivity is negative across 31/31 compartments, while
-length changes sign near the first nonlinear site. See the
-**[real metric-tangent receipt](results/REAL_METRIC_TANGENT.md)** and the
-**[live branch gradient map](https://anttiluode.github.io/Operaattori/gradient_map.html)**.
+
+A 31-compartment apical branch then gives **62 analytic geometry directions**.
+At the released **1x** drive, diameter is negative across 31/31 compartments
+while length is slightly positive before the first nonlinear site and negative
+from x≈0.242 onward. That pretty sign flip is **not universal**: across drive
+scales 0.25, 0.50, 0.75, 1.50, 2.0 and 3.0, length is negative in 31/31
+compartments, while diameter changes from mixed/all-negative at low-to-mid
+drive to mostly positive at high drive. The gradient field is therefore an
+**operating-point-dependent nonlinear object**, not a fixed growth rule.
+
+The gradient also survives a finite recompile check. At 1x drive, a distributed
+steepest-ascent step with L2 log-metric budget 0.20 changes no local metric by
+more than about **5.72%**, yet moves the actual soma peak by **+2.97%**; the
+first-order prediction remains within a few percent. Literal one-segment
+lengthening is much weaker: +22.14% length before site 1 changes the peak by
+only +0.0137%, while the strongest downstream cooling location changes it by
+−0.430%.
+
+See the **[real metric-tangent receipt](results/REAL_METRIC_TANGENT.md)**,
+the **[operating-point receipt](results/GRADIENT_OPERATING_POINT.md)** and the
+**[interactive gradient map](https://anttiluode.github.io/Operaattori/gradient_map.html)**.
 
 **Prior-art fence.** This repo does **not** claim to be the first differentiable
 neuron simulator or the first code to optimize dendritic shape. Jaxley
