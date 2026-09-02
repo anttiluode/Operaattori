@@ -117,6 +117,15 @@ unit tests cover the backward-Euler compiler, analytic current derivative,
 zero-input rest state, nonlinear site closure, and invariance to compartment
 relabeling.
 
+The compiler now also exposes **[exact first-order operator tangents](reduced/operator_tangent.py)**.
+Given (dG/dtheta) and (dC/dtheta), it differentiates
+`G,C -> P,X -> implicit NMDA -> soma trace` analytically, reusing the local
+Newton Jacobian rather than finite-differencing the solver. The compiler
+matrices and complete nonlinear soma-trace tangent are checked against centered
+finite differences, including a multi-parameter path. This is the first step
+from geometry as fixed input to geometry as a controllable state variable; it
+is not yet a claim about an optimal biological shape.
+
 The one retained outlier is rat L6 IPC at 11.2% cell-median soma error, matching
 its already-known passive graph discretization weakness.
 
