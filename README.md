@@ -171,6 +171,17 @@ the full map are created by voltage-dependent feedback. See the
 **[transport/NMDA decomposition](results/GRADIENT_TRANSPORT_FEEDBACK.md)** and the
 **[interactive operator split](https://anttiluode.github.io/Operaattori/operator_split.html)**.
 
+The same decomposition now survives a **24-morphology cross-cell panel** using
+one deterministic apical branch per cell and the six length/diameter directions
+at the three nonlinear sites. Median feedback/transport norm rises from
+**0.827 at 0.5x** to **1.468 at 1x** and **1.735 at 2x**; feedback exceeds
+transport in 23/24 cells at 2x. Across the three tested drives, **24/24 cells**
+enter a condition where feedback norm exceeds transport and **23/24 cells**
+show at least one geometry direction whose sign is reversed by the nonlinear
+closure. The reversals are overwhelmingly diameter effects (38 diameter versus
+1 length reversal at 1x). See the
+**[cross-cell decomposition receipt](results/CROSS_CELL_GRADIENT_DECOMPOSITION.md)**.
+
 **Prior-art fence.** This repo does **not** claim to be the first differentiable
 neuron simulator or the first code to optimize dendritic shape. Jaxley
 (Nature Methods, 2025) explicitly differentiates morphological parameters and
