@@ -1,0 +1,95 @@
+name: Operaattori finite decomposition prediction
+
+on:
+  pull_request:
+    paths:
+      - "FINITE_DECOMPOSITION_PROTOCOL.md"
+      - "audits/finite_decomposition_prediction.py"
+      - "audits/collect_finite_decomposition_prediction.py"
+      - "audits/cross_cell_gradient_decomposition.py"
+      - "audits/gradient_transport_feedback.py"
+      - "audits/gradient_operating_point.py"
+      - "audits/real_metric_tangent.py"
+      - "audits/direct_cable_graph.py"
+      - "audits/causal_nonlinear_graph.py"
+      - ".github/workflows/audit-finite-decomposition-prediction.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  finite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        include:
+          - {drive: "0.5", q: "1.05", tag: d05_q105}
+          - {drive: "1.0", q: "1.05", tag: d10_q105}
+          - {drive: "2.0", q: "1.05", tag: d20_q105}
+          - {drive: "0.5", q: "1.10", tag: d05_q110}
+          - {drive: "1.0", q: "1.10", tag: d10_q110}
+          - {drive: "2.0", q: "1.10", tag: d20_q110}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install numpy scipy neuron
+      - name: Checkout pinned FCI source
+        shell: bash
+        run: |
+          git clone --filter=blob:none https://github.com/ido4848/FCI.git /tmp/fci
+          git -C /tmp/fci checkout 75ad8b4d81a7f51bf888b30650c543592340db06
+          test "$(git -C /tmp/fci rev-parse HEAD)" = "75ad8b4d81a7f51bf888b30650c543592340db06"
+      - name: Compile shared released mechanisms once
+        shell: bash
+        run: |
+          cd /tmp/fci/simulating_neurons/neuron_models/rat/hay/Rat_L5b_PC_2_Hay_passive_dends_simple_soma
+          nrnivmodl mods
+      - name: Run finite intervention shard
+        env:
+          PYTHONUNBUFFERED: "1"
+        run: |
+          mkdir -p results/finite_decomposition
+          python audits/finite_decomposition_prediction.py \
+            --fci-root /tmp/fci \
+            --drive-scale ${{ matrix.drive }} \
+            --metric-scale ${{ matrix.q }} \
+            --out results/finite_decomposition/${{ matrix.tag }}.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: finite-decomposition-${{ matrix.tag }}
+          path: results/finite_decomposition/${{ matrix.tag }}.json
+          retention-days: 90
+
+  collect:
+    needs: finite
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: finite-decomposition-*
+          path: finite-artifacts
+      - name: Freeze classification
+        run: |
+          mkdir -p results/finite_decomposition
+          python audits/collect_finite_decomposition_prediction.py \
+            --root finite-artifacts \
+            --out results/finite_decomposition/finite_decomposition_summary.json
+          cat results/finite_decomposition/finite_decomposition_summary.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: finite-decomposition-summary
+          path: results/finite_decomposition/finite_decomposition_summary.json
+          retention-days: 90
